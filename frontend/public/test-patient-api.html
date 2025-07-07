@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GhEHR Patient API Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; }
+        .container { background: #f5f5f5; padding: 20px; border-radius: 8px; margin-bottom: 20px; }
+        button { background: #007bff; color: white; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer; margin: 5px; }
+        button:hover { background: #0056b3; }
+        .results { background: white; padding: 15px; border-radius: 4px; margin-top: 15px; }
+        .patient { background: #e7f3ff; padding: 8px; margin: 5px 0; border-radius: 4px; }
+        .error { color: red; }
+        .success { color: green; }
+    </style>
+</head>
+<body>
+    <h1>🏥 GhEHR Patient API Test</h1>
+    
+    <div class="container">
+        <h3>Test Patient Loading</h3>
+        <button onclick="testLogin()">1. Login</button>
+        <button onclick="testPatients()">2. Load Patients</button>
+        <button onclick="testClinicalNotes()">3. Test Clinical Notes</button>
+        <button onclick="testAIAnalysis()">4. Test AI Analysis</button>
+        
+        <div id="results" class="results" style="display: none;">
+            <h4>Results:</h4>
+            <div id="output"></div>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = 'http://localhost:5000/api';
+        let authToken = '';
+
+        function showResults(message, isError = false) {
+            const results = document.getElementById('results');
+            const output = document.getElementById('output');
+            
+            results.style.display = 'block';
+            output.innerHTML += `<div class="${isError ? 'error' : 'success'}">${message}</div>`;
+        }
+
+        async function testLogin() {
+            try {
+                showResults('🔐 Attempting login...');
+                
+                const response = await fetch(`${API_BASE}/auth/login`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        email: 'doctor@ghehr.gh',
+                        password: 'password'
+                    })
+                });
+
+                const data = await response.json();
+                
+                if (data.success) {
+                    authToken = data.data.token;
+                    showResults(`✅ Login successful! User: ${data.data.user.name}`);
+                    showResults(`🔑 Token: ${authToken.substring(0, 20)}...`);
+                } else {
+                    showResults(`❌ Login failed: ${data.error?.message}`, true);
+                }
+            } catch (error) {
+                showResults(`❌ Login error: ${error.message}`, true);
+            }
+        }
+
+        async function testPatients() {
+            if (!authToken) {
+                showResults('❌ Please login first!', true);
+                return;
+            }
+
+            try {
+                showResults('👥 Loading patients...');
+                
+                const response = await fetch(`${API_BASE}/patients?limit=10`, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${authToken}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                const data = await response.json();
+                
+                if (data.success) {
+                    const patients = data.data.patients;
+                    showResults(`✅ Loaded ${patients.length} patients:`);
+                    
+                    patients.forEach(patient => {
+                        showResults(`👤 ${patient.firstName} ${patient.lastName} (ID: ${patient.patientId})`);
+                    });
+                } else {
+                    showResults(`❌ Failed to load patients: ${data.error?.message}`, true);
+                }
+            } catch (error) {
+                showResults(`❌ Patient loading error: ${error.message}`, true);
+            }
+        }
+
+        async function testClinicalNotes() {
+            if (!authToken) {
+                showResults('❌ Please login first!', true);
+                return;
+            }
+
+            try {
+                showResults('📝 Loading clinical notes...');
+                
+                const response = await fetch(`${API_BASE}/notes`, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${authToken}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                const data = await response.json();
+                
+                if (data.success) {
+                    const notes = data.data.notes;
+                    showResults(`✅ Loaded ${notes.length} clinical notes`);
+                    
+                    notes.forEach(note => {
+                        showResults(`📄 Note: ${note.content.substring(0, 50)}...`);
+                    });
+                } else {
+                    showResults(`❌ Failed to load notes: ${data.error?.message}`, true);
+                }
+            } catch (error) {
+                showResults(`❌ Clinical notes error: ${error.message}`, true);
+            }
+        }
+
+        async function testAIAnalysis() {
+            if (!authToken) {
+                showResults('❌ Please login first!', true);
+                return;
+            }
+
+            try {
+                showResults('🤖 Testing AI analysis...');
+                
+                const testText = "Patient has high fever, severe headache, chills, and vomiting for 3 days. Lives in rural area during rainy season.";
+                
+                const response = await fetch(`${API_BASE}/notes/analyze`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${authToken}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ text: testText })
+                });
+
+                const data = await response.json();
+                
+                if (data.success) {
+                    const analysis = data.data;
+                    showResults(`✅ AI Analysis completed:`);
+                    showResults(`🔍 Conditions: ${analysis.suggestedConditions.map(c => `${c.condition} (${Math.round(c.confidence * 100)}%)`).join(', ')}`);
+                    showResults(`📊 Severity: ${analysis.severity}, Urgency: ${analysis.urgencyLevel}`);
+                    showResults(`💡 Symptoms: ${analysis.extractedSymptoms.join(', ')}`);
+                } else {
+                    showResults(`❌ AI analysis failed: ${data.error?.message}`, true);
+                }
+            } catch (error) {
+                showResults(`❌ AI analysis error: ${error.message}`, true);
+            }
+        }
+
+        // Clear results
+        function clearResults() {
+            document.getElementById('output').innerHTML = '';
+            document.getElementById('results').style.display = 'none';
+        }
+    </script>
+</body>
+</html>
