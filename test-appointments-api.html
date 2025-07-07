@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Appointments API</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; }
+        .container { background: #f5f5f5; padding: 20px; border-radius: 8px; margin-bottom: 20px; }
+        button { background: #007bff; color: white; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer; margin: 5px; }
+        button:hover { background: #0056b3; }
+        .success { color: green; }
+        .error { color: red; }
+        .results { background: white; padding: 15px; border-radius: 4px; margin-top: 15px; }
+        pre { background: #f8f9fa; padding: 10px; border-radius: 4px; overflow-x: auto; }
+    </style>
+</head>
+<body>
+    <h1>GhEHR Appointments API Test</h1>
+    
+    <div class="container">
+        <h3>Authentication</h3>
+        <button onclick="testLogin()">🔐 Login</button>
+        <div id="auth-status"></div>
+    </div>
+
+    <div class="container">
+        <h3>Appointments API Tests</h3>
+        <button onclick="testGetAppointments()">📅 Get Appointments</button>
+        <button onclick="testCreateAppointment()">➕ Create Appointment</button>
+        <button onclick="testUpdateAppointmentStatus()">✏️ Update Status</button>
+    </div>
+
+    <div class="container">
+        <h3>Results</h3>
+        <div id="output"></div>
+    </div>
+
+    <script>
+        const API_BASE = 'http://localhost:5000/api';
+        let authToken = '';
+
+        function showResults(message, isError = false) {
+            const output = document.getElementById('output');
+            const className = isError ? 'error' : 'success';
+            output.innerHTML += `<div class="${className}">${message}</div>`;
+        }
+
+        async function testLogin() {
+            try {
+                showResults('🔐 Attempting login...');
+                
+                const response = await fetch(`${API_BASE}/auth/login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        email: 'admin@ghehr.gh',
+                        password: 'password'
+                    })
+                });
+
+                const data = await response.json();
+                
+                if (data.success) {
+                    authToken = data.data.token;
+                    showResults(`✅ Login successful! User: ${data.data.user.name}`);
+                    document.getElementById('auth-status').innerHTML = `<span class="success">✅ Authenticated as ${data.data.user.name}</span>`;
+                } else {
+                    showResults(`❌ Login failed: ${data.error?.message}`, true);
+                }
+            } catch (error) {
+                showResults(`❌ Login error: ${error.message}`, true);
+            }
+        }
+
+        async function testGetAppointments() {
+            if (!authToken) {
+                showResults('❌ Please login first', true);
+                return;
+            }
+
+            try {
+                showResults('📅 Fetching appointments...');
+                
+                const response = await fetch(`${API_BASE}/appointments`, {
+                    headers: {
+                        'Authorization': `Bearer ${authToken}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                const data = await response.json();
+                
+                if (data.success) {
+                    showResults(`✅ Found ${data.data.appointments.length} appointments`);
+                    showResults(`<pre>${JSON.stringify(data.data.appointments, null, 2)}</pre>`);
+                } else {
+                    showResults(`❌ Failed to fetch appointments: ${data.error?.message}`, true);
+                }
+            } catch (error) {
+                showResults(`❌ Fetch error: ${error.message}`, true);
+            }
+        }
+
+        async function testCreateAppointment() {
+            if (!authToken) {
+                showResults('❌ Please login first', true);
+                return;
+            }
+
+            try {
+                showResults('➕ Creating test appointment...');
+                
+                const appointmentData = {
+                    patientId: '1',
+                    doctorId: '2',
+                    date: '2025-07-06',
+                    time: '16:00',
+                    duration: 30,
+                    type: 'consultation',
+                    notes: 'API Test Appointment'
+                };
+
+                const response = await fetch(`${API_BASE}/appointments`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${authToken}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(appointmentData)
+                });
+
+                const data = await response.json();
+                
+                if (data.success) {
+                    showResults(`✅ Appointment created! ID: ${data.data.appointment.id}`);
+                    showResults(`<pre>${JSON.stringify(data.data.appointment, null, 2)}</pre>`);
+                } else {
+                    showResults(`❌ Failed to create appointment: ${data.error?.message}`, true);
+                }
+            } catch (error) {
+                showResults(`❌ Create error: ${error.message}`, true);
+            }
+        }
+
+        async function testUpdateAppointmentStatus() {
+            if (!authToken) {
+                showResults('❌ Please login first', true);
+                return;
+            }
+
+            try {
+                showResults('✏️ Updating appointment status...');
+                
+                const response = await fetch(`${API_BASE}/appointments/APT-001/status`, {
+                    method: 'PATCH',
+                    headers: {
+                        'Authorization': `Bearer ${authToken}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ status: 'confirmed' })
+                });
+
+                const data = await response.json();
+                
+                if (data.success) {
+                    showResults(`✅ Status updated! New status: ${data.data.appointment.status}`);
+                    showResults(`<pre>${JSON.stringify(data.data.appointment, null, 2)}</pre>`);
+                } else {
+                    showResults(`❌ Failed to update status: ${data.error?.message}`, true);
+                }
+            } catch (error) {
+                showResults(`❌ Update error: ${error.message}`, true);
+            }
+        }
+
+        // Clear results
+        function clearResults() {
+            document.getElementById('output').innerHTML = '';
+        }
+    </script>
+</body>
+</html>
