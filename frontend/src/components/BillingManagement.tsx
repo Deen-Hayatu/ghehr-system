@@ -53,6 +53,9 @@ import {
 import { useAuth } from '../contexts/AuthContext';
 import axios from 'axios';
 
+// API base URL
+const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+
 interface Service {
   name: string;
   amount: number;
@@ -197,7 +200,7 @@ const BillingManagement: React.FC = () => {
       if (filters.startDate) queryParams.append('startDate', filters.startDate);
       if (filters.endDate) queryParams.append('endDate', filters.endDate);
 
-      const response = await fetch(`http://localhost:5000/api/billing?${queryParams}`, {
+      const response = await fetch(`${API_BASE_URL}/api/billing?${queryParams}`, {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json',
@@ -223,7 +226,7 @@ const BillingManagement: React.FC = () => {
         return;
       }
       // Using axios for consistency with other components
-      const response = await axios.get('http://localhost:5000/api/patients?limit=0', { // limit=0 to fetch all
+      const response = await axios.get(`${API_BASE_URL}/api/patients?limit=0`, { // limit=0 to fetch all
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json',
@@ -273,7 +276,7 @@ const BillingManagement: React.FC = () => {
         return;
       }
 
-      const response = await fetch('http://localhost:5000/api/billing', {
+      const response = await fetch(`${API_BASE_URL}/api/billing`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -310,7 +313,7 @@ const BillingManagement: React.FC = () => {
         return;
       }
 
-      const response = await fetch(`http://localhost:5000/api/billing/${selectedInvoice.id}/payment`, {
+      const response = await fetch(`${API_BASE_URL}/api/billing/${selectedInvoice.id}/payment`, {
         method: 'PATCH',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -395,7 +398,7 @@ const BillingManagement: React.FC = () => {
         return;
       }
 
-      const response = await fetch(`http://localhost:5000/api/billing/${invoiceId}/pdf`, {
+      const response = await fetch(`${API_BASE_URL}/api/billing/${invoiceId}/pdf`, {
         headers: {
           'Authorization': `Bearer ${token}`,
         },

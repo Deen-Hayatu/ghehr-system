@@ -27,15 +27,17 @@ export const authenticateToken = (
   }
 
   try {
-    const jwtSecret = process.env.JWT_SECRET;
-    if (!jwtSecret) {
-      throw new Error('JWT_SECRET not configured');
-    }
+    const jwtSecret = process.env.JWT_SECRET || 'ghehr-secret-key';
+    console.log('🔑 JWT_SECRET configured:', jwtSecret ? 'YES' : 'NO');
+    console.log('🎫 Received token:', token ? token.substring(0, 20) + '...' : 'NONE');
 
     const decoded = jwt.verify(token, jwtSecret) as any;
+    console.log('✅ Token verified for user:', decoded.email, 'facilityId:', decoded.facilityId);
     req.user = decoded;
     next();
   } catch (error) {
+    const errorMessage = error instanceof Error ? error.message : String(error);
+    console.log('❌ Token verification failed:', errorMessage);
     res.status(403).json({
       success: false,
       error: { message: 'Invalid or expired token' },

@@ -23,13 +23,39 @@ cd ..
 # Create distribution folder
 echo "Creating distribution folder..."
 rm -rf dist
-mkdir -p dist/backend
+mkdir -p dist/public
 
-# Copy files
-echo "Copying files..."
-cp -r backend/dist/* dist/backend/
-cp -r backend/node_modules dist/backend/
-cp backend/package.json dist/backend/
-cp -r frontend/build dist/frontend
+# Copy backend files to root level (for Elastic Beanstalk Node.js platform)
+echo "Copying backend files to root level..."
+cp -r backend/dist/* dist/
+cp -r backend/node_modules dist/
+cp backend/package.json dist/
+cp backend/.env dist/
 
-echo "Deployment package ready in dist folder."
+# Copy .ebextensions if it exists
+if [ -d ".ebextensions" ]; then
+  echo "Copying .ebextensions..."
+  cp -r .ebextensions dist/
+fi
+
+# Update package.json to have correct main entry point
+echo "Updating package.json for deployment..."
+cd dist
+# Update the main field to point to index.js instead of dist/index.js
+sed -i 's/"main": "dist\/index.js"/"main": "index.js"/' package.json
+# Update the start script to use index.js instead of dist/index.js
+sed -i 's/"start": "node dist\/index.js"/"start": "node index.js"/' package.json
+cd ..
+
+# Copy frontend build to public directory (to be served as static files)
+echo "Copying frontend files to public directory..."
+cp -r frontend/build/* dist/public/
+
+# Create deployment ZIP package
+echo "Creating deployment ZIP package..."
+cd dist
+py -m zipfile -c ../deployment-package.zip .
+cd ..
+
+echo "Deployment package created: deployment-package.zip"
+echo "Ready for AWS Elastic Beanstalk deployment."

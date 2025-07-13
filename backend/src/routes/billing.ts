@@ -300,38 +300,68 @@ router.get('/:id/pdf', authenticateToken, (req: AuthenticatedRequest, res: Respo
   try {
     const { id } = req.params;
     const facilityId = req.user?.facilityId;
+    
+    console.log('📄 PDF request for invoice:', id, 'from facility:', facilityId);
+    
     const invoice = invoices.find(inv => inv.id === id && inv.facilityId === facilityId);
     if (!invoice) {
+      console.log('❌ Invoice not found:', id);
       res.status(404).json({ success: false, error: { message: 'Invoice not found' } });
       return;
     }
 
+    console.log('✅ Generating PDF for invoice:', invoice.id);
+
+    // Set headers for PDF download
     res.setHeader('Content-Type', 'application/pdf');
     res.setHeader('Content-Disposition', `attachment; filename=invoice_${invoice.id}.pdf`);
-    const doc = new PDFDocument();
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Headers', 'Authorization, Content-Type');
+    res.setHeader('Cache-Control', 'no-cache');
+    
+    const doc = new PDFDocument({ margin: 50 });
     doc.pipe(res);
 
     // Header
     doc.fontSize(20).text('GhEHR Invoice', { align: 'center' });
     doc.moveDown();
-    doc.fontSize(12).text(`Invoice ID: ${invoice.id}`);
-    doc.text(`Patient ID: ${invoice.patientId}`);
-    doc.text(`Issued Date: ${invoice.issuedDate}`);
-    doc.text(`Status: ${invoice.status}`);
-    if (invoice.paidDate) doc.text(`Paid Date: ${invoice.paidDate}`);
-    doc.text(`Facility ID: ${invoice.facilityId}`);
-    doc.moveDown();
+    
+    // Invoice details
+    doc.fontSize(12)
+       .text(`Invoice ID: ${invoice.id}`)
+       .text(`Patient ID: ${invoice.patientId}`)
+       .text(`Issued Date: ${invoice.issuedDate}`)
+       .text(`Status: ${invoice.status.toUpperCase()}`);
+    
+    if (invoice.paidDate) {
+      doc.text(`Paid Date: ${invoice.paidDate}`);
+    }
+    
+    doc.text(`Facility ID: ${invoice.facilityId}`)
+       .moveDown();
 
-    // Services
+    // Services table header
     doc.fontSize(14).text('Services:', { underline: true });
-    invoice.services.forEach(service => {
-      doc.fontSize(12).text(`${service.name}: GHS ${service.amount.toFixed(2)}`);
+    doc.moveDown(0.5);
+    
+    // Services list
+    doc.fontSize(12);
+    invoice.services.forEach((service, index) => {
+      doc.text(`${index + 1}. ${service.name}: GHS ${service.amount.toFixed(2)}`);
     });
+    
     doc.moveDown();
-    doc.fontSize(14).text(`Total Amount: GHS ${invoice.amount.toFixed(2)}`);
-    doc.fontSize(12).text(`Payment Method: ${invoice.paymentMethod || '-'}`);
-    doc.moveDown();
-    doc.text('Thank you for your payment!', { align: 'center' });
+    
+    // Total
+    doc.fontSize(14)
+       .text(`Total Amount: GHS ${invoice.amount.toFixed(2)}`, { align: 'right' })
+       .fontSize(12)
+       .text(`Payment Method: ${invoice.paymentMethod || 'Not specified'}`, { align: 'right' });
+    
+    doc.moveDown(2);
+    doc.fontSize(10).text('Thank you for choosing GhEHR Healthcare Services!', { align: 'center' });
+    
+    console.log('✅ PDF generated successfully for invoice:', invoice.id);
     doc.end();
   } catch (error) {
     console.error('❌ Error generating invoice PDF:', error);

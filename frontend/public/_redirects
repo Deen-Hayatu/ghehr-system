@@ -1,0 +1,5 @@
+# Netlify redirects to force HTTP protocol
+https://ghehr-system.eba-ygtvwt9j.eu-central-1.elasticbeanstalk.com/* http://ghehr-system.eba-ygtvwt9j.eu-central-1.elasticbeanstalk.com/:splat 301!
+
+# Handle client-side routing
+/*    /index.html   200

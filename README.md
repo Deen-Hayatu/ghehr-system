@@ -1,266 +1,285 @@
 # GhEHR - Ghana Electronic Health Records System
 
-<div align="center">
-  <h3>🏥 A comprehensive Electronic Health Records system designed for healthcare facilities in Ghana</h3>
-  
-  [![License: ISC](https://img.shields.io/badge/License-ISC-blue.svg)](https://opensource.org/licenses/ISC)
-  [![Node.js](https://img.shields.io/badge/Node.js-v18+-green.svg)](https://nodejs.org/)
-  [![React](https://img.shields.io/badge/React-v19+-blue.svg)](https://reactjs.org/)
-  [![TypeScript](https://img.shields.io/badge/TypeScript-v5+-blue.svg)](https://www.typescriptlang.org/)
-</div>
+A comprehensive Electronic Health Records (EHR) system designed specifically for healthcare facilities in Ghana, featuring AI-powered clinical notes, offline capabilities, and culturally appropriate design.
 
-## 📋 Overview
+![GhEHR Logo](https://via.placeholder.com/150x75/4CAF50/FFFFFF?text=GhEHR)
 
-GhEHR is a modern, secure, and user-friendly Electronic Health Records system specifically designed for healthcare facilities in Ghana. The system addresses the unique challenges of healthcare delivery in Ghana, including low-literacy users, offline capabilities, and local payment methods.
+## 🌟 Features
 
-## ✨ Features
+### Core Features (MVP)
+- **Patient Management** - Digital registration with demographics and medical history
+- **Clinical Records** - AI-powered medical notes with Ghana-specific disease detection
+- **Appointment Scheduling** - Calendar view with SMS reminders
+- **Billing & Payments** - Invoice generation with PDF export
+- **Reporting** - Dashboard analytics and revenue summaries
 
-### 🏥 **Core Healthcare Management**
-- **Patient Management**: Digital registration with demographics and medical history
-- **Clinical Records**: Doctor's notes, diagnoses, and prescription management
-- **Appointment Scheduling**: Calendar-based scheduling with SMS reminders
-- **Billing & Payments**: Invoice generation with Mobile Money integration
-- **Reporting**: Daily patient counts, revenue summaries, and analytics
-
-### 🌍 **Ghana-Specific Features**
-- **Low-Literacy UI**: Icon-based interface with minimal text
-- **Language Support**: Swahili/Twi language options (planned)
-- **Offline Mode**: Sync-able local storage for poor internet areas
-- **Mobile Money**: Integration with local payment systems
-- **Compliance**: HIPAA-like data protection standards
-
-### 🔒 **Security & Compliance**
-- JWT-based authentication
-- Role-based access control (RBAC)
-- Audit logging for all data access
-- Encrypted data transmission
-- Secure file uploads
+### Advanced Features
+- **AI-Powered Clinical Notes** ✅ - Real-time analysis of medical text for common Ghana diseases
+- **PDF Invoice Generation** ✅ - Professional invoice documents with download functionality
+- **WhatsApp Integration** 🚧 - Appointment booking via WhatsApp (planned)
+- **Offline Mode** 🚧 - PWA with auto-sync capabilities (planned)
+- **Voice Notes** 🚧 - Speech-to-text for clinical documentation (planned)
 
 ## 🏗️ Architecture
 
-```
-┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
-│   Frontend      │    │   Backend       │    │   Database      │
-│   React.js      │◄──►│   Node.js       │◄──►│   PostgreSQL    │
-│   TypeScript    │    │   Express.js    │    │   (planned)     │
-│   Material-UI   │    │   TypeScript    │    │                 │
-└─────────────────┘    └─────────────────┘    └─────────────────┘
-```
+- **Frontend**: React.js with TypeScript, Material-UI
+- **Backend**: Node.js/Express with TypeScript
+- **Database**: In-memory storage (PostgreSQL ready)
+- **Authentication**: JWT-based with role-based access control
+- **Deployment**: AWS Elastic Beanstalk ready
 
-## 🚀 Quick Start
+## 🚀 Live Demo
+
+**Production URL**: [http://ghehr-production-v2.eba-nymf88yi.us-east-1.elasticbeanstalk.com](http://ghehr-production-v2.eba-nymf88yi.us-east-1.elasticbeanstalk.com)
+
+### Test Credentials
+- **Email**: `admin@ghehr.gh`
+- **Password**: `password`
+
+## 🛠️ Quick Start
 
 ### Prerequisites
-
-- Node.js 18+ 
-- npm or yarn
+- Node.js 18+ and npm
 - Git
 
-### Installation
+### Local Development
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/your-org/ghehr.git
-   cd ghehr
+   git clone https://github.com/yourusername/ghehr-system.git
+   cd ghehr-system
    ```
 
-2. **Install dependencies**
+2. **Setup Backend**
    ```bash
-   # Install backend dependencies
    cd backend
    npm install
-   
-   # Install frontend dependencies
-   cd ../frontend
-   npm install --legacy-peer-deps
-   ```
-
-3. **Environment setup**
-   ```bash
-   # Backend environment
-   cd backend
-   cp .env.example .env
-   # Edit .env with your configuration
-   ```
-
-4. **Start development servers**
-   ```bash
-   # Terminal 1: Start backend
-   cd backend
    npm run dev
-   
-   # Terminal 2: Start frontend
+   ```
+
+3. **Setup Frontend** (in new terminal)
+   ```bash
    cd frontend
+   npm install
    npm start
    ```
 
-5. **Access the application**
+4. **Access the application**
    - Frontend: http://localhost:3000
    - Backend API: http://localhost:5000
-   - API Health Check: http://localhost:5000/health
 
-## 📚 API Documentation
+## 🏥 AI-Powered Clinical Features
 
-### Authentication
-```bash
-# Login
-POST /api/auth/login
-{
-  "email": "admin@ghehr.gh",
-  "password": "password"
-}
+### Ghana Medical NLP
+The system includes specialized AI for detecting common diseases in Ghana:
 
-# Register
-POST /api/auth/register
-{
-  "email": "user@ghehr.gh",
-  "password": "password",
-  "name": "User Name",
-  "role": "doctor"
-}
-```
+- **Malaria** - Fever, chills, headache detection
+- **Typhoid** - Prolonged fever, abdominal pain
+- **Tuberculosis** - Chronic cough, weight loss
+- **Hypertension** - Blood pressure monitoring
+- **Diabetes** - Blood sugar level tracking
+- **Pneumonia** - Respiratory symptoms
+- **Asthma** - Breathing difficulties
+- **Malnutrition** - Growth and nutrition assessment
 
-### Default Users
-- **Admin**: admin@ghehr.gh / password
-- **Doctor**: doctor@ghehr.gh / password
+### Real-time Analysis
+- Automatic symptom extraction from clinical notes
+- Confidence scoring (0-1 scale) for condition suggestions
+- Treatment recommendations based on detected conditions
+- Debounced real-time analysis to prevent excessive API calls
 
-### Core Endpoints
-- `GET /api/patients` - List patients
-- `POST /api/patients` - Create patient
-- `GET /api/appointments` - List appointments  
-- `POST /api/appointments` - Create appointment
-- `GET /api/billing` - List invoices
-- `GET /api/reports/dashboard` - Dashboard statistics
+## 📱 User Interface
 
-## 🛠️ Development
+### Design Principles
+- **Low-Literacy Friendly** - Icon-based navigation with minimal text
+- **Cultural Sensitivity** - Ghana-appropriate colors and symbols
+- **Mobile-First** - Responsive design for tablets and phones
+- **Offline-Ready** - Progressive Web App capabilities
 
-### Project Structure
-```
-ghehr/
-├── frontend/          # React.js application
-│   ├── src/
-│   ├── public/
-│   └── package.json
-├── backend/           # Node.js API server
-│   ├── src/
-│   │   ├── controllers/
-│   │   ├── routes/
-│   │   ├── middleware/
-│   │   └── index.ts
-│   └── package.json
-├── shared/            # Shared types and utilities
-├── docs/              # Documentation
-└── README.md
-```
+### Key Screens
+- **Dashboard** - Overview of patients, appointments, and revenue
+- **Patient Management** - Registration and medical history
+- **Clinical Notes** - AI-powered medical documentation
+- **Appointments** - Calendar view and scheduling
+- **Billing** - Invoice creation and PDF generation
+- **Reports** - Analytics and summaries
 
-### Available Scripts
+## 🔐 Security & Compliance
 
-**Backend**
-```bash
-npm run dev      # Start development server
-npm run build    # Build for production
-npm start        # Start production server
-npm run clean    # Clean build files
-```
+- **Authentication** - JWT-based with secure token handling
+- **Authorization** - Role-based access control (Admin, Doctor, Nurse)
+- **Data Protection** - HIPAA-like compliance considerations
+- **Audit Logging** - Comprehensive activity tracking
+- **Security Headers** - Proper CORS, CSP, and security configurations
 
-**Frontend**
-```bash
-npm start        # Start development server
-npm run build    # Build for production
-npm test         # Run tests
-```
+## 🚢 Deployment
 
-## 🚀 Deployment
+### AWS Elastic Beanstalk (Recommended)
 
-### AWS Deployment (Recommended)
-
-1. **Backend Deployment**
+1. **Build the application**
    ```bash
-   # Build the application
-   cd backend
-   npm run build
-   
-   # Deploy to AWS EC2/ECS
-   # Configure environment variables
-   # Set up PostgreSQL RDS instance
+   bash scripts/deploy.sh
    ```
 
-2. **Frontend Deployment**
+2. **Deploy to AWS**
    ```bash
-   # Build for production
-   cd frontend
-   npm run build
-   
-   # Deploy to AWS S3 + CloudFront
-   # Configure environment variables
+   # Configure AWS CLI first
+   aws configure
+
+   # Deploy using the deployment script
+   # (See AWS-DEPLOYMENT.md for detailed instructions)
    ```
 
 ### Environment Variables
 
-**Backend (.env)**
+Create `.env` files in both `backend/` and `frontend/` directories:
+
+**Backend `.env`:**
 ```env
 NODE_ENV=production
 PORT=5000
-JWT_SECRET=your-super-secret-jwt-key
-FRONTEND_URL=https://your-domain.com
-DB_HOST=your-db-host
-DB_PORT=5432
-DB_NAME=ghehr_production
-DB_USER=ghehr_user
-DB_PASSWORD=your-secure-password
+JWT_SECRET=your_super_secret_jwt_key
 ```
 
-## 📋 Roadmap
+**Frontend `.env`:**
+```env
+REACT_APP_API_URL=https://your-backend-url.com
+```
 
-### Phase 1: MVP (Months 1-4) ✅
-- [x] Patient Management
-- [x] Clinical Records
-- [x] Appointment Scheduling
-- [x] Billing & Payments
-- [x] Basic Reporting
+## 🧪 Testing
 
-### Phase 2: Enhanced Features (Months 5-8)
-- [ ] Database Integration (PostgreSQL)
-- [ ] Advanced Reporting & Analytics
-- [ ] Mobile App (Flutter)
-- [ ] SMS Integration
-- [ ] Multi-language Support
+### Manual Testing
+- **Login**: Use test credentials above
+- **Patient Management**: Create and search patients
+- **Clinical Notes**: Test AI analysis with medical text
+- **Billing**: Create invoices and download PDFs
+- **Reports**: View dashboard statistics
 
-### Phase 3: Scale & Integration (Months 9-12)
-- [ ] Multi-facility Support
-- [ ] Lab Integration APIs
-- [ ] Mobile Money Payment Gateway
-- [ ] Data Export (PDF/Excel)
-- [ ] Advanced Security Features
+### API Testing
+Use the included test pages:
+- `test-pdf-download-debug.html` - PDF download testing
+- Test API endpoints with curl or Postman
+
+## 📊 API Documentation
+
+### Authentication
+```
+POST /api/auth/login
+Body: { "email": "admin@ghehr.gh", "password": "password" }
+```
+
+### Patients
+```
+GET /api/patients - List all patients
+POST /api/patients - Create new patient
+GET /api/patients/:id - Get patient details
+```
+
+### Clinical Notes
+```
+POST /api/notes - Create clinical note with AI analysis
+GET /api/notes - Get notes by patient
+POST /api/notes/analyze - Real-time medical text analysis
+```
+
+### Billing
+```
+GET /api/billing - List invoices
+POST /api/billing - Create new invoice
+GET /api/billing/:id/pdf - Download invoice PDF
+```
+
+### Reports
+```
+GET /api/reports/dashboard - Dashboard statistics
+```
 
 ## 🤝 Contributing
 
-We welcome contributions! Please see our [Contributing Guide](docs/CONTRIBUTING.md) for details.
-
 1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
 3. Commit your changes (`git commit -m 'Add amazing feature'`)
 4. Push to the branch (`git push origin feature/amazing-feature`)
 5. Open a Pull Request
 
+### Development Guidelines
+- Follow TypeScript best practices
+- Implement proper error handling
+- Write comprehensive tests
+- Use meaningful commit messages
+- Update documentation for new features
+
+## 📋 Project Status
+
+### Completed ✅
+- [x] Patient Management System
+- [x] AI-Powered Clinical Notes
+- [x] Appointment Scheduling
+- [x] Billing & Invoice Generation
+- [x] PDF Export Functionality
+- [x] Dashboard & Reports
+- [x] JWT Authentication
+- [x] AWS Deployment
+- [x] Security Headers & CORS
+
+### In Progress 🚧
+- [ ] WhatsApp Integration
+- [ ] Offline Mode with PWA
+- [ ] Voice Notes & Speech Recognition
+- [ ] Mobile Money Integration
+- [ ] Multi-language Support (Twi, Ga)
+
+### Planned 📋
+- [ ] PostgreSQL Database Integration
+- [ ] Advanced Analytics
+- [ ] Telemedicine Features
+- [ ] Laboratory Integration
+- [ ] Inventory Management
+- [ ] Staff Management
+
+## 🔧 Technical Stack
+
+### Frontend
+- React 18 with TypeScript
+- Material-UI (MUI) for components
+- React Router for navigation
+- Axios for API calls
+- React Hook Form for forms
+
+### Backend
+- Node.js with Express
+- TypeScript for type safety
+- JWT for authentication
+- PDFKit for PDF generation
+- Express-validator for validation
+
+### Development Tools
+- ESLint & Prettier for code quality
+- Git for version control
+- AWS CLI for deployment
+- VS Code with extensions
+
+## 📞 Support
+
+For questions, issues, or contributions:
+
+- **GitHub Issues**: [Create an issue](https://github.com/yourusername/ghehr-system/issues)
+- **Email**: support@ghehr.gh
+- **Documentation**: Check the `docs/` folder for detailed guides
+
 ## 📄 License
 
-This project is licensed under the ISC License - see the [LICENSE](LICENSE) file for details.
-
-## 🆘 Support
-
-- 📧 Email: support@ghehr.gh
-- 📖 Documentation: [docs.ghehr.gh](https://docs.ghehr.gh)
-- 🐛 Issues: [GitHub Issues](https://github.com/your-org/ghehr/issues)
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ## 🙏 Acknowledgments
 
-- Healthcare professionals in Ghana for their input and feedback
-- Open source community for the excellent tools and libraries
-- Ghana Health Service for guidance on healthcare standards
+- Ghana Health Service for requirements and insights
+- Healthcare professionals who provided feedback
+- Open source community for tools and libraries
+- AWS for cloud infrastructure support
 
 ---
 
-<div align="center">
-  <p>Built with ❤️ for healthcare in Ghana</p>
-  <p>© 2025 GhEHR Team. All rights reserved.</p>
-</div>
+**Built with ❤️ for Healthcare in Ghana**
+
+*GhEHR - Empowering Healthcare Through Technology*
