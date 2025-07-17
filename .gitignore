@@ -18,6 +18,8 @@ yarn-error.log*
 
 # IDE and editor files
 .vscode/
+!.vscode/tasks.json
+!.vscode/launch.json
 .idea/
 *.swp
 *.swo
@@ -58,8 +60,59 @@ Dockerfile
 # Local development
 local-server.js
 test-server.js
+**/server-backup.ts
+**/server-clean.ts
+**/server-minimal.ts
+**/server-test.ts
 
 # Documentation (keep in repo)
 !README.md
 !SETUP_COMPLETE.md
 !AWS-DEPLOYMENT.md
+!LOCAL_TESTING_PROTOCOL.md
+!LOCAL_DEVELOPMENT_GUIDE.md
+!PRE_DEPLOYMENT_CHECKLIST.md
+!GIT_WORKFLOW.md
+!AI_TESTING_PLAN.md
+!MEDICAL_NLP_TEST_CASES.md
+
+# Ghana-specific development files
+ghana-medical-terms-backup.json
+ghana-moh-*
+local-condition-mapping.json
+ghana-symptom-dictionary.json
+ghana-medical-abbreviations.json
+test-ghana-nlp.js
+moh-disease-surveillance-*.json
+adinkra-symbols-map.json
+
+# Security and sensitive data
+*jwt-secret*
+*private-key*
+*.pem
+*.key
+*.crt
+*credentials*
+*auth-token*
+
+# Patient data (for development)
+/mock-data/patients/*
+!/mock-data/patients/.gitkeep
+patient-samples.json
+test-patient-data.js
+patient-records-*.json
+
+# Testing files that should not be committed
+cypress/screenshots/
+cypress/videos/
+test-results/
+coverage/
+.nyc_output/
+
+# Local database
+*.sqlite
+*.db
+db-backups/
+
+# VSCode extension recommendations (keep in repo)
+!.vscode/extensions.json
