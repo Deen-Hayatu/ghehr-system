@@ -15,6 +15,7 @@ import AppointmentManagement from './components/AppointmentManagement';
 import ClinicalNotes from './components/ClinicalNotes';
 import BillingManagement from './components/BillingManagement';
 import ReportsManagement from './components/ReportsManagement';
+import MOHDashboard from './components/MOHDashboard';
 
 // Protected Route Component
 const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -57,6 +58,14 @@ const AppRoutes: React.FC = () => {
         element={
           <ProtectedRoute>
             <AppointmentManagement />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/moh"
+        element={
+          <ProtectedRoute>
+            <MOHDashboard />
           </ProtectedRoute>
         }
       />

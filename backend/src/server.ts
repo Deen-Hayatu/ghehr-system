@@ -44,6 +44,7 @@ import appointmentsRoutes from './routes/appointments';
 import clinicalNotesRoutes from './routes/clinicalNotes';
 import billingRoutes from './routes/billing';
 import reportsRoutes from './routes/reports';
+import mohRoutes from './routes/moh';
 
 app.use('/api/auth', authRoutes);
 app.use('/api/patients', patientsRoutes);
@@ -51,6 +52,9 @@ app.use('/api/appointments', appointmentsRoutes);
 app.use('/api/notes', clinicalNotesRoutes);
 app.use('/api/billing', billingRoutes);
 app.use('/api/reports', reportsRoutes);
+
+// MOH Data API
+app.use('/api/moh', mohRoutes);
 
 // Test endpoints
 app.get('/api/test', (req, res) => {
