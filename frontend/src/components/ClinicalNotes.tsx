@@ -36,7 +36,7 @@ import {
   Search as SearchIcon,
   Notes as NotesIcon,
   Psychology as AIIcon,
-  LocalHospital as HospitalIcon,
+  // ...existing code...
   Lightbulb as LightbulbIcon,
   Warning as WarningIcon,
   Refresh as RefreshIcon,
@@ -89,7 +89,7 @@ interface AIInsights {
 
 const ClinicalNotes: React.FC = () => {
   const theme = useTheme();
-  const { user, token } = useAuth();
+  const { token } = useAuth();
 
   // State management
   const [notes, setNotes] = useState<ClinicalNote[]>([]);

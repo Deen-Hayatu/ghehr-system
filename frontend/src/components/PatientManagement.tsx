@@ -43,7 +43,7 @@ import {
   Badge as BadgeIcon,
   Refresh as RefreshIcon,
   Download as DownloadIcon,
-  FilterList as FilterIcon,
+  // ...existing code...
   Description as DescriptionIcon, // Add this import
 } from '@mui/icons-material';
 import { useAuth } from '../contexts/AuthContext';
