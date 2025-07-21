@@ -1,0 +1,61 @@
+GhEHR Enhanced Roadmap (2025-2026)
+Phase 1: Foundation (Q1 2024) - COMPLETED ?
+1. Core EHR Features
+o Patient registration & clinical records
+o Appointment scheduling (basic calendar)
+o Billing with Mobile Money integration (MTN/AirtelTigo)
+o Offline-first architecture (Hive DB + sync)
+2. Ghana-Specific Basics
+o Low-literacy UI (icon-driven)
+o Malaria/typhoid clinical templates
+o AWS Cape Town region deployment
+
+Phase 2: Standards & Security (Q2-Q3 2025)
+1. Regulatory Compliance
+o ISO 13606-1 data export module
+o Ghana Data Protection Act audit
+o End-to-end encryption for sensitive fields
+2. Interoperability
+v
+
+3. Advanced Security
+o Biometric login (fingerprint/face ID)
+o Automated PostgreSQL backups to S3
+o Role-based data access logs
+
+Phase 3: Patient Empowerment (Q4 2024)
+1. From Patient Experience Doc:
+o Remote Monitoring:
+typescript
+// SMS-based vital reporting
+router.post('/api/vitals/sms', (req, res) => {
+  const { phone, bp, glucose } = req.body;
+  // Store in PostgreSQL with is_offline flag
+});
+o Cost Transparency:
+* MTN Mobile Money price estimator
+* Procedure cost breakdowns (English/Twi)
+2. Family & Community Tools
+o Caregiver access portals
+o WhatsApp appointment reminders
+o Ghanain-language health education videos
+
+Phase 4: Scale & AI (Q1-Q2 2025)
+1. Ghana-Wide Deployment
+o Sharded PostgreSQL for 5K+ patients
+o Multi-facility support
+o District hospital onboarding
+2. AI Enhancements
+o Ghanaian-language, English NLP for clinical notes
+o Malaria, Tuberculosis, typhoid diagnosis assistant (WHO guidelines)
+o Drug interaction alerts (Ghana Essential Medicines List)
+
+Phase 5: Ecosystem Integration (Q3 2025+)
+1. National Systems
+o NHIS (National Health Insurance) claims
+o EPI (Expanded Program on Immunization) sync
+o Pharmacy stock level APIs
+2. Telemedicine
+o Africa's Talking voice consultations
+o MTN Mobile Money for teleconsult payments
+

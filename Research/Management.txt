@@ -1,0 +1,255 @@
+1. Core Architecture
+Navigation Structure
+Diagram
+Code
+graph TD
+  A[Mage] --> B[Hospital]
+  A --> C[Users]
+  A --> D[Subscription]
+  A --> E[Settings]
+  B --> B1[Storage]
+  B --> B2[Lab Orders]
+  B --> B3[Pharmacy Orders]
+  B --> B4[Audit Trails]
+  E --> E1[Preferences]
+  E --> E2[Application Settings]
+  E1 --> E11[Doctor Signature]
+  E1 --> E12[Auto Logout]
+  E1 --> E13[Date Format]
+  E1 --> E14[Theme]
+  E1 --> E15[Language]
+  E1 --> E16[Reset]
+  E1 --> E17[Change Password]
+  E2 --> E21[Favorites]
+  E2 --> E22[Custom Codes]
+  E2 --> E23[Notifications]
+  E2 --> E24[Branding]
+2. Database Schema
+New Tables Required
+sql
+-- Mage main table
+CREATE TABLE mage_modules (
+  id SERIAL PRIMARY KEY,
+  name VARCHAR(50) UNIQUE NOT NULL -- 'Hospital', 'Users', etc.
+);
+
+-- Users management
+CREATE TABLE practice_users (
+  id UUID PRIMARY KEY,
+  username VARCHAR(50) UNIQUE NOT NULL,
+  role VARCHAR(20) CHECK (role IN ('admin', 'doctor', 'nurse', 'pharmacist')),
+  status VARCHAR(15) CHECK (status IN ('active', 'suspended', 'deactivated', 'pending')),
+  last_active TIMESTAMPTZ,
+  actions JSONB -- {edit: bool, delete: bool}
+);
+
+-- Subscription plans
+CREATE TABLE subscriptions (
+  id SERIAL PRIMARY KEY,
+  type VARCHAR(30) NOT NULL, -- 'Basic', 'Pro', 'Enterprise'
+  validity INTERVAL NOT NULL, -- '30 days', '1 year'
+  signup_date TIMESTAMPTZ DEFAULT NOW(),
+  is_active BOOLEAN DEFAULT TRUE
+);
+
+-- Branding settings
+CREATE TABLE branding (
+  facility_id INTEGER REFERENCES facilities(id),
+  facility_name VARCHAR(100),
+  logo_path VARCHAR(255),
+  primary_color VARCHAR(7) DEFAULT '#1a365d', -- GhEHR blue
+  secondary_color VARCHAR(7) DEFAULT '#fcd116' -- GhEHR gold
+);
+3. Frontend Components
+Users Management (React/TypeScript)
+tsx
+interface UserTableProps {
+  users: {
+    id: string;
+    name: string;
+    role: UserRole;
+    status: 'active' | 'suspended' | 'deactivated' | 'pending';
+    lastLogin?: Date;
+  }[];
+  onAddUser: (user: Omit<User, 'id'>) => Promise<void>;
+  onEditStatus: (id: string, newStatus: UserStatus) => void;
+}
+
+// Status badge component
+const StatusBadge = ({ status }: { status: UserStatus }) => {
+  const colors = {
+    active: 'bg-green-100 text-green-800',
+    suspended: 'bg-yellow-100 text-yellow-800',
+    deactivated: 'bg-red-100 text-red-800',
+    pending: 'bg-blue-100 text-blue-800'
+  };
+  return <span className={`px-2 py-1 rounded-full text-xs ${colors[status]}`}>{status}</span>;
+};
+Branding Customization
+tsx
+// BrandingForm.tsx
+const BrandingForm = ({ facilityId }: { facilityId: number }) => {
+  const [logo, setLogo] = useState<File | null>(null);
+  const [colors, setColors] = useState({
+    primary: '#1a365d',
+    secondary: '#fcd116'
+  });
+
+  const handleUpload = async () => {
+    const formData = new FormData();
+    if (logo) formData.append('logo', logo);
+    await axios.patch(`/api/branding/${facilityId}`, formData);
+  };
+};
+4. Backend APIs
+Key Endpoints
+typescript
+// GET /api/mage/users - List users with filters
+router.get('/users', authenticate('admin'), async (req, res) => {
+  const { status, role } = req.query;
+  const users = await UserService.list({ status, role });
+  res.json(users);
+});
+
+// PATCH /api/mage/branding - Update facility branding
+router.patch('/branding', upload.single('logo'), async (req, res) => {
+  const { facilityId } = req.user;
+  const logoPath = req.file?.path;
+  await BrandingService.update(facilityId, { ...req.body, logoPath });
+  res.sendStatus(204);
+});
+
+// POST /api/mage/subscriptions - Upgrade plan
+router.post('/subscriptions', authenticate('admin'), async (req, res) => {
+  const { plan } = req.body;
+  const result = await PaymentService.upgrade(req.user.facilityId, plan);
+  res.json(result);
+});
+5. Key Features Implementation
+A. Hospital Module
+Subtab	Functionality
+Storage	Disk usage analytics + cleanup tools
+Lab Orders	Integration with Lab Information Systems
+Pharmacy Orders	Medication inventory tracking
+Audit Trails	CSV export of all system events
+B. Subscription Management
+typescript
+// Subscription upgrade logic
+async function upgradePlan(facilityId: number, newPlan: string) {
+  const currentPlan = await getCurrentPlan(facilityId);
+  if (currentPlan === 'Enterprise') throw new Error('Maximum plan reached');
+  
+  await stripe.subscriptions.update(facilityId, { plan: newPlan });
+  await db.subscriptions.update({ 
+    where: { facilityId },
+    data: { type: newPlan, validity: getPlanDuration(newPlan) }
+  });
+}
+C. Settings Module
+Preferences:
+
+Doctor signature upload (PDF/PNG)
+
+Auto logout (15min-24hr dropdown)
+
+Date formats (DD/MM/YYYY, MM/DD/YYYY, YYYY-MM-DD)
+
+Themes (Light/Dark/Custom)
+
+Languages (English, Twi)
+
+Application Settings:
+
+Favorites: Pin frequently used modules
+
+Custom Codes: Facility-specific diagnosis codes
+
+Notifications: Email/SMS alerts configuration
+
+6. Security & Validation
+typescript
+// Role-based access middleware
+const mageAccess = (requiredRole: UserRole) => {
+  return (req: Request, res: Response, next: NextFunction) => {
+    if (req.user.role !== requiredRole && req.user.role !== 'admin') {
+      throw new ForbiddenError('Insufficient permissions');
+    }
+    next();
+  };
+};
+
+// Usage
+router.get('/hospital/audit-trails', mageAccess('admin'), getAuditTrails);
+7. Test Cases
+markdown
+1. [ ] Admin adds new doctor user → Verify pending status email
+2. [ ] Upload 200KB logo → Check PDF report header
+3. [ ] Switch to "Dark" theme → Verify localStorage persistence
+4. [ ] Cancel subscription → Confirm grace period warning
+5. [ ] Set auto-logout to 30min → Verify session expiry
+8. Deliverables Timeline
+Component	Est. Time
+Mage Navigation	2 days
+Users CRUD	3 days
+Subscription Flow	2 days
+Branding Customization	3 days
+Audit Trails	1 day
+Branding Implementation Example
+PDF Report Header:
+
+javascript
+function generatePdfHeader(doc, branding) {
+  if (branding.logo) {
+    doc.image(branding.logo, 50, 45, { width: 50 });
+  }
+  doc.fontSize(16)
+     .text(branding.facilityName || 'GhEHR', 110, 50)
+     .moveDown();
+}
+
+Stripe Integration Purpose
+Handles all subscription billing for your Practice Management module, allowing clinics to:
+
+Subscribe/Upgrade Plans
+
+Process payments for "Basic", "Pro", or "Enterprise" tiers
+
+Example: Clinic upgrades from Basic ($50/mo) to Pro ($150/mo)
+
+Automate Recurring Payments
+
+Charges credit cards/Mobile Money automatically every month/year
+
+Retries failed payments with dunning logic
+
+Manage Subscriptions
+
+Cancel/downgrade plans
+
+Apply discounts or trial periods
+
+// Backend: Upgrade plan endpoint
+import Stripe from 'stripe';
+
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
+
+async function upgradePlan(clinicId: string, newPlan: string) {
+  // 1. Get Stripe customer ID from your database
+  const clinic = await db.clinics.findUnique({ where: { id: clinicId } });
+  
+  // 2. Create subscription in Stripe
+  const subscription = await stripe.subscriptions.create({
+    customer: clinic.stripeCustomerId,
+    items: [{ price: getStripePriceId(newPlan) }],
+  });
+
+  // 3. Update local database
+  await db.subscriptions.update({
+    where: { clinicId },
+    data: { 
+      type: newPlan,
+      stripeSubscriptionId: subscription.id,
+      status: 'active'
+    }
+  });
+}

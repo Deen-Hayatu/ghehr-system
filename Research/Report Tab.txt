@@ -1,0 +1,104 @@
+graph TD
+  A[Reports] --> B[Admin Reports]
+  A --> C[Patient Reports]
+  B --> B1[Appointment Summary]
+  B --> B2[Appointment Details]
+  B --> B3[Visit Summary]
+  B --> B4[Booked Appointments]
+  B --> B5[Patient Lists]
+  C --> C1[Clinical Details]
+  C --> C2[Prescription]
+  C --> C3[Test Order]
+  C --> C4[Vaccine]
+
+B. Functionality
+Admin Reports:
+
+Date-range filters (default: last 30 days)
+
+"Generate" button → PDF/Excel output
+
+Columns:
+
+
+| Date | Patient ID | Name | Doctor | Status | Duration |
+
+
+Patient Reports:
+
+Searchable patient selector (typeahead)
+
+Auto-populate:
+javascript
+{
+  header: {
+    clinicLogo: '/logos/custom-clinic.png', // Overrides default GhEHR logo
+    date: new Date().toLocaleDateString('en-GH'),
+    doctor: currentUser.name
+  },
+  body: // Report-specific data
+}
+
+2. Technical Specifications
+Frontend (React/TypeScript)
+tsx
+// AdminReportLayout.tsx
+interface AdminReportProps {
+  reportType: 'summary' | 'details' | 'visits' | 'booked' | 'lists';
+  onGenerate: (params: ReportParams) => Promise<Blob>;
+}
+
+// PatientReportLayout.tsx
+interface PatientReportProps {
+  reportType: 'clinical' | 'prescription' | 'test' | 'vaccine';
+  patientSearch: (query: string) => Promise<Patient[]>;
+}
+Backend (Node.js/Express)
+typescript
+// routes/reports.ts
+router.post('/admin/:reportType', authenticate('admin'), generateAdminReport);
+router.post('/patient/:reportType', authenticate('doctor'), generatePatientReport);
+
+// Example PDF generation
+const generatePDF = (data: ReportData, logoPath: string) => {
+  const doc = new PDFDocument();
+  doc.image(logoPath, 50, 50, { width: 100 });
+  doc.text(`Report: ${data.type}`, { align: 'center' });
+  // Add dynamic content...
+  return doc;
+};
+Database (PostgreSQL)
+sql
+-- Optimized queries for reports
+CREATE INDEX idx_appointments_date ON appointments(date);
+CREATE INDEX idx_patient_visits ON visits(patient_id, date);
+3. UI/UX Requirements
+Component	Requirements
+Report Type Selector	Tab-based navigation with active state styling
+Date Range Picker	Ghana locale (DD/MM/YYYY)
+Patient Search	Debounced (300ms) typeahead with MUI Autocomplete
+Generate Button	Loading spinner during PDF generation
+Error Handling	Toast notifications for failed generations
+4. Security & Performance
+RBAC Enforcement:
+
+typescript
+// Middleware
+const checkReportAccess = (user: User, reportType: string) => {
+  if (user.role === 'nurse' && reportType === 'patient_lists') {
+    throw new ForbiddenError();
+  }
+};
+Caching:
+
+javascript
+// Redis cache for frequent reports
+const cacheKey = `report:${reportType}:${hash(params)}`;
+const cached = await redis.get(cacheKey);
+if (cached) return cached;
+5. Test Cases
+markdown
+1. [ ] Admin generates "Appointment Summary" for Q1 2024 → PDF with 50 records
+2. [ ] Doctor searches "Kwame" → selects patient → generates "Vaccine Report" → verifies logo
+3. [ ] Nurse attempts admin report → gets 403 error
+4. [ ] Offline mode → cached reports remain available

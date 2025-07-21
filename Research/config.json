@@ -1,0 +1,43 @@
+{
+  "base_url": "https://www.moh.gov.gh/",
+  "scraping_config": {
+    "delay_between_requests": 2,
+    "timeout": 10,
+    "max_retries": 3,
+    "headers": {
+      "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+    }
+  },
+  "target_sections": [
+    "health_policies",
+    "healthcare_facilities", 
+    "health_programs",
+    "publications",
+    "news_updates",
+    "contact_info",
+    "departments"
+  ],
+  "keywords_for_ehr": [
+    "electronic health record",
+    "ehr",
+    "medical record",
+    "patient data",
+    "health information",
+    "data privacy",
+    "medical standards",
+    "healthcare digitization",
+    "telemedicine",
+    "health technology"
+  ],
+  "facility_types": [
+    "hospital",
+    "clinic", 
+    "health center",
+    "polyclinic",
+    "medical center",
+    "community health",
+    "district hospital",
+    "regional hospital",
+    "teaching hospital"
+  ]
+}

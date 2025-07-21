@@ -8,6 +8,7 @@
     "@hookform/resolvers": "^5.1.1",
     "@mui/icons-material": "^7.2.0",
     "@mui/material": "^7.2.0",
+    "@mui/system": "^7.2.0",
     "@mui/x-date-pickers": "^8.6.0",
     "@tanstack/react-query": "^5.81.5",
     "@testing-library/dom": "^10.4.0",
@@ -53,5 +54,6 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  }
+  },
+  "proxy": "http://localhost:5000"
 }

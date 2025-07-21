@@ -1,0 +1,28 @@
+
+# Use an official CUDA image for GPU-based inference
+FROM nvidia/cuda:12.2.0-runtime-ubuntu22.04
+
+# Set working directory
+WORKDIR /app
+
+# Install system dependencies
+RUN apt-get update && apt-get install -y \
+    python3 \
+    python3-pip \
+    git \
+    build-essential \
+    && rm -rf /var/lib/apt/lists/*
+
+# Clone the inference server
+RUN git clone https://github.com/oobabooga/text-generation-webui.git
+
+WORKDIR /app/text-generation-webui
+
+# Install Python requirements
+RUN pip3 install -r requirements.txt
+
+# Download model (optional — could be mounted as a volume)
+# RUN python3 download-model.py TheBloke/Mistral-7B-Instruct-v0.1-GPTQ
+
+# Default command (can be modified to fit your config)
+CMD ["python3", "server.py", "--listen", "--model", "mistral-7b"]
