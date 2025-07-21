@@ -43,6 +43,7 @@ import {
   Save as SaveIcon,
 } from '@mui/icons-material';
 import { useAuth } from '../contexts/AuthContext';
+import { CommonHeader } from './CommonHeader';
 import { AdinkraSymbols } from '../theme/ghanaTheme';
 import axios from 'axios';
 import { debounce } from 'lodash';
@@ -312,7 +313,15 @@ const ClinicalNotes: React.FC = () => {
   }, [selectedPatient]);
 
   return (
-    <Box sx={{ p: 3 }}>
+    <Box sx={{ flexGrow: 1 }}>
+      {/* Header */}
+      <CommonHeader 
+        title="Clinical Notes"
+        subtitle="Patient medical records and notes"
+      />
+      
+      {/* Main Content */}
+      <Box sx={{ p: 3 }}>
       {/* Header */}
       <Box sx={{ mb: 4 }}>
         <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
@@ -763,6 +772,7 @@ const ClinicalNotes: React.FC = () => {
           <Button onClick={() => setViewDialogOpen(false)}>Close</Button>
         </DialogActions>
       </Dialog>
+      </Box>
     </Box>
   );
 };

@@ -48,6 +48,7 @@ import {
 } from '@mui/icons-material';
 import { useAuth } from '../contexts/AuthContext';
 import { AdinkraSymbols } from '../theme/ghanaTheme';
+import { CommonHeader } from './CommonHeader';
 import PatientRegistration from './PatientRegistration';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom'; // Add this import
@@ -500,7 +501,15 @@ const PatientManagement: React.FC = () => {
   };
 
   return (
-    <Box sx={{ p: 3 }}>
+    <Box sx={{ flexGrow: 1 }}>
+      {/* Header */}
+      <CommonHeader 
+        title="Patient Management"
+        subtitle="Manage patient records and information"
+      />
+      
+      {/* Main Content */}
+      <Box sx={{ p: 3 }}>
       {/* Header Section */}
       <Box sx={{ mb: 4 }}>
         <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
@@ -948,6 +957,7 @@ const PatientManagement: React.FC = () => {
         editMode={true}
         patientData={selectedPatient}
       />
+      </Box>
     </Box>
   );
 };

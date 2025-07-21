@@ -6,12 +6,6 @@ import {
   CardContent,
   Typography,
   Button,
-  Avatar,
-  AppBar,
-  Toolbar,
-  IconButton,
-  Menu,
-  MenuItem,
   useTheme,
   alpha,
   Chip,
@@ -20,21 +14,18 @@ import {
   CircularProgress,
 } from '@mui/material';
 import {
-  AccountCircle,
-  Logout,
   Dashboard as DashboardIcon,
   People,
   CalendarToday,
   Receipt,
   TrendingUp,
   LocalHospital,
-  Notifications,
-  Settings,
   Notes,
   PersonAdd,
 } from '@mui/icons-material';
 import { useAuth } from '../contexts/AuthContext';
 import { AdinkraSymbols } from '../theme/ghanaTheme';
+import { CommonHeader } from './CommonHeader';
 import axios from 'axios';
 
 // API base URL
@@ -60,8 +51,7 @@ interface DashboardStats {
 const Dashboard: React.FC = () => {
   const theme = useTheme();
   const navigate = useNavigate();
-  const { user, logout, token } = useAuth();
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const { user, token } = useAuth();
   
   // Dashboard data state
   const [dashboardStats, setDashboardStats] = useState<DashboardStats | null>(null);
@@ -105,19 +95,6 @@ const Dashboard: React.FC = () => {
       fetchDashboardStats();
     }
   }, [token]);
-
-  const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
-
-  const handleLogout = () => {
-    logout();
-    handleClose();
-  };
 
   // Dynamic dashboard data based on fetched statistics
   const getDashboardCards = () => {
@@ -185,73 +162,10 @@ const Dashboard: React.FC = () => {
   return (
     <Box sx={{ flexGrow: 1 }}>
       {/* Header */}
-      <AppBar position="static" elevation={0}>
-        <Toolbar>
-          <Box sx={{ display: 'flex', alignItems: 'center', flexGrow: 1 }}>
-            <Avatar
-              sx={{
-                width: 40,
-                height: 40,
-                background: `linear-gradient(135deg, ${theme.palette.secondary.main} 0%, white 100%)`,
-                mr: 2,
-              }}
-            >
-              <LocalHospital sx={{ color: theme.palette.primary.main }} />
-            </Avatar>
-            <Typography variant="h6" component="div" sx={{ 
-              flexGrow: 1, 
-              fontWeight: 600,
-              color: 'white',
-              textShadow: '1px 1px 2px rgba(0,0,0,0.3)'
-            }}>
-              GhEHR Dashboard
-            </Typography>
-          </Box>
-          
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-            <IconButton color="inherit">
-              <Notifications />
-            </IconButton>
-            <IconButton color="inherit">
-              <Settings />
-            </IconButton>
-            <IconButton
-              size="large"
-              aria-label="account of current user"
-              aria-controls="menu-appbar"
-              aria-haspopup="true"
-              onClick={handleMenu}
-              color="inherit"
-            >
-              <AccountCircle />
-            </IconButton>
-            <Menu
-              id="menu-appbar"
-              anchorEl={anchorEl}
-              anchorOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
-              }}
-              open={Boolean(anchorEl)}
-              onClose={handleClose}
-            >
-              <MenuItem onClick={handleClose}>
-                <AccountCircle sx={{ mr: 1 }} />
-                Profile
-              </MenuItem>
-              <MenuItem onClick={handleLogout}>
-                <Logout sx={{ mr: 1 }} />
-                Logout
-              </MenuItem>
-            </Menu>
-          </Box>
-        </Toolbar>
-      </AppBar>
+      <CommonHeader 
+        title="GhEHR Dashboard"
+        subtitle="Healthcare Management System"
+      />
 
       {/* Main Content */}
       <Box sx={{ p: 3 }}>

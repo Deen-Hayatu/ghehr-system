@@ -44,6 +44,7 @@ import {
   Cancel as CancelIcon,
 } from '@mui/icons-material';
 import { useAuth } from '../contexts/AuthContext';
+import { CommonHeader } from './CommonHeader';
 import { AdinkraSymbols } from '../theme/ghanaTheme';
 import axios from 'axios';
 
@@ -303,34 +304,15 @@ const AppointmentManagement: React.FC = () => {
   }, [selectedDate, selectedStatus, selectedType, token]);
 
   return (
-    <Box sx={{ p: 3 }}>
+    <Box sx={{ flexGrow: 1 }}>
       {/* Header */}
-      <Box sx={{ mb: 4 }}>
-        <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-          <Avatar
-            sx={{
-              width: 48,
-              height: 48,
-              background: `linear-gradient(135deg, ${theme.palette.primary.main} 0%, ${theme.palette.secondary.main} 100%)`,
-              mr: 2,
-            }}
-          >
-            <CalendarIcon />
-          </Avatar>
-          <Box sx={{ flexGrow: 1 }}>
-            <Typography variant="h4" fontWeight="bold" color="primary">
-              Appointment Management
-            </Typography>
-            <Typography variant="body1" color="text.secondary">
-              Schedule and manage patient appointments
-            </Typography>
-          </Box>
-          <Box sx={{ color: theme.palette.secondary.main, fontSize: '2rem' }}>
-            <AdinkraSymbols.Sankofa />
-          </Box>
-        </Box>
-      </Box>
-
+      <CommonHeader 
+        title="Appointment Management"
+        subtitle="Schedule and manage patient appointments"
+      />
+      
+      {/* Main Content */}
+      <Box sx={{ p: 3 }}>
       {/* Filters and Actions */}
       <Card sx={{ mb: 3 }}>
         <CardContent>
@@ -681,6 +663,7 @@ const AppointmentManagement: React.FC = () => {
           <Button onClick={() => setViewDialogOpen(false)}>Close</Button>
         </DialogActions>
       </Dialog>
+      </Box>
     </Box>
   );
 };
