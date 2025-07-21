@@ -30,6 +30,7 @@ import {
   Warning,
   CheckCircle
 } from '@mui/icons-material';
+import { CommonHeader } from './CommonHeader';
 
 export default function MOHDashboard() {
   const theme = useTheme();
@@ -85,11 +86,19 @@ export default function MOHDashboard() {
   const diseases = insights.disease_surveillance || [];
 
   return (
-    <Box sx={{ 
-      p: 3,
-      background: `linear-gradient(135deg, ${alpha(theme.palette.primary.main, 0.03)} 0%, ${alpha(theme.palette.secondary.main, 0.03)} 100%)`,
-      minHeight: '100vh'
-    }}>
+    <Box sx={{ flexGrow: 1 }}>
+      {/* Header */}
+      <CommonHeader 
+        title="Ministry of Health Dashboard"
+        subtitle="Ghana Health System Compliance & Surveillance"
+      />
+      
+      {/* Main Content */}
+      <Box sx={{ 
+        p: 3,
+        background: `linear-gradient(135deg, ${alpha(theme.palette.primary.main, 0.03)} 0%, ${alpha(theme.palette.secondary.main, 0.03)} 100%)`,
+        minHeight: 'calc(100vh - 64px)'
+      }}>
       {/* Header Section with Ghana styling */}
       <Box sx={{ mb: 4 }}>
         <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
@@ -500,6 +509,7 @@ export default function MOHDashboard() {
           <CheckCircle sx={{ mr: 2, color: theme.palette.success.main }} />
           MOH Patient IDs: Ready for Lightwave integration
         </Typography>
+      </Box>
       </Box>
     </Box>
   );

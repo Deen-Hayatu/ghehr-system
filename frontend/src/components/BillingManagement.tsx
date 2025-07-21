@@ -51,6 +51,7 @@ import {
   CalendarToday as CalendarIcon,
 } from '@mui/icons-material';
 import { useAuth } from '../contexts/AuthContext';
+import { CommonHeader } from './CommonHeader';
 import axios from 'axios';
 
 // API base URL
@@ -520,7 +521,15 @@ const BillingManagement: React.FC = () => {
   }
 
   return (
-    <Container maxWidth="xl" sx={{ py: 4 }}>
+    <Box sx={{ flexGrow: 1 }}>
+      {/* Header */}
+      <CommonHeader 
+        title="Billing & Payment Management"
+        subtitle="Manage invoices, process payments, and track revenue"
+      />
+      
+      {/* Main Content */}
+      <Container maxWidth="xl" sx={{ py: 4 }}>
       <Box sx={{ mb: 4 }}>
         <Typography variant="h4" component="h1" gutterBottom>
           <ReceiptIcon sx={{ mr: 2, verticalAlign: 'middle' }} />
@@ -1134,7 +1143,8 @@ const BillingManagement: React.FC = () => {
           {snackbar.message}
         </Alert>
       </Snackbar>
-    </Container>
+      </Container>
+    </Box>
   );
 };
 

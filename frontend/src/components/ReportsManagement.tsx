@@ -32,6 +32,7 @@ import {
   Print as PrintIcon,
 } from '@mui/icons-material';
 import { useAuth } from '../contexts/AuthContext';
+import { CommonHeader } from './CommonHeader';
 import axios from 'axios';
 
 // API base URL
@@ -139,7 +140,15 @@ const ReportsManagement: React.FC = () => {
   }
 
   return (
-    <Container maxWidth="xl" sx={{ py: 4 }}>
+    <Box sx={{ flexGrow: 1 }}>
+      {/* Header */}
+      <CommonHeader 
+        title="Reports & Analytics"
+        subtitle="Comprehensive healthcare reports and analytics"
+      />
+      
+      {/* Main Content */}
+      <Container maxWidth="xl" sx={{ py: 4 }}>
       <Box sx={{ mb: 4 }}>
         <Typography variant="h4" component="h1" gutterBottom>
           <AssessmentIcon sx={{ mr: 2, verticalAlign: 'middle' }} />
@@ -370,7 +379,8 @@ const ReportsManagement: React.FC = () => {
           </Card>
         </>
       )}
-    </Container>
+      </Container>
+    </Box>
   );
 };
 
