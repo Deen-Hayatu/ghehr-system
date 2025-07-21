@@ -494,6 +494,23 @@ const Dashboard: React.FC = () => {
                   >
                     View Reports
                   </Button>
+                  <Button
+                    fullWidth
+                    variant="outlined"
+                    startIcon={<LocalHospital />}
+                    onClick={() => navigate('/moh')}
+                    sx={{ 
+                      py: 2, 
+                      textAlign: 'left', 
+                      justifyContent: 'flex-start',
+                      '&:hover': {
+                        backgroundColor: alpha(theme.palette.info.main, 0.1),
+                        borderColor: theme.palette.info.main,
+                      }
+                    }}
+                  >
+                    MOH Data
+                  </Button>
                 </Box>
               </CardContent>
             </Card>

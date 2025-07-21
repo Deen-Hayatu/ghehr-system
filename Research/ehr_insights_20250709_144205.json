@@ -1,0 +1,821 @@
+{
+  "regulatory_requirements": [
+    {
+      "title": "Health Information System Strategic Plan 2022-2025",
+      "url": "https://www.moh.gov.gh/wp-content/uploads/2024/03/HISSP_2022-2025_FINALVERSION-1.pdf",
+      "source_page": "https://www.moh.gov.gh/policy-documents/",
+      "scraped_at": "2025-07-09T14:26:42.933016"
+    },
+    {
+      "title": "Right to Information Manual (2024) – Ministry of Health",
+      "url": "http://www.moh.gov.gh/wp-content/uploads/2025/02/RIGHT-TO-INFORMATION-MANUAL-MINISTRY-OF-HEALTH.pdf",
+      "source_page": "https://www.moh.gov.gh/manuals-guidelines/",
+      "scraped_at": "2025-07-09T14:26:44.403305"
+    }
+  ],
+  "facility_types": [
+    "hospital",
+    "clinic",
+    "health_center"
+  ],
+  "common_health_issues": [
+    {
+      "issue": "aids",
+      "program": "Ghana AIDS Commission DG paid a courtesy call on Health Minister",
+      "context": "ghana aids commission dg paid a courtesy call on health minister "
+    },
+    {
+      "issue": "aids",
+      "program": "Ghana AIDS Commission DG paid a courtesy call on Health Minister",
+      "context": "ghana aids commission dg paid a courtesy call on health minister "
+    },
+    {
+      "issue": "aids",
+      "program": "Ghana AIDS Commission DG paid a courtesy call on Health Minister",
+      "context": "ghana aids commission dg paid a courtesy call on health minister "
+    },
+    {
+      "issue": "maternal",
+      "program": "Construction of 1600 New Chps Compounds Across the Country Dedicating a Good Proportion of these to Maternal Health and Neonatal Care Services",
+      "context": "construction of 1600 new chps compounds across the country dedicating a good proportion of these to maternal health and neonatal care services the ministry has successfully reviewed and revised the ch"
+    },
+    {
+      "issue": "malaria",
+      "program": "Programme Updates",
+      "context": "programme updates implementation of the national e-health project the ministry of health’s national e-health project, featuring the lightwave health information management system… the qualityrights in"
+    },
+    {
+      "issue": "nutrition",
+      "program": "Programme Updates",
+      "context": "programme updates implementation of the national e-health project the ministry of health’s national e-health project, featuring the lightwave health information management system… the qualityrights in"
+    },
+    {
+      "issue": "malaria",
+      "program": "Programme Updates",
+      "context": "programme updates implementation of the national e-health project the ministry of health’s national e-health project, featuring the lightwave health information management system… the qualityrights in"
+    },
+    {
+      "issue": "nutrition",
+      "program": "Programme Updates",
+      "context": "programme updates implementation of the national e-health project the ministry of health’s national e-health project, featuring the lightwave health information management system… the qualityrights in"
+    },
+    {
+      "issue": "malaria",
+      "program": "Programme Updates",
+      "context": "programme updates implementation of the national e-health project the ministry of health’s national e-health project, featuring the lightwave health information management system… the qualityrights in"
+    },
+    {
+      "issue": "nutrition",
+      "program": "Programme Updates",
+      "context": "programme updates implementation of the national e-health project the ministry of health’s national e-health project, featuring the lightwave health information management system… the qualityrights in"
+    },
+    {
+      "issue": "malaria",
+      "program": "Programme Updates",
+      "context": "programme updates implementation of the national e-health project the ministry of health’s national e-health project, featuring the lightwave health information management system… the qualityrights in"
+    },
+    {
+      "issue": "nutrition",
+      "program": "Programme Updates",
+      "context": "programme updates implementation of the national e-health project the ministry of health’s national e-health project, featuring the lightwave health information management system… the qualityrights in"
+    },
+    {
+      "issue": "malaria",
+      "program": "Programme Updates",
+      "context": "programme updates implementation of the national e-health project the ministry of health’s national e-health project, featuring the lightwave health information management system… the qualityrights in"
+    },
+    {
+      "issue": "nutrition",
+      "program": "Programme Updates",
+      "context": "programme updates implementation of the national e-health project the ministry of health’s national e-health project, featuring the lightwave health information management system… the qualityrights in"
+    },
+    {
+      "issue": "malaria",
+      "program": "Programme Updates",
+      "context": "programme updates implementation of the national e-health project the ministry of health’s national e-health project, featuring the lightwave health information management system… the qualityrights in"
+    },
+    {
+      "issue": "nutrition",
+      "program": "Programme Updates",
+      "context": "programme updates implementation of the national e-health project the ministry of health’s national e-health project, featuring the lightwave health information management system… the qualityrights in"
+    },
+    {
+      "issue": "malaria",
+      "program": "National E-Health Project with Bio-surveillance (Early Warning) System",
+      "context": "national e-health project with bio-surveillance (early warning) system implementation of the national e-health project the ministry of health’s national e-health project, featuring the lightwave healt"
+    },
+    {
+      "issue": "nutrition",
+      "program": "National E-Health Project with Bio-surveillance (Early Warning) System",
+      "context": "national e-health project with bio-surveillance (early warning) system implementation of the national e-health project the ministry of health’s national e-health project, featuring the lightwave healt"
+    },
+    {
+      "issue": "malaria",
+      "program": "National E-Health Project with Bio-surveillance (Early Warning) System",
+      "context": "national e-health project with bio-surveillance (early warning) system implementation of the national e-health project the ministry of health’s national e-health project, featuring the lightwave healt"
+    },
+    {
+      "issue": "nutrition",
+      "program": "National E-Health Project with Bio-surveillance (Early Warning) System",
+      "context": "national e-health project with bio-surveillance (early warning) system implementation of the national e-health project the ministry of health’s national e-health project, featuring the lightwave healt"
+    },
+    {
+      "issue": "malaria",
+      "program": "National E-Health Project with Bio-surveillance (Early Warning) System",
+      "context": "national e-health project with bio-surveillance (early warning) system implementation of the national e-health project the ministry of health’s national e-health project, featuring the lightwave healt"
+    },
+    {
+      "issue": "nutrition",
+      "program": "National E-Health Project with Bio-surveillance (Early Warning) System",
+      "context": "national e-health project with bio-surveillance (early warning) system implementation of the national e-health project the ministry of health’s national e-health project, featuring the lightwave healt"
+    },
+    {
+      "issue": "maternal",
+      "program": "Millennium Accelerated Framework (MAF) Programme",
+      "context": "millennium accelerated framework (maf) programme the mdg acceleration framework (maf) focuses on improving maternal health at both community and health care facilities through the use…"
+    },
+    {
+      "issue": "nutrition",
+      "program": "Regenerative Health & Nutrition",
+      "context": "regenerative health & nutrition regenerative health is the attainment of optimal physical and mental well being through the adoption of holistic healthy lifestyles that…"
+    },
+    {
+      "issue": "maternal",
+      "program": "Millennium Accelerated Framework (MAF) Programme",
+      "context": "millennium accelerated framework (maf) programme the mdg acceleration framework (maf) focuses on improving maternal health at both community and health care facilities through the use of evidence-base"
+    },
+    {
+      "issue": "maternal",
+      "program": "Millennium Accelerated Framework (MAF) Programme",
+      "context": "millennium accelerated framework (maf) programme the mdg acceleration framework (maf) focuses on improving maternal health at both community and health care facilities through the use of evidence-base"
+    },
+    {
+      "issue": "maternal",
+      "program": "Millennium Accelerated Framework (MAF) Programme",
+      "context": "millennium accelerated framework (maf) programme the mdg acceleration framework (maf) focuses on improving maternal health at both community and health care facilities through the use of evidence-base"
+    },
+    {
+      "issue": "maternal",
+      "program": "Millennium Accelerated Framework (MAF) Programme",
+      "context": "millennium accelerated framework (maf) programme the mdg acceleration framework (maf) focuses on improving maternal health at both community and health care facilities through the use of evidence-base"
+    },
+    {
+      "issue": "maternal",
+      "program": "Millennium Accelerated Framework (MAF) Programme",
+      "context": "millennium accelerated framework (maf) programme the mdg acceleration framework (maf) focuses on improving maternal health at both community and health care facilities through the use of evidence-base"
+    },
+    {
+      "issue": "maternal",
+      "program": "Millennium Accelerated Framework (MAF) Programme",
+      "context": "millennium accelerated framework (maf) programme the mdg acceleration framework (maf) focuses on improving maternal health at both community and health care facilities through the use of evidence-base"
+    },
+    {
+      "issue": "maternal",
+      "program": "Millennium Accelerated Framework (MAF) Programme",
+      "context": "millennium accelerated framework (maf) programme the mdg acceleration framework (maf) focuses on improving maternal health at both community and health care facilities through the use of evidence-base"
+    },
+    {
+      "issue": "diabetes",
+      "program": "Regenerative Health & Nutrition",
+      "context": "regenerative health & nutrition regenerative health is the attainment of optimal physical and mental well being through the adoption of holistic healthy lifestyles that strengthen and renew the body a"
+    },
+    {
+      "issue": "hypertension",
+      "program": "Regenerative Health & Nutrition",
+      "context": "regenerative health & nutrition regenerative health is the attainment of optimal physical and mental well being through the adoption of holistic healthy lifestyles that strengthen and renew the body a"
+    },
+    {
+      "issue": "nutrition",
+      "program": "Regenerative Health & Nutrition",
+      "context": "regenerative health & nutrition regenerative health is the attainment of optimal physical and mental well being through the adoption of holistic healthy lifestyles that strengthen and renew the body a"
+    },
+    {
+      "issue": "diabetes",
+      "program": "Regenerative Health & Nutrition",
+      "context": "regenerative health & nutrition regenerative health is the attainment of optimal physical and mental well being through the adoption of holistic healthy lifestyles that strengthen and renew the body a"
+    },
+    {
+      "issue": "hypertension",
+      "program": "Regenerative Health & Nutrition",
+      "context": "regenerative health & nutrition regenerative health is the attainment of optimal physical and mental well being through the adoption of holistic healthy lifestyles that strengthen and renew the body a"
+    },
+    {
+      "issue": "nutrition",
+      "program": "Regenerative Health & Nutrition",
+      "context": "regenerative health & nutrition regenerative health is the attainment of optimal physical and mental well being through the adoption of holistic healthy lifestyles that strengthen and renew the body a"
+    },
+    {
+      "issue": "diabetes",
+      "program": "Regenerative Health & Nutrition",
+      "context": "regenerative health & nutrition regenerative health is the attainment of optimal physical and mental well being through the adoption of holistic healthy lifestyles that strengthen and renew the body a"
+    },
+    {
+      "issue": "hypertension",
+      "program": "Regenerative Health & Nutrition",
+      "context": "regenerative health & nutrition regenerative health is the attainment of optimal physical and mental well being through the adoption of holistic healthy lifestyles that strengthen and renew the body a"
+    },
+    {
+      "issue": "nutrition",
+      "program": "Regenerative Health & Nutrition",
+      "context": "regenerative health & nutrition regenerative health is the attainment of optimal physical and mental well being through the adoption of holistic healthy lifestyles that strengthen and renew the body a"
+    },
+    {
+      "issue": "diabetes",
+      "program": "Regenerative Health & Nutrition",
+      "context": "regenerative health & nutrition regenerative health is the attainment of optimal physical and mental well being through the adoption of holistic healthy lifestyles that strengthen and renew the body a"
+    },
+    {
+      "issue": "hypertension",
+      "program": "Regenerative Health & Nutrition",
+      "context": "regenerative health & nutrition regenerative health is the attainment of optimal physical and mental well being through the adoption of holistic healthy lifestyles that strengthen and renew the body a"
+    },
+    {
+      "issue": "nutrition",
+      "program": "Regenerative Health & Nutrition",
+      "context": "regenerative health & nutrition regenerative health is the attainment of optimal physical and mental well being through the adoption of holistic healthy lifestyles that strengthen and renew the body a"
+    },
+    {
+      "issue": "diabetes",
+      "program": "Regenerative Health & Nutrition",
+      "context": "regenerative health & nutrition regenerative health is the attainment of optimal physical and mental well being through the adoption of holistic healthy lifestyles that strengthen and renew the body a"
+    },
+    {
+      "issue": "hypertension",
+      "program": "Regenerative Health & Nutrition",
+      "context": "regenerative health & nutrition regenerative health is the attainment of optimal physical and mental well being through the adoption of holistic healthy lifestyles that strengthen and renew the body a"
+    },
+    {
+      "issue": "nutrition",
+      "program": "Regenerative Health & Nutrition",
+      "context": "regenerative health & nutrition regenerative health is the attainment of optimal physical and mental well being through the adoption of holistic healthy lifestyles that strengthen and renew the body a"
+    },
+    {
+      "issue": "diabetes",
+      "program": "Regenerative Health & Nutrition",
+      "context": "regenerative health & nutrition regenerative health is the attainment of optimal physical and mental well being through the adoption of holistic healthy lifestyles that strengthen and renew the body a"
+    },
+    {
+      "issue": "hypertension",
+      "program": "Regenerative Health & Nutrition",
+      "context": "regenerative health & nutrition regenerative health is the attainment of optimal physical and mental well being through the adoption of holistic healthy lifestyles that strengthen and renew the body a"
+    },
+    {
+      "issue": "nutrition",
+      "program": "Regenerative Health & Nutrition",
+      "context": "regenerative health & nutrition regenerative health is the attainment of optimal physical and mental well being through the adoption of holistic healthy lifestyles that strengthen and renew the body a"
+    },
+    {
+      "issue": "diabetes",
+      "program": "Regenerative Health & Nutrition",
+      "context": "regenerative health & nutrition regenerative health is the attainment of optimal physical and mental well being through the adoption of holistic healthy lifestyles that strengthen and renew the body a"
+    },
+    {
+      "issue": "hypertension",
+      "program": "Regenerative Health & Nutrition",
+      "context": "regenerative health & nutrition regenerative health is the attainment of optimal physical and mental well being through the adoption of holistic healthy lifestyles that strengthen and renew the body a"
+    },
+    {
+      "issue": "nutrition",
+      "program": "Regenerative Health & Nutrition",
+      "context": "regenerative health & nutrition regenerative health is the attainment of optimal physical and mental well being through the adoption of holistic healthy lifestyles that strengthen and renew the body a"
+    },
+    {
+      "issue": "nutrition",
+      "program": "Regenerative Health & Nutrition",
+      "context": "regenerative health & nutrition "
+    },
+    {
+      "issue": "maternal",
+      "program": "Minister for Health commissioned Kpone Municipal Hospital",
+      "context": "minister for health commissioned kpone municipal hospital the government of ghana in collaboration with czech republic have officially commissioned the kpone municipal hospital in the greataccra regio"
+    },
+    {
+      "issue": "maternal",
+      "program": "Minister for Health commissioned Kpone Municipal Hospital",
+      "context": "minister for health commissioned kpone municipal hospital the government of ghana in collaboration with czech republic have officially commissioned the kpone municipal hospital in the greataccra regio"
+    },
+    {
+      "issue": "maternal",
+      "program": "Minister for Health commissioned Kpone Municipal Hospital",
+      "context": "minister for health commissioned kpone municipal hospital the government of ghana in collaboration with czech republic have officially commissioned the kpone municipal hospital in the greataccra regio"
+    },
+    {
+      "issue": "maternal",
+      "program": "Minister for Health commissioned Kpone Municipal Hospital",
+      "context": "minister for health commissioned kpone municipal hospital the government of ghana in collaboration with czech republic have officially commissioned the kpone municipal hospital in the greataccra regio"
+    },
+    {
+      "issue": "maternal",
+      "program": "Minister for Health commissioned Kpone Municipal Hospital",
+      "context": "minister for health commissioned kpone municipal hospital the government of ghana in collaboration with czech republic have officially commissioned the kpone municipal hospital in the greataccra regio"
+    },
+    {
+      "issue": "maternal",
+      "program": "Minister for Health commissioned Kpone Municipal Hospital",
+      "context": "minister for health commissioned kpone municipal hospital the government of ghana in collaboration with czech republic have officially commissioned the kpone municipal hospital in the greataccra regio"
+    },
+    {
+      "issue": "maternal",
+      "program": "Minister for Health commissioned Kpone Municipal Hospital",
+      "context": "minister for health commissioned kpone municipal hospital the government of ghana in collaboration with czech republic have officially commissioned the kpone municipal hospital in the greataccra regio"
+    },
+    {
+      "issue": "immunization",
+      "program": "GAVI mission paid a courtesy call on Minister for Health",
+      "context": "gavi mission paid a courtesy call on minister for health the global alliance for vaccines and immunization (gavi) has held a meeting with the ministry of health to discuss its ongoing mission within g"
+    },
+    {
+      "issue": "immunization",
+      "program": "GAVI mission paid a courtesy call on Minister for Health",
+      "context": "gavi mission paid a courtesy call on minister for health the global alliance for vaccines and immunization (gavi) has held a meeting with the ministry of health to discuss its ongoing mission within g"
+    },
+    {
+      "issue": "immunization",
+      "program": "GAVI mission paid a courtesy call on Minister for Health",
+      "context": "gavi mission paid a courtesy call on minister for health the global alliance for vaccines and immunization (gavi) has held a meeting with the ministry of health to discuss its ongoing mission within g"
+    },
+    {
+      "issue": "immunization",
+      "program": "GAVI mission paid a courtesy call on Minister for Health",
+      "context": "gavi mission paid a courtesy call on minister for health the global alliance for vaccines and immunization (gavi) has held a meeting with the ministry of health to discuss its ongoing mission within g"
+    },
+    {
+      "issue": "immunization",
+      "program": "GAVI mission paid a courtesy call on Minister for Health",
+      "context": "gavi mission paid a courtesy call on minister for health the global alliance for vaccines and immunization (gavi) has held a meeting with the ministry of health to discuss its ongoing mission within g"
+    },
+    {
+      "issue": "immunization",
+      "program": "GAVI mission paid a courtesy call on Minister for Health",
+      "context": "gavi mission paid a courtesy call on minister for health the global alliance for vaccines and immunization (gavi) has held a meeting with the ministry of health to discuss its ongoing mission within g"
+    },
+    {
+      "issue": "immunization",
+      "program": "GAVI mission paid a courtesy call on Minister for Health",
+      "context": "gavi mission paid a courtesy call on minister for health the global alliance for vaccines and immunization (gavi) has held a meeting with the ministry of health to discuss its ongoing mission within g"
+    },
+    {
+      "issue": "maternal",
+      "program": "Minister for Health inaugurates Ghana National Surgical, Obstetric, and Anesthesia Plan (NSOAP)",
+      "context": "minister for health inaugurates ghana national surgical, obstetric, and anesthesia plan (nsoap) in a bid to strengthen surgical, obstetric, and anaesthesia care in ghana, hon. kwabena mintah akandoh, "
+    },
+    {
+      "issue": "maternal",
+      "program": "Minister for Health inaugurates Ghana National Surgical, Obstetric, and Anesthesia Plan (NSOAP)",
+      "context": "minister for health inaugurates ghana national surgical, obstetric, and anesthesia plan (nsoap) in a bid to strengthen surgical, obstetric, and anaesthesia care in ghana, hon. kwabena mintah akandoh, "
+    },
+    {
+      "issue": "maternal",
+      "program": "Minister for Health inaugurates Ghana National Surgical, Obstetric, and Anesthesia Plan (NSOAP)",
+      "context": "minister for health inaugurates ghana national surgical, obstetric, and anesthesia plan (nsoap) in a bid to strengthen surgical, obstetric, and anaesthesia care in ghana, hon. kwabena mintah akandoh, "
+    },
+    {
+      "issue": "maternal",
+      "program": "Minister for Health inaugurates Ghana National Surgical, Obstetric, and Anesthesia Plan (NSOAP)",
+      "context": "minister for health inaugurates ghana national surgical, obstetric, and anesthesia plan (nsoap) in a bid to strengthen surgical, obstetric, and anaesthesia care in ghana, hon. kwabena mintah akandoh, "
+    },
+    {
+      "issue": "maternal",
+      "program": "Minister for Health inaugurates Ghana National Surgical, Obstetric, and Anesthesia Plan (NSOAP)",
+      "context": "minister for health inaugurates ghana national surgical, obstetric, and anesthesia plan (nsoap) in a bid to strengthen surgical, obstetric, and anaesthesia care in ghana, hon. kwabena mintah akandoh, "
+    },
+    {
+      "issue": "maternal",
+      "program": "Minister for Health inaugurates Ghana National Surgical, Obstetric, and Anesthesia Plan (NSOAP)",
+      "context": "minister for health inaugurates ghana national surgical, obstetric, and anesthesia plan (nsoap) in a bid to strengthen surgical, obstetric, and anaesthesia care in ghana, hon. kwabena mintah akandoh, "
+    },
+    {
+      "issue": "maternal",
+      "program": "Minister for Health inaugurates Ghana National Surgical, Obstetric, and Anesthesia Plan (NSOAP)",
+      "context": "minister for health inaugurates ghana national surgical, obstetric, and anesthesia plan (nsoap) in a bid to strengthen surgical, obstetric, and anaesthesia care in ghana, hon. kwabena mintah akandoh, "
+    },
+    {
+      "issue": "aids",
+      "program": "Ghana AIDS Commission DG paid a courtesy call on Health Minister",
+      "context": "ghana aids commission dg paid a courtesy call on health minister ministry of health– p.o.box m 44sekou toure avenuenorth ridgeadjacent national health insurance head office"
+    },
+    {
+      "issue": "aids",
+      "program": "Ghana AIDS Commission DG paid a courtesy call on Health Minister",
+      "context": "ghana aids commission dg paid a courtesy call on health minister ministry of health– p.o.box m 44sekou toure avenuenorth ridgeadjacent national health insurance head office"
+    },
+    {
+      "issue": "aids",
+      "program": "Ghana AIDS Commission DG paid a courtesy call on Health Minister",
+      "context": "ghana aids commission dg paid a courtesy call on health minister ministry of health– p.o.box m 44sekou toure avenuenorth ridgeadjacent national health insurance head office"
+    },
+    {
+      "issue": "aids",
+      "program": "Ghana AIDS Commission DG paid a courtesy call on Health Minister",
+      "context": "ghana aids commission dg paid a courtesy call on health minister "
+    },
+    {
+      "issue": "aids",
+      "program": "Ghana AIDS Commission DG paid a courtesy call on Health Minister",
+      "context": "ghana aids commission dg paid a courtesy call on health minister "
+    },
+    {
+      "issue": "aids",
+      "program": "Ghana AIDS Commission DG paid a courtesy call on Health Minister",
+      "context": "ghana aids commission dg paid a courtesy call on health minister "
+    },
+    {
+      "issue": "aids",
+      "program": "Ghana AIDS Commission DG paid a courtesy call on Health Minister",
+      "context": "ghana aids commission dg paid a courtesy call on health minister "
+    },
+    {
+      "issue": "aids",
+      "program": "Ghana AIDS Commission DG paid a courtesy call on Health Minister",
+      "context": "ghana aids commission dg paid a courtesy call on health minister "
+    },
+    {
+      "issue": "aids",
+      "program": "Ghana AIDS Commission DG paid a courtesy call on Health Minister",
+      "context": "ghana aids commission dg paid a courtesy call on health minister "
+    },
+    {
+      "issue": "aids",
+      "program": "Ghana AIDS Commission DG paid a courtesy call on Health Minister",
+      "context": "ghana aids commission dg paid a courtesy call on health minister "
+    },
+    {
+      "issue": "aids",
+      "program": "Ghana AIDS Commission DG paid a courtesy call on Health Minister",
+      "context": "ghana aids commission dg paid a courtesy call on health minister "
+    },
+    {
+      "issue": "aids",
+      "program": "Ghana AIDS Commission DG paid a courtesy call on Health Minister",
+      "context": "ghana aids commission dg paid a courtesy call on health minister "
+    },
+    {
+      "issue": "aids",
+      "program": "Ghana AIDS Commission DG paid a courtesy call on Health Minister",
+      "context": "ghana aids commission dg paid a courtesy call on health minister "
+    },
+    {
+      "issue": "aids",
+      "program": "Ghana AIDS Commission DG paid a courtesy call on Health Minister",
+      "context": "ghana aids commission dg paid a courtesy call on health minister "
+    },
+    {
+      "issue": "aids",
+      "program": "Ghana AIDS Commission DG paid a courtesy call on Health Minister",
+      "context": "ghana aids commission dg paid a courtesy call on health minister "
+    },
+    {
+      "issue": "aids",
+      "program": "Ghana AIDS Commission DG paid a courtesy call on Health Minister",
+      "context": "ghana aids commission dg paid a courtesy call on health minister "
+    },
+    {
+      "issue": "aids",
+      "program": "Ghana AIDS Commission DG paid a courtesy call on Health Minister",
+      "context": "ghana aids commission dg paid a courtesy call on health minister "
+    },
+    {
+      "issue": "aids",
+      "program": "Ghana AIDS Commission DG paid a courtesy call on Health Minister",
+      "context": "ghana aids commission dg paid a courtesy call on health minister "
+    },
+    {
+      "issue": "aids",
+      "program": "Ghana AIDS Commission DG paid a courtesy call on Health Minister",
+      "context": "ghana aids commission dg paid a courtesy call on health minister "
+    },
+    {
+      "issue": "aids",
+      "program": "Ghana AIDS Commission DG paid a courtesy call on Health Minister",
+      "context": "ghana aids commission dg paid a courtesy call on health minister "
+    }
+  ],
+  "data_standards": [],
+  "compliance_requirements": [],
+  "discovered_sections": {
+    "other": [
+      "Menu",
+      "Ministry Of Health",
+      "Home",
+      "Role & Function of MOH",
+      "Deputy Ministers",
+      "Office of the Chief Director",
+      "Organogram",
+      "Health Partners",
+      "Agencies",
+      "Directorate",
+      "Human Resource for Health Development",
+      "Research Statistics Information Management Directorate",
+      "Traditional & Alternative Medicine Directorate",
+      "Procurement & Supply",
+      "General Administration",
+      "Finance Directorate",
+      "Internal Audit Directorate",
+      "Infrastructure Directorate",
+      "Technical Coordination Directorate (TCD)",
+      "Annual Reviews",
+      "Facts & Figures",
+      "Capital Projects",
+      "Financial Reports",
+      "Nutrition and Malaria Control for Child Survival",
+      "Climate Change Health Project",
+      "Regenerative Health & Nutrition",
+      "Media",
+      "Upcoming Events",
+      "Gallery of Projects",
+      "Video Gallery",
+      "Tenders",
+      "Useful Links",
+      "",
+      "Health Minister visits UG health facilities",
+      "",
+      "",
+      "HEALTH MINISTER APPEALS TO STRIKING HEALTH WORKERS TO RETURN TO DUTY",
+      "",
+      "HEALTH MINISTER SWEARS IN NEW BOARDS OF KEY HEALTH AGENCIES",
+      "",
+      "AFRICA CDC DIRECTOR GENERAL PAYS COURTESY CALL ON MINISTER FOR HEALTH",
+      "",
+      "MoH COMMEMORATES, WORLD HAND HYGIENE DAY",
+      "",
+      "PRESIDENT MAHAMA LAUNCHES GHANA MEDICAL TRUST FUND TO SUPPORT CHRONIC DISEASE CARE",
+      "",
+      "",
+      "",
+      "MINISTER FOR HEALTH HOLDS EMERGENCY STAKEHOLDER MEETING WITH PRINCIPALS AND DIRECTORS OF HEALTH TRAINING INSTITUTIONS",
+      "",
+      "",
+      "",
+      "Minister for Health and Social Protection in Morocco paid a courtesy visit to Ghana’s Minister for Health",
+      "",
+      "GAVI mission paid a courtesy call on Minister for Health",
+      "",
+      "Minister for Health inaugurates Ghana National Surgical, Obstetric, and Anesthesia Plan (NSOAP)",
+      "",
+      "Ministry of Health destroyed large consignment of illicit opioid-containing drugs",
+      "",
+      "Ghana AIDS Commission DG paid a courtesy call on Health Minister",
+      "",
+      "Egyptian Ambassador to Ghana paid a courtesy call on Health Minister",
+      "",
+      "UNFPA Country Rep. paid a courtesy call on Health Minister",
+      "",
+      "Ministry of Health commemorates 2025 world TB Day",
+      "",
+      "Hon. Minister for Health inaugurates Ghana Medical Trust Fund (MahamaCares) Taskforce",
+      "",
+      "",
+      "Minister for Health embarked on a visit to Agenda 111 sites in Ashanti Region",
+      "",
+      "WAHO DG paid a courtesy call on Minister for Health",
+      "",
+      "Minister for Health commissions KOFIH Health Centre",
+      "",
+      "World Bank Operational Manager paid a courtesy call on Minister for Health",
+      "",
+      "Korean Ambassador to Ghana paid a courtesy call on Minister for Health",
+      "",
+      "Health Minister visit Central Region on cholera cases",
+      "",
+      "US AMBASSADOR CALLS ON HEALTH MINISTER TO DISCUSS USAID FUNDING AND HEALTHCARE IMPROVEMENTS",
+      "",
+      "Minister for Health pays a working visit to Upper West on Meningitis fight",
+      "",
+      "Ministry of Health welcomes Minister",
+      "",
+      "President John Mahama sworn in Hon. Kwabena Mintah Akandoh as the Minister of Health",
+      "",
+      "Health Minister visits UG health facilities",
+      "",
+      "",
+      "HEALTH MINISTER APPEALS TO STRIKING HEALTH WORKERS TO RETURN TO DUTY",
+      "",
+      "HEALTH MINISTER SWEARS IN NEW BOARDS OF KEY HEALTH AGENCIES",
+      "",
+      "AFRICA CDC DIRECTOR GENERAL PAYS COURTESY CALL ON MINISTER FOR HEALTH",
+      "",
+      "MoH COMMEMORATES, WORLD HAND HYGIENE DAY",
+      "",
+      "",
+      "2014 – 2017 Health Sector Medium Term Development Plan",
+      "2014 Holistic Assessment Report",
+      "Health Finance Strategy",
+      "MAF Strategic Plan",
+      "Monitoring and Evaluation Framework",
+      "Upcoming Events",
+      "Launch of Ghana Medical Trust Fund",
+      "",
+      "",
+      "Launch of Mahamacares Taskforce",
+      "National E-Health Project with Bio-surveillance (Early Warning) System",
+      "",
+      "QualityRights in Mental Health – Ghana Project",
+      "",
+      "Nutrition and Malaria Control for Child Survival",
+      "",
+      "Procedures for Wearing face Mask",
+      "",
+      "Gonorrhoea researchers identify innovative vaccine, new antibiotic",
+      "",
+      "WHO announces model essential medicines lists for 2017",
+      "",
+      "World No Tobacco Day, 31 May 2017",
+      "",
+      "WHO publishes its first ever list of antibiotic-resistant “priority pathogens”",
+      "Agencies",
+      "Ministry Agencies",
+      "Allied Health Professions Council",
+      "",
+      "",
+      "Christian Health Association of Ghana",
+      "Procurement of Ambulance Vehicles for the Ministry of Health (MOH/2017/PREQ/A.4/1)",
+      "",
+      "Korea International Cooporation Agency",
+      "",
+      "World Bank",
+      "",
+      "",
+      "Japan International Corporation Agency",
+      "",
+      "African Development Bank",
+      "Facebook",
+      "X",
+      "Instagram",
+      "info@moh.gov.gh",
+      "0Fans",
+      "0Followers",
+      "0Subscribers",
+      "0Followers",
+      "The Presidency",
+      "The Government of Ghana",
+      "The World Health Organisation",
+      "UNICEF",
+      "Regenerative Health",
+      "Back to top button",
+      "Close",
+      "Facebook",
+      "X",
+      "Instagram"
+    ],
+    "contact": [
+      "About Us",
+      "Contact Us",
+      "Contact"
+    ],
+    "policy": [
+      "Policy, Planning, Monitoring & Evaluation",
+      "Publications",
+      "COVID-19 Response Documents",
+      "Policy Documents",
+      "Policy Briefs",
+      "Manuals & Guidelines",
+      "National Policy on Health Workforce Policy held by Ministry of Health",
+      "National Policy Dialogue on Health Workforce in Ghana"
+    ],
+    "program": [
+      "Annual Programme of Work",
+      "Programmes",
+      "Millennium Accelerated Framework (MAF) Programme",
+      "Programme Updates",
+      "Programme Updates",
+      "World Food Programme",
+      "Ghana Health Service",
+      "Community-Based Health Planning and Services"
+    ],
+    "news": [
+      "News & Events",
+      "Press Releases",
+      "Press Releases",
+      "Press Release: Report on Investigation into alleged abandonment of patient at Ojobi",
+      "Press Release – Release of funds to clear GF commodities.jpeg"
+    ],
+    "facility": [
+      "HEALTH MINISTER INAUGURATES BOARDS OF GHANA HEALTH SERVICE AND HO TEACHING HOSPITAL",
+      "MINISTRY OF HEALTH ENGAGES GMA AND FACILITY HEADS ON SYSTEMIC CHALLENGES IN HEALTHCARE",
+      "HEALTH MINISTER DONATES MEDICAL EQUIPMENT TO TAMALE TEACHING HOSPITAL",
+      "Minister for Health commissioned Kpone Municipal Hospital",
+      "Minister for Health paid a working visit to Ahanta West Municipal Hospital",
+      "HEALTH MINISTER INAUGURATES BOARDS OF GHANA HEALTH SERVICE AND HO TEACHING HOSPITAL",
+      "Press Release: Completed hospitals under Agenda 111",
+      "Construction and Equipping of 597-Bed University Hospital At Legon",
+      "Major Upgrade and Rehabilitation of Regional Hospital, Ridge-Accra (420 Bed)",
+      "Ghana 8 No Hospital Project",
+      "Construction of 10 Polyclinics in Central Region",
+      "Center for Scientific Research into Plant Medicine",
+      "Rehabilitation of Debra Ward at 37 Military Hospitals in the Greater Accra Region for Ministry of Health"
+    ]
+  },
+  "ehr_relevant_links": [
+    {
+      "text": "Programme Updates",
+      "url": "https://www.moh.gov.gh/national-e-health-project-with-bio-surveillance-early-warning-system/",
+      "category": "program",
+      "ehr_relevance_score": 2
+    },
+    {
+      "text": "National E-Health Project with Bio-surveillance (Early Warning) System",
+      "url": "https://www.moh.gov.gh/national-e-health-project-with-bio-surveillance-early-warning-system/",
+      "category": "other",
+      "ehr_relevance_score": 2
+    },
+    {
+      "text": "Research Statistics Information Management Directorate",
+      "url": "https://www.moh.gov.gh/research-statistics-information-management-directorate/",
+      "category": "other",
+      "ehr_relevance_score": 1
+    },
+    {
+      "text": "Climate Change Health Project",
+      "url": "https://www.moh.gov.gh/climate-change-health-project/",
+      "category": "other",
+      "ehr_relevance_score": 1
+    },
+    {
+      "text": "Regenerative Health & Nutrition",
+      "url": "https://www.moh.gov.gh/regenerative-health-nutrition/",
+      "category": "other",
+      "ehr_relevance_score": 1
+    },
+    {
+      "text": "",
+      "url": "https://www.moh.gov.gh/ministry-of-health-engages-gma-and-facility-heads-on-systemic-challenges-in-healthcare/",
+      "category": "other",
+      "ehr_relevance_score": 1
+    },
+    {
+      "text": "MINISTRY OF HEALTH ENGAGES GMA AND FACILITY HEADS ON SYSTEMIC CHALLENGES IN HEALTHCARE",
+      "url": "https://www.moh.gov.gh/ministry-of-health-engages-gma-and-facility-heads-on-systemic-challenges-in-healthcare/",
+      "category": "facility",
+      "ehr_relevance_score": 1
+    }
+  ],
+  "contact_summary": {
+    "phone": [
+      "+233 302",
+      "+233 302",
+      "+233 302",
+      "+233 302",
+      "+233 302",
+      "+233 302",
+      "+233 302",
+      "+233 302",
+      "+233 302",
+      "+233 302",
+      "+233 302",
+      "+233 302",
+      "+233 302",
+      "+233 302",
+      "+233 302",
+      "+233 302",
+      "+233 302"
+    ],
+    "email": [
+      "info@moh.gov.gh",
+      "info@moh.gov.gh",
+      "info@moh.gov.gh",
+      "info@moh.gov.gh",
+      "info@moh.gov.gh",
+      "info@moh.gov.gh",
+      "info@moh.gov.gh",
+      "info@moh.gov.gh",
+      "info@moh.gov.gh",
+      "info@moh.gov.gh",
+      "info@moh.gov.gh"
+    ],
+    "address": [
+      "Ministry of Health – P.O.Box M 44",
+      "Ministry of Health – P.O.Box M 44",
+      "Sekou Toure Avenue",
+      "Ministry of Health – P.O.Box M 44",
+      "Ministry of Health – P.O.Box M 44",
+      "Sekou Toure Avenue",
+      "Ministry of Health – P.O.Box M 44",
+      "Ministry of Health – P.O.Box M 44",
+      "Sekou Toure Avenue",
+      "P.O.Box M 44",
+      "P.O.Box M 44",
+      "Sekou Toure Avenue",
+      "Ministry of Health – P.O.Box M 44",
+      "Ministry of Health – P.O.Box M 44",
+      "Sekou Toure Avenue"
+    ],
+    "fax": [
+      "Fax : +233 302 665651",
+      "Fax : +233 302 665651",
+      "Fax : +233 302 665651",
+      "Fax",
+      "Fax : +233 302 665651"
+    ]
+  },
+  "recommendations": [
+    "Design EHR to support 3 facility types: hospital, clinic, health_center",
+    "Include templates/modules for common health issues: aids, maternal, hypertension, nutrition, immunization",
+    "Integrate SMS/phone communication features for patient engagement",
+    "Include email notifications and communication features",
+    "Implement offline-capable design for rural areas with poor connectivity",
+    "Include multilingual support (English, Twi, other local languages)",
+    "Ensure compliance with Ghana's data protection and health information policies",
+    "Design mobile-first interface for healthcare workers using smartphones",
+    "Include Mobile Money integration for billing (popular payment method in Ghana)"
+  ]
+}

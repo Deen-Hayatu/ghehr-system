@@ -1,0 +1,29 @@
+User Management ( Lab users, Front desk users, Medical charting users
+Patient Engagement
+Appointment Scheduling
+Practice Management. Add a table called mage, when mage is clicked, it opens up subtabs Hospital,Users,Subscription and  Settings. Hospital tab further opens the Tabs storage, Lab orders, Pharmacy orders and audit trails which will all open to give you the necessary information. the users Tab will open a window that shows current use, and their role, it has user ID, user name , role and actions. here a user can be added or deleleted, it should also show wherether the user is active ,suspended, deactivated or not activated.Subscription should show the payements tab and the different kind of subscriiptions. ie it shows subscription type, validity, date signed up and the option to upgrade or cancel plan. The Settingd tab opens Preferences which has options for Doctor signature upload, Auto log out time, Date format selection, theme selectionLanguage selection and the option to reset all settings, below Preferences is the Change password . Then Application Settings is the next big tab after Preferences, here we have favourite, custom codes, nitification and Branding Tab, the branding tab opens a window where the facility can brand the system in their own way, so Add a Name of the facility that will appear on all reports and also upload their logo
+Bills & Receipts
+Patient Portal
+Reports - click on reports opens new subtab of patient and admin, admin tab has subtabs of appointment summary, appointment details, visit summary, booked appointments and patient lists, click on appointment summary or anyother subtabs takes you to a page where you click generate to generate the reports. Click on patient part of the report tab takes you to 4 subtabs, clinical details, prescription, test order, Vaccine. clicking on each of the patient tab takes you to a subpage where  you can select or search a patient name and generate to automatically generate a report with dates, doctors name and the particular details on. the report should also bearthe logo or GhEHR or a customized one for the specific clinic or practice
+Email Notifications
+Patient Intake Form
+Lab Interface
+Medical Charting User
+Front Desk User
+Lab User
+Pharmacy User 
+Audit Logs
+International Medical Codes Support
+SMS Notifications
+EHR File & Image attachment
+Document Management
+Speciality Templates
+Queue Management
+Organization branding support
+Patient Activity Tracker
+Health Records Activity Tracker
+Custom Roles & Privileges
+E-Prescription
+Appointment Reminder
+Inpatient Management
+
