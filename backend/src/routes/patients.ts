@@ -83,6 +83,77 @@ router.get('/', authenticateToken, (req: AuthenticatedRequest, res: Response) =>
   }
 });
 
+// GET /api/patients/search - Search patients for reports (must be before /:id route)
+router.get('/search', authenticateToken, (req: AuthenticatedRequest, res: Response) => {
+  try {
+    const { q } = req.query;
+    const facilityId = req.user?.facilityId;
+
+    if (!q || q.toString().trim() === '') {
+      res.json({
+        success: true,
+        data: { patients: [] },
+      });
+      return;
+    }
+
+    const searchTerm = q.toString().toLowerCase().trim();
+    let filteredPatients = patients;
+
+    // Filter by facility if user has one
+    if (facilityId) {
+      filteredPatients = patients.filter(patient => 
+        patient.facilityId === facilityId
+      );
+    }
+
+    // Search by name, patient ID, or phone
+    const matchingPatients = filteredPatients.filter(patient => 
+      patient.firstName.toLowerCase().includes(searchTerm) ||
+      patient.lastName.toLowerCase().includes(searchTerm) ||
+      patient.patientId.toLowerCase().includes(searchTerm) ||
+      (patient.phoneNumber && patient.phoneNumber.includes(searchTerm)) ||
+      `${patient.firstName} ${patient.lastName}`.toLowerCase().includes(searchTerm)
+    );
+
+    // Limit to 10 results for performance
+    const limitedResults = matchingPatients.slice(0, 10);
+
+    // Calculate age from date of birth
+    const calculateAge = (dateOfBirth: string): number => {
+      const today = new Date();
+      const birthDate = new Date(dateOfBirth);
+      let age = today.getFullYear() - birthDate.getFullYear();
+      const monthDiff = today.getMonth() - birthDate.getMonth();
+      if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+        age--;
+      }
+      return age;
+    };
+
+    // Transform to simple format for reports
+    const transformedPatients = limitedResults.map(patient => ({
+      id: patient.id,
+      name: `${patient.firstName} ${patient.lastName}`,
+      age: calculateAge(patient.dateOfBirth),
+      gender: patient.gender,
+      phone: patient.phoneNumber,
+      patientId: patient.patientId,
+    }));
+
+    res.json({
+      success: true,
+      data: { patients: transformedPatients },
+    });
+  } catch (error) {
+    console.error('❌ Error searching patients:', error);
+    res.status(500).json({
+      success: false,
+      error: { message: 'Error searching patients' },
+    });
+  }
+});
+
 // GET /api/patients/:id - Get specific patient
 router.get('/:id', authenticateToken, async (req: AuthenticatedRequest, res: Response): Promise<void> => {
   try {

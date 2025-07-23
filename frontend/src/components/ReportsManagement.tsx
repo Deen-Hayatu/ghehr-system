@@ -16,23 +16,24 @@ import {
   Chip,
   CircularProgress,
   Alert,
-  Select,
-  MenuItem,
-  FormControl,
-  InputLabel,
-  TextField,
+  Tabs,
+  Tab,
+  useTheme,
 } from '@mui/material';
 import {
   Assessment as AssessmentIcon,
   TrendingUp as TrendingUpIcon,
   People as PeopleIcon,
   CalendarToday as CalendarIcon,
-  Receipt as ReceiptIcon,
   Download as DownloadIcon,
   Print as PrintIcon,
+  AdminPanelSettings as AdminIcon,
+  PersonSearch as PatientSearchIcon,
 } from '@mui/icons-material';
 import { useAuth } from '../contexts/AuthContext';
 import { CommonHeader } from './CommonHeader';
+import AdminReportLayout, { AdminReportType, ReportParams } from './AdminReportLayout';
+import PatientReportLayout, { PatientReportType, PatientReportParams, Patient } from './PatientReportLayout';
 import axios from 'axios';
 
 // API base URL
@@ -64,14 +65,39 @@ interface ReportStats {
   }>;
 }
 
+interface TabPanelProps {
+  children?: React.ReactNode;
+  index: number;
+  value: number;
+}
+
+function TabPanel(props: TabPanelProps) {
+  const { children, value, index, ...other } = props;
+
+  return (
+    <div
+      role="tabpanel"
+      hidden={value !== index}
+      id={`reports-tabpanel-${index}`}
+      aria-labelledby={`reports-tab-${index}`}
+      {...other}
+    >
+      {value === index && <Box sx={{ p: 3 }}>{children}</Box>}
+    </div>
+  );
+}
+
 const ReportsManagement: React.FC = () => {
-  const { token } = useAuth();
+  const theme = useTheme();
+  const { token, user } = useAuth();
   const [stats, setStats] = useState<ReportStats | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [selectedPeriod, setSelectedPeriod] = useState('today');
-  const [startDate, setStartDate] = useState('');
-  const [endDate, setEndDate] = useState('');
+  
+  // Tab management
+  const [mainTabValue, setMainTabValue] = useState(0);
+  const [adminTabValue, setAdminTabValue] = useState(0);
+  const [patientTabValue, setPatientTabValue] = useState(0);
 
   const fetchReports = async () => {
     try {
@@ -107,6 +133,41 @@ const ReportsManagement: React.FC = () => {
     fetchReports();
   }, [token]);
 
+  // Admin report generation
+  const handleAdminReportGenerate = async (params: ReportParams): Promise<Blob> => {
+    try {
+      const response = await axios.post(
+        `${API_BASE_URL}/api/reports/admin/${params.reportType}`,
+        params,
+        {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          },
+          responseType: 'blob'
+        }
+      );
+      
+      return response.data;
+    } catch (error: any) {
+      console.error('Error generating admin report:', error);
+      throw new Error(error.response?.data?.message || 'Failed to generate report');
+    }
+  };
+
+  // Patient search functionality
+  const searchPatients = async (query: string): Promise<Patient[]> => {
+    if (!query || query.length < 2) return [];
+    
+    try {
+      const response = await axios.get(`/api/patients/search?q=${encodeURIComponent(query)}`);
+      return response.data;
+    } catch (error) {
+      console.error('Error searching patients:', error);
+      return [];
+    }
+  };
+
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat('en-GH', {
       style: 'currency',
@@ -115,8 +176,8 @@ const ReportsManagement: React.FC = () => {
   };
 
   const generatePDF = () => {
-    // TODO: Implement PDF generation
-    console.log('Generating PDF report...');
+    // TODO: Implement PDF generation for dashboard stats
+    console.log('Generating dashboard PDF report...');
   };
 
   const printReport = () => {
@@ -139,6 +200,12 @@ const ReportsManagement: React.FC = () => {
     );
   }
 
+  const adminReportTypes: AdminReportType[] = ['summary', 'details', 'visits', 'booked', 'lists'];
+  const patientReportTypes: PatientReportType[] = ['comprehensive', 'clinical', 'medical-history', 'recent-visits'];
+
+  // Check if user has admin access
+  const hasAdminAccess = user?.role === 'admin' || user?.role === 'doctor';
+
   return (
     <Box sx={{ flexGrow: 1 }}>
       {/* Header */}
@@ -148,238 +215,271 @@ const ReportsManagement: React.FC = () => {
       />
       
       {/* Main Content */}
-      <Container maxWidth="xl" sx={{ py: 4 }}>
-      <Box sx={{ mb: 4 }}>
-        <Typography variant="h4" component="h1" gutterBottom>
-          <AssessmentIcon sx={{ mr: 2, verticalAlign: 'middle' }} />
-          Reports & Analytics
-        </Typography>
-        <Typography variant="body1" color="text.secondary">
-          Comprehensive reports and analytics for healthcare management
-        </Typography>
-      </Box>
-
-      {/* Report Controls */}
-      <Paper sx={{ p: 3, mb: 4 }}>
-        <Box 
-          sx={{
-            display: 'grid',
-            gridTemplateColumns: { xs: '1fr', md: '1fr 1fr 1fr 1fr' },
-            gap: 2,
-            alignItems: 'center'
-          }}
-        >
-          <FormControl fullWidth>
-            <InputLabel>Period</InputLabel>
-            <Select
-              value={selectedPeriod}
-              onChange={(e) => setSelectedPeriod(e.target.value)}
-              label="Period"
-            >
-              <MenuItem value="today">Today</MenuItem>
-              <MenuItem value="week">This Week</MenuItem>
-              <MenuItem value="month">This Month</MenuItem>
-              <MenuItem value="custom">Custom Range</MenuItem>
-            </Select>
-          </FormControl>
-          {selectedPeriod === 'custom' && (
-            <>
-              <TextField
-                fullWidth
-                type="date"
-                label="Start Date"
-                value={startDate}
-                onChange={(e) => setStartDate(e.target.value)}
-                InputLabelProps={{ shrink: true }}
-              />
-              <TextField
-                fullWidth
-                type="date"
-                label="End Date"
-                value={endDate}
-                onChange={(e) => setEndDate(e.target.value)}
-                InputLabelProps={{ shrink: true }}
-              />
-            </>
-          )}
-          <Box display="flex" gap={1}>
-            <Button
-              variant="outlined"
-              startIcon={<DownloadIcon />}
-              onClick={generatePDF}
-            >
-              Export PDF
-            </Button>
-            <Button
-              variant="outlined"
-              startIcon={<PrintIcon />}
-              onClick={printReport}
-            >
-              Print
-            </Button>
-          </Box>
-        </Box>
-      </Paper>
-
-      {stats && (
-        <>
-          {/* Key Metrics */}
-          <Box 
+      <Box sx={{ p: 3 }}>
+        {/* Main Navigation Tabs */}
+        <Paper sx={{ mb: 3 }}>
+          <Tabs
+            value={mainTabValue}
+            onChange={(_, newValue) => setMainTabValue(newValue)}
+            variant="fullWidth"
             sx={{
-              display: 'grid',
-              gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr', md: 'repeat(4, 1fr)' },
-              gap: 3,
-              mb: 4
+              '& .MuiTab-root': {
+                minHeight: 72,
+                textTransform: 'none',
+                fontSize: '1rem',
+                fontWeight: 500,
+              },
             }}
           >
-            <Card>
-              <CardContent>
-                <Box display="flex" alignItems="center" justifyContent="space-between">
-                  <Box>
-                    <Typography color="textSecondary" gutterBottom>
-                      Patients Today
-                    </Typography>
-                    <Typography variant="h4" component="h2">
-                      {stats.patientsToday}
-                    </Typography>
-                  </Box>
-                  <PeopleIcon color="primary" sx={{ fontSize: 40 }} />
-                </Box>
-              </CardContent>
-            </Card>
-            <Card>
-              <CardContent>
-                <Box display="flex" alignItems="center" justifyContent="space-between">
-                  <Box>
-                    <Typography color="textSecondary" gutterBottom>
-                      Appointments Today
-                    </Typography>
-                    <Typography variant="h4" component="h2">
-                      {stats.appointmentsToday}
-                    </Typography>
-                  </Box>
-                  <CalendarIcon color="success" sx={{ fontSize: 40 }} />
-                </Box>
-              </CardContent>
-            </Card>
-            <Card>
-              <CardContent>
-                <Box display="flex" alignItems="center" justifyContent="space-between">
-                  <Box>
-                    <Typography color="textSecondary" gutterBottom>
-                      Today's Revenue
-                    </Typography>
-                    <Typography variant="h4" component="h2" color="success.main">
-                      {formatCurrency(stats.todayRevenue)}
-                    </Typography>
-                  </Box>
-                  <TrendingUpIcon color="success" sx={{ fontSize: 40 }} />
-                </Box>
-              </CardContent>
-            </Card>
-            <Card>
-              <CardContent>
-                <Box display="flex" alignItems="center" justifyContent="space-between">
-                  <Box>
-                    <Typography color="textSecondary" gutterBottom>
-                      Monthly Revenue
-                    </Typography>
-                    <Typography variant="h4" component="h2" color="primary.main">
-                      {formatCurrency(stats.monthlyRevenue)}
-                    </Typography>
-                  </Box>
-                  <ReceiptIcon color="primary" sx={{ fontSize: 40 }} />
-                </Box>
-              </CardContent>
-            </Card>
-          </Box>
+            <Tab
+              icon={<AssessmentIcon />}
+              label="Dashboard Overview"
+              iconPosition="start"
+            />
+            {hasAdminAccess && (
+              <Tab
+                icon={<AdminIcon />}
+                label="Admin Reports"
+                iconPosition="start"
+              />
+            )}
+            <Tab
+              icon={<PatientSearchIcon />}
+              label="Patient Reports"
+              iconPosition="start"
+            />
+          </Tabs>
+        </Paper>
 
-          {/* Appointment Statistics */}
-          <Box 
-            sx={{
-              display: 'grid',
-              gridTemplateColumns: { xs: '1fr', md: '1fr 1fr' },
-              gap: 3,
-              mb: 4
-            }}
-          >
-            <Card>
-              <CardContent>
-                <Typography variant="h6" gutterBottom>
-                  Appointment Status
-                </Typography>
-                <Box sx={{ mt: 2 }}>
-                  <Box display="flex" justifyContent="space-between" alignItems="center" sx={{ mb: 1 }}>
-                    <Typography>Scheduled</Typography>
-                    <Chip label={stats.appointments.scheduled} color="primary" size="small" />
-                  </Box>
-                  <Box display="flex" justifyContent="space-between" alignItems="center" sx={{ mb: 1 }}>
-                    <Typography>Completed</Typography>
-                    <Chip label={stats.appointments.completed} color="success" size="small" />
-                  </Box>
-                  <Box display="flex" justifyContent="space-between" alignItems="center" sx={{ mb: 1 }}>
-                    <Typography>Cancelled</Typography>
-                    <Chip label={stats.appointments.cancelled} color="error" size="small" />
-                  </Box>
-                  <Box display="flex" justifyContent="space-between" alignItems="center">
-                    <Typography>No Show</Typography>
-                    <Chip label={stats.appointments.noShow} color="warning" size="small" />
-                  </Box>
-                </Box>
-              </CardContent>
-            </Card>
-            <Card>
-              <CardContent>
-                <Typography variant="h6" gutterBottom>
-                  Patient Age Distribution
-                </Typography>
-                <Box sx={{ mt: 2 }}>
-                  {Object.entries(stats.patientsByAge).map(([ageGroup, count]) => (
-                    <Box key={ageGroup} display="flex" justifyContent="space-between" alignItems="center" sx={{ mb: 1 }}>
-                      <Typography>{ageGroup} years</Typography>
-                      <Chip label={count} color="primary" variant="outlined" size="small" />
+        {/* Tab Panels */}
+        <TabPanel value={mainTabValue} index={0}>
+          {/* Dashboard Overview */}
+          <Typography variant="h6" gutterBottom>
+            Dashboard Statistics
+          </Typography>
+          
+          {/* Stats Cards */}
+          <Container maxWidth="xl" sx={{ py: 2 }}>
+            {/* Quick Stats */}
+            <Box sx={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: 3, mb: 4 }}>
+              <Card>
+                <CardContent>
+                  <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                    <Box>
+                      <Typography color="textSecondary" gutterBottom>
+                        Today's Patients
+                      </Typography>
+                      <Typography variant="h4">
+                        {stats?.patientsToday || 0}
+                      </Typography>
                     </Box>
-                  ))}
-                </Box>
-              </CardContent>
-            </Card>
-          </Box>
+                    <PeopleIcon sx={{ fontSize: 40, color: theme.palette.primary.main }} />
+                  </Box>
+                </CardContent>
+              </Card>
 
-          {/* Common Diagnoses */}
-          <Card>
-            <CardContent>
-              <Typography variant="h6" gutterBottom>
-                Common Diagnoses
-              </Typography>
-              <TableContainer>
-                <Table>
-                  <TableHead>
-                    <TableRow>
-                      <TableCell>Diagnosis</TableCell>
-                      <TableCell align="right">Count</TableCell>
-                      <TableCell align="right">Percentage</TableCell>
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    {stats.commonDiagnoses.map((diagnosis, index) => {
-                      const totalDiagnoses = stats.commonDiagnoses.reduce((sum, d) => sum + d.count, 0);
-                      const percentage = ((diagnosis.count / totalDiagnoses) * 100).toFixed(1);
-                      return (
-                        <TableRow key={index}>
-                          <TableCell>{diagnosis.diagnosis}</TableCell>
-                          <TableCell align="right">{diagnosis.count}</TableCell>
-                          <TableCell align="right">{percentage}%</TableCell>
-                        </TableRow>
-                      );
-                    })}
-                  </TableBody>
-                </Table>
-              </TableContainer>
-            </CardContent>
-          </Card>
-        </>
-      )}
-      </Container>
+              <Card>
+                <CardContent>
+                  <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                    <Box>
+                      <Typography color="textSecondary" gutterBottom>
+                        Appointments Today
+                      </Typography>
+                      <Typography variant="h4">
+                        {stats?.appointmentsToday || 0}
+                      </Typography>
+                    </Box>
+                    <CalendarIcon sx={{ fontSize: 40, color: theme.palette.secondary.main }} />
+                  </Box>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardContent>
+                  <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                    <Box>
+                      <Typography color="textSecondary" gutterBottom>
+                        Total Patients
+                      </Typography>
+                      <Typography variant="h4">
+                        {stats?.totalPatients || 0}
+                      </Typography>
+                    </Box>
+                    <AssessmentIcon sx={{ fontSize: 40, color: theme.palette.success.main }} />
+                  </Box>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardContent>
+                  <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                    <Box>
+                      <Typography color="textSecondary" gutterBottom>
+                        Monthly Revenue
+                      </Typography>
+                      <Typography variant="h4">
+                        {formatCurrency(stats?.monthlyRevenue || 0)}
+                      </Typography>
+                    </Box>
+                    <TrendingUpIcon sx={{ fontSize: 40, color: theme.palette.warning.main }} />
+                  </Box>
+                </CardContent>
+              </Card>
+            </Box>
+
+            {/* Action Buttons */}
+            <Box sx={{ display: 'flex', gap: 2, mb: 4 }}>
+              <Button
+                variant="contained"
+                startIcon={<DownloadIcon />}
+                onClick={generatePDF}
+              >
+                Export Dashboard PDF
+              </Button>
+              <Button
+                variant="outlined"
+                startIcon={<PrintIcon />}
+                onClick={printReport}
+              >
+                Print Dashboard
+              </Button>
+            </Box>
+
+            {/* Additional Statistics Tables */}
+            {stats && (
+              <Box sx={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 1fr))', gap: 3 }}>
+                {/* Appointment Status */}
+                <Card>
+                  <CardContent>
+                    <Typography variant="h6" gutterBottom>
+                      Appointment Status
+                    </Typography>
+                    <TableContainer>
+                      <Table size="small">
+                        <TableBody>
+                          <TableRow>
+                            <TableCell>Scheduled</TableCell>
+                            <TableCell align="right">
+                              <Chip label={stats.appointments.scheduled} color="primary" size="small" />
+                            </TableCell>
+                          </TableRow>
+                          <TableRow>
+                            <TableCell>Completed</TableCell>
+                            <TableCell align="right">
+                              <Chip label={stats.appointments.completed} color="success" size="small" />
+                            </TableCell>
+                          </TableRow>
+                          <TableRow>
+                            <TableCell>Cancelled</TableCell>
+                            <TableCell align="right">
+                              <Chip label={stats.appointments.cancelled} color="error" size="small" />
+                            </TableCell>
+                          </TableRow>
+                          <TableRow>
+                            <TableCell>No Show</TableCell>
+                            <TableCell align="right">
+                              <Chip label={stats.appointments.noShow} color="warning" size="small" />
+                            </TableCell>
+                          </TableRow>
+                        </TableBody>
+                      </Table>
+                    </TableContainer>
+                  </CardContent>
+                </Card>
+
+                {/* Common Diagnoses */}
+                <Card>
+                  <CardContent>
+                    <Typography variant="h6" gutterBottom>
+                      Common Diagnoses
+                    </Typography>
+                    <TableContainer>
+                      <Table size="small">
+                        <TableHead>
+                          <TableRow>
+                            <TableCell>Diagnosis</TableCell>
+                            <TableCell align="right">Count</TableCell>
+                          </TableRow>
+                        </TableHead>
+                        <TableBody>
+                          {stats.commonDiagnoses.map((diagnosis, index) => (
+                            <TableRow key={index}>
+                              <TableCell>{diagnosis.diagnosis}</TableCell>
+                              <TableCell align="right">{diagnosis.count}</TableCell>
+                            </TableRow>
+                          ))}
+                        </TableBody>
+                      </Table>
+                    </TableContainer>
+                  </CardContent>
+                </Card>
+              </Box>
+            )}
+          </Container>
+        </TabPanel>
+
+        {/* Admin Reports Tab Panel */}
+        {hasAdminAccess && (
+          <TabPanel value={mainTabValue} index={1}>
+            <Typography variant="h6" gutterBottom>
+              Administrative Reports
+            </Typography>
+            
+            {/* Admin Report Sub-tabs */}
+            <Paper sx={{ mb: 3 }}>
+              <Tabs
+                value={adminTabValue}
+                onChange={(_, newValue) => setAdminTabValue(newValue)}
+                variant="scrollable"
+                scrollButtons="auto"
+              >
+                <Tab label="Appointment Summary" />
+                <Tab label="Appointment Details" />
+                <Tab label="Visit Summary" />
+                <Tab label="Booked Appointments" />
+                <Tab label="Patient Lists" />
+              </Tabs>
+            </Paper>
+
+            {adminReportTypes.map((reportType, index) => (
+              <TabPanel key={reportType} value={adminTabValue} index={index}>
+                <AdminReportLayout
+                  reportType={reportType}
+                  onGenerate={handleAdminReportGenerate}
+                />
+              </TabPanel>
+            ))}
+          </TabPanel>
+        )}
+
+        {/* Patient Reports Tab Panel */}
+        <TabPanel value={mainTabValue} index={hasAdminAccess ? 2 : 1}>
+          <Typography variant="h6" gutterBottom>
+            Patient Reports
+          </Typography>
+          
+          {/* Patient Report Sub-tabs */}
+          <Paper sx={{ mb: 3 }}>
+            <Tabs
+              value={patientTabValue}
+              onChange={(_, newValue) => setPatientTabValue(newValue)}
+              variant="scrollable"
+              scrollButtons="auto"
+            >
+              <Tab label="Clinical Details" />
+              <Tab label="Prescription" />
+              <Tab label="Test Order" />
+              <Tab label="Vaccine" />
+            </Tabs>
+          </Paper>
+
+          {patientReportTypes.map((reportType, index) => (
+            <TabPanel key={reportType} value={patientTabValue} index={index}>
+              <PatientReportLayout />
+            </TabPanel>
+          ))}
+        </TabPanel>
+      </Box>
     </Box>
   );
 };
