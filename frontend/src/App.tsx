@@ -16,6 +16,7 @@ import ClinicalNotes from './components/ClinicalNotes';
 import BillingManagement from './components/BillingManagement';
 import ReportsManagement from './components/ReportsManagement';
 import MOHDashboard from './components/MOHDashboard';
+import ManageManagement from './components/ManageManagement';
 
 // Protected Route Component
 const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -66,6 +67,14 @@ const AppRoutes: React.FC = () => {
         element={
           <ProtectedRoute>
             <MOHDashboard />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/manage"
+        element={
+          <ProtectedRoute>
+            <ManageManagement />
           </ProtectedRoute>
         }
       />

@@ -22,6 +22,7 @@ import {
   LocalHospital,
   Notes,
   PersonAdd,
+  Business as ManageIcon,
 } from '@mui/icons-material';
 import { useAuth } from '../contexts/AuthContext';
 import { AdinkraSymbols } from '../theme/ghanaTheme';
@@ -424,6 +425,23 @@ const Dashboard: React.FC = () => {
                     }}
                   >
                     MOH Data
+                  </Button>
+                  <Button
+                    fullWidth
+                    variant="outlined"
+                    startIcon={<ManageIcon />}
+                    onClick={() => navigate('/manage')}
+                    sx={{ 
+                      py: 2, 
+                      textAlign: 'left', 
+                      justifyContent: 'flex-start',
+                      '&:hover': {
+                        backgroundColor: alpha(theme.palette.secondary.main, 0.1),
+                        borderColor: theme.palette.secondary.main,
+                      }
+                    }}
+                  >
+                    Manage Practice
                   </Button>
                 </Box>
               </CardContent>
