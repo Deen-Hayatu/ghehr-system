@@ -9,15 +9,15 @@ import {
   Paper,
 } from '@mui/material';
 import {
-  Storage as StorageIcon,
-  Science as LabIcon,
-  LocalPharmacy as PharmacyIcon,
-  Assignment as AuditIcon,
+  VerifiedUser as EligibilityIcon,
+  Assignment as PreAuthIcon,
+  Description as ClaimIcon,
+  AccountBalance as BillingIcon,
 } from '@mui/icons-material';
-import DataStorageManagement from './hospital/DataStorageManagement';
-import LabOrders from './hospital/LabOrders';
-import PharmacyOrders from './hospital/PharmacyOrders';
-import AuditTrails from './hospital/AuditTrails';
+import EligibilityCheck from './insurance/EligibilityCheck';
+import PreAuthorization from './insurance/PreAuthorization';
+import ClaimCreation from './insurance/ClaimCreation';
+import BillingProvider from './insurance/BillingProvider';
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -32,8 +32,8 @@ function TabPanel(props: TabPanelProps) {
     <div
       role="tabpanel"
       hidden={value !== index}
-      id={`hospital-tabpanel-${index}`}
-      aria-labelledby={`hospital-tab-${index}`}
+      id={`insurance-tabpanel-${index}`}
+      aria-labelledby={`insurance-tab-${index}`}
       {...other}
     >
       {value === index && <Box sx={{ p: 2 }}>{children}</Box>}
@@ -41,50 +41,50 @@ function TabPanel(props: TabPanelProps) {
   );
 }
 
-const HospitalManagement: React.FC = () => {
+const InsuranceManagement: React.FC = () => {
   const [tabValue, setTabValue] = useState(0);
 
   const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
     setTabValue(newValue);
   };
 
-  const hospitalTabConfig = [
+  const insuranceTabConfig = [
     {
-      label: 'Data Storage',
-      icon: StorageIcon,
-      color: '#1976d2',
+      label: 'Eligibility Check',
+      icon: EligibilityIcon,
+      color: '#2196f3',
     },
     {
-      label: 'Lab Orders',
-      icon: LabIcon,
+      label: 'Pre-authorization',
+      icon: PreAuthIcon,
       color: '#ff9800',
     },
     {
-      label: 'Pharmacy Orders',
-      icon: PharmacyIcon,
+      label: 'Claim Creation',
+      icon: ClaimIcon,
       color: '#4caf50',
     },
     {
-      label: 'Audit Trails',
-      icon: AuditIcon,
+      label: 'Billing Provider',
+      icon: BillingIcon,
       color: '#9c27b0',
     },
   ];
 
   return (
     <Box>
-      {/* Hospital Header */}
+      {/* Insurance Header */}
       <Box sx={{ mb: 3 }}>
         <Typography variant="h5" fontWeight="bold" sx={{ mb: 1 }}>
-          🏥 Hospital Operations Management
+          🛡️ Insurance Management
         </Typography>
         <Typography variant="body1" color="text.secondary">
-          Comprehensive management system for data storage analytics, laboratory orders, 
-          pharmacy operations, and complete audit trail tracking.
+          Comprehensive insurance workflow management for eligibility verification, 
+          pre-authorization, claims processing, and billing provider coordination.
         </Typography>
       </Box>
 
-      {/* Hospital Sub-Navigation */}
+      {/* Insurance Sub-Navigation */}
       <Paper sx={{ mb: 3 }}>
         <Tabs
           value={tabValue}
@@ -101,7 +101,7 @@ const HospitalManagement: React.FC = () => {
             },
           }}
         >
-          {hospitalTabConfig.map((tab, index) => {
+          {insuranceTabConfig.map((tab, index) => {
             const IconComponent = tab.icon;
             return (
               <Tab
@@ -138,24 +138,24 @@ const HospitalManagement: React.FC = () => {
         </Tabs>
       </Paper>
 
-      {/* Hospital Tab Panels */}
+      {/* Insurance Tab Panels */}
       <TabPanel value={tabValue} index={0}>
-        <DataStorageManagement />
+        <EligibilityCheck />
       </TabPanel>
 
       <TabPanel value={tabValue} index={1}>
-        <LabOrders />
+        <PreAuthorization />
       </TabPanel>
 
       <TabPanel value={tabValue} index={2}>
-        <PharmacyOrders />
+        <ClaimCreation />
       </TabPanel>
 
       <TabPanel value={tabValue} index={3}>
-        <AuditTrails />
+        <BillingProvider />
       </TabPanel>
     </Box>
   );
 };
 
-export default HospitalManagement;
+export default InsuranceManagement;

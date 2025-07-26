@@ -19,6 +19,7 @@
   "author": "GhEHR Team",
   "license": "ISC",
   "dependencies": {
+    "@types/xlsx": "^0.0.35",
     "axios": "^1.10.0",
     "bcryptjs": "^3.0.2",
     "compression": "^1.8.0",
@@ -31,7 +32,8 @@
     "jsonwebtoken": "^9.0.2",
     "morgan": "^1.10.0",
     "multer": "^2.0.1",
-    "pdfkit": "^0.17.1"
+    "pdfkit": "^0.17.1",
+    "xlsx": "^0.18.5"
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.6",
