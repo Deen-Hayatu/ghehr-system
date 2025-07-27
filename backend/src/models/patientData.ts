@@ -14,7 +14,7 @@ export const patients: Patient[] = [
     ghanaCardNumber: 'GHA-123456789-1',
     nhisNumber: 'NHIS-123456789',
     phoneNumber: '+233244123456',
-    email: 'kwame.asante@email.com',
+    email: 'deenfortune89@gmail.com',
     address: {
       region: 'Ashanti',
       district: 'Kumasi Metropolitan',

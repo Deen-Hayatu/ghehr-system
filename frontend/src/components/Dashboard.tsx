@@ -23,6 +23,7 @@ import {
   Notes,
   PersonAdd,
   Business as ManageIcon,
+  Email as EmailIcon,
 } from '@mui/icons-material';
 import { useAuth } from '../contexts/AuthContext';
 import { AdinkraSymbols } from '../theme/ghanaTheme';
@@ -442,6 +443,23 @@ const Dashboard: React.FC = () => {
                     }}
                   >
                     Manage Practice
+                  </Button>
+                  <Button
+                    fullWidth
+                    variant="outlined"
+                    startIcon={<EmailIcon />}
+                    onClick={() => navigate('/emails')}
+                    sx={{ 
+                      py: 2, 
+                      textAlign: 'left', 
+                      justifyContent: 'flex-start',
+                      '&:hover': {
+                        backgroundColor: alpha(theme.palette.primary.main, 0.1),
+                        borderColor: theme.palette.primary.main,
+                      }
+                    }}
+                  >
+                    Email Notifications
                   </Button>
                 </Box>
               </CardContent>

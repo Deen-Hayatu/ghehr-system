@@ -1,6 +1,8 @@
 import express, { Request, Response } from 'express';
 import { body, validationResult } from 'express-validator';
 import { authenticateToken, AuthenticatedRequest } from '../middleware/auth';
+import { emailService, EmailNotificationType } from '../services/EmailService';
+import { patients } from '../models/patientData';
 
 const router = express.Router();
 
@@ -176,6 +178,52 @@ router.post('/', [
     console.log('📋 New appointment:', newAppointment);
 
     appointments.push(newAppointment);
+
+    // 📧 AUTOMATED EMAIL: Send appointment confirmation
+    try {
+      const patient = patients.find(p => p.id === req.body.patientId || p.patientId === req.body.patientId);
+      if (patient && patient.email) {
+        console.log('📧 Sending appointment confirmation to:', patient.email);
+        
+        // Get appointment date and time in readable format
+        const appointmentDate = new Date(formattedDate).toDateString();
+        const appointmentTime = req.body.time;
+        
+        await emailService.queueEmail({
+          to: patient.email,
+          type: EmailNotificationType.APPOINTMENT_CONFIRMATION,
+          data: {
+            patientName: `${patient.firstName} ${patient.lastName}`,
+            patientId: patient.patientId,
+            appointmentId: newAppointmentId,
+            appointmentDate: appointmentDate,
+            appointmentTime: appointmentTime,
+            appointmentType: req.body.type || 'Consultation',
+            doctorName: 'Dr. Kwame Asante', // You can fetch from doctors table
+            department: 'General Medicine',
+            facilityName: 'GhEHR Medical Center',
+            facilityTagline: 'Your Health, Our Priority',
+            facilityPhone: '+233 302 123 456',
+            facilityEmail: 'info@ghehr.gh',
+            facilityAddress: 'Accra, Ghana',
+            appointmentNotes: req.body.notes || 'Please arrive 15 minutes early',
+            rescheduleLink: `${process.env.FRONTEND_URL || 'http://localhost:3000'}/reschedule/${newAppointmentId}`,
+            cancelLink: `${process.env.FRONTEND_URL || 'http://localhost:3000'}/cancel/${newAppointmentId}`,
+            emergencyPhone: '+233 302 123 456',
+            privacyPolicyLink: '#',
+            termsLink: '#',
+            unsubscribeLink: '#'
+          },
+          priority: 'high' // Appointment confirmations are high priority
+        });
+        console.log('✅ Appointment confirmation email queued successfully');
+      } else {
+        console.log('⚠️ Patient not found or no email provided, skipping confirmation email');
+      }
+    } catch (emailError) {
+      console.error('❌ Failed to send appointment confirmation email:', emailError);
+      // Don't fail the appointment creation if email fails
+    }
 
     res.status(201).json({
       success: true,

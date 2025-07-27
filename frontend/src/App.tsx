@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
@@ -17,6 +17,11 @@ import BillingManagement from './components/BillingManagement';
 import ReportsManagement from './components/ReportsManagement';
 import MOHDashboard from './components/MOHDashboard';
 import ManageManagement from './components/ManageManagement';
+import EmailManagement from './components/EmailManagement';
+
+// Import offline mode components
+import OfflineStatus from './components/OfflineStatus';
+import pwaManager from './services/PWAManager';
 
 // Protected Route Component
 const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -102,12 +107,37 @@ const AppRoutes: React.FC = () => {
           </ProtectedRoute>
         }
       />
+      <Route
+        path="/emails"
+        element={
+          <ProtectedRoute>
+            <EmailManagement />
+          </ProtectedRoute>
+        }
+      />
       <Route path="/" element={<Navigate to="/login" replace />} />
     </Routes>
   );
 };
 
 function App() {
+  // Initialize offline mode and PWA features
+  useEffect(() => {
+    const initializeOfflineMode = async () => {
+      console.log('🚀 Initializing GhEHR offline mode...');
+      
+      try {
+        // Initialize PWA manager (service worker, offline DB, etc.)
+        await pwaManager.initializeOfflineMode();
+        console.log('✅ Offline mode initialized successfully');
+      } catch (error) {
+        console.error('❌ Failed to initialize offline mode:', error);
+      }
+    };
+
+    initializeOfflineMode();
+  }, []);
+
   return (
     <ThemeProvider theme={ghanaTheme}>
       <CssBaseline />
@@ -115,6 +145,8 @@ function App() {
         <Router>
           <div className="App">
             <AppRoutes />
+            {/* Offline Status Component - shows network/sync status */}
+            <OfflineStatus position="fixed" />
           </div>
         </Router>
       </AuthProvider>
