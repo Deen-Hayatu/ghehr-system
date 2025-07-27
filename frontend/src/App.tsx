@@ -17,6 +17,7 @@ import BillingManagement from './components/BillingManagement';
 import ReportsManagement from './components/ReportsManagement';
 import MOHDashboard from './components/MOHDashboard';
 import ManageManagement from './components/ManageManagement';
+import EmailManagement from './components/EmailManagement';
 
 // Protected Route Component
 const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -99,6 +100,14 @@ const AppRoutes: React.FC = () => {
         element={
           <ProtectedRoute>
             <ReportsManagement />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/emails"
+        element={
+          <ProtectedRoute>
+            <EmailManagement />
           </ProtectedRoute>
         }
       />

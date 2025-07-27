@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Prescription Ready for Pickup</title>
+  <style>
+    body { 
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+      margin: 0; 
+      padding: 20px; 
+      background-color: #f5f5f5; 
+      line-height: 1.6;
+    }
+    .container { 
+      max-width: 600px; 
+      margin: 0 auto; 
+      background: white; 
+      border-radius: 10px; 
+      overflow: hidden; 
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
+    }
+    .header { 
+      background: linear-gradient(135deg, #4caf50 0%, #8bc34a 100%); 
+      color: white; 
+      padding: 30px 20px; 
+      text-align: center; 
+    }
+    .logo { 
+      height: 60px; 
+      width: auto; 
+      margin-bottom: 15px; 
+      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
+    }
+    .content { 
+      padding: 40px 30px; 
+    }
+    .prescription-card {
+      background: #e8f5e8;
+      border-left: 4px solid #4caf50;
+      padding: 20px;
+      margin: 20px 0;
+      border-radius: 5px;
+    }
+    .medication-list {
+      background: #f8f9fa;
+      border-radius: 5px;
+      padding: 20px;
+      margin: 20px 0;
+    }
+    .medication-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 0;
+      border-bottom: 1px solid #dee2e6;
+    }
+    .medication-item:last-child {
+      border-bottom: none;
+    }
+    .medication-name {
+      font-weight: bold;
+      color: #2c3e50;
+      font-size: 16px;
+    }
+    .medication-details {
+      color: #6c757d;
+      font-size: 14px;
+      margin-top: 5px;
+    }
+    .medication-quantity {
+      background: #dc143c;
+      color: white;
+      padding: 5px 10px;
+      border-radius: 15px;
+      font-size: 12px;
+      font-weight: bold;
+    }
+    .pickup-info {
+      background: #fff3cd;
+      border: 1px solid #ffeaa7;
+      border-radius: 5px;
+      padding: 20px;
+      margin: 25px 0;
+    }
+    .button { 
+      display: inline-block; 
+      padding: 15px 30px; 
+      background: #4caf50; 
+      color: white; 
+      text-decoration: none; 
+      border-radius: 5px; 
+      margin: 20px 0; 
+      font-weight: bold;
+      transition: background 0.3s ease;
+    }
+    .button:hover {
+      background: #45a049;
+    }
+    .footer { 
+      background: #2c3e50; 
+      color: white; 
+      padding: 25px; 
+      text-align: center; 
+      font-size: 14px; 
+    }
+    .important-note {
+      background: #ffebee;
+      border-left: 4px solid #f44336;
+      padding: 15px;
+      margin: 20px 0;
+      color: #c62828;
+    }
+    @media (max-width: 600px) {
+      .medication-item {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .medication-quantity {
+        margin-top: 10px;
+      }
+      .content {
+        padding: 20px 15px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <img src="https://i.imgur.com/b8WvnC0.png" alt="GhEHR - Ghana Electronic Health Records" class="logo" onerror="this.style.display='none';">
+      <h1>{{facilityName}}</h1>
+      <p>{{facilityTagline}}</p>
+    </div>
+    
+    <div class="content">
+      <h2 style="color: #4caf50; margin-bottom: 10px;">💊 Your Prescription is Ready!</h2>
+      <p style="font-size: 16px; color: #34495e;">Dear {{patientName}},</p>
+      
+      <p style="font-size: 16px; color: #34495e;">
+        Good news! Your prescription has been prepared and is ready for pickup at our pharmacy.
+      </p>
+
+      <div class="prescription-card">
+        <h3 style="margin-top: 0; color: #2e7d32;">📋 Prescription Details</h3>
+        <p style="margin: 10px 0;"><strong>Prescription ID:</strong> {{prescriptionId}}</p>
+        <p style="margin: 10px 0;"><strong>Prescribed by:</strong> Dr. {{doctorName}}</p>
+        <p style="margin: 10px 0;"><strong>Date Prescribed:</strong> {{prescriptionDate}}</p>
+        <p style="margin: 10px 0;"><strong>Ready Since:</strong> {{readyDate}}</p>
+      </div>
+
+      <div class="medication-list">
+        <h4 style="margin-top: 0; color: #2c3e50;">💊 Medications Ready for Pickup</h4>
+        
+        {{#medications}}
+        <div class="medication-item">
+          <div>
+            <div class="medication-name">{{name}} {{strength}}</div>
+            <div class="medication-details">{{dosageForm}} • {{instructions}}</div>
+            {{#duration}}
+            <div class="medication-details">Duration: {{duration}}</div>
+            {{/duration}}
+          </div>
+          <div class="medication-quantity">Qty: {{quantity}}</div>
+        </div>
+        {{/medications}}
+        
+        <div style="margin-top: 20px; padding-top: 15px; border-top: 2px solid #dee2e6;">
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <span style="font-weight: bold; font-size: 16px;">Total Cost:</span>
+            <span style="font-size: 18px; font-weight: bold; color: #4caf50;">{{totalCost}}</span>
+          </div>
+          {{#paymentStatus}}
+          <div style="margin-top: 10px;">
+            <span style="font-size: 14px; color: #6c757d;">Payment Status: </span>
+            <span style="background: #e3f2fd; color: #1976d2; padding: 3px 8px; border-radius: 12px; font-size: 12px; font-weight: bold;">{{paymentStatus}}</span>
+          </div>
+          {{/paymentStatus}}
+        </div>
+      </div>
+
+      <div class="pickup-info">
+        <h4 style="margin-top: 0; color: #f57f17;">🕒 Pickup Information</h4>
+        <p style="margin: 10px 0;"><strong>Pharmacy Hours:</strong> {{pharmacyHours}}</p>
+        <p style="margin: 10px 0;"><strong>Location:</strong> {{pharmacyLocation}}</p>
+        <p style="margin: 10px 0;"><strong>Pharmacist:</strong> {{pharmacistName}}</p>
+        
+        <div style="margin-top: 15px; padding: 10px; background: rgba(255, 193, 7, 0.1); border-radius: 5px;">
+          <p style="margin: 0; font-size: 14px; color: #f57f17;">
+            <strong>⏰ Please pickup within 7 days.</strong> After this period, medications may be returned to stock.
+          </p>
+        </div>
+      </div>
+
+      <div class="important-note">
+        <h4 style="margin-top: 0;">⚠️ What to Bring for Pickup</h4>
+        <ul style="margin: 10px 0; padding-left: 20px;">
+          <li>Valid government-issued ID</li>
+          <li>Insurance card (if applicable)</li>
+          <li>Original prescription slip (if you have it)</li>
+          <li>Payment method (if balance is due)</li>
+        </ul>
+      </div>
+
+      <div style="background: #e3f2fd; border-left: 4px solid #2196f3; padding: 15px; margin: 20px 0;">
+        <h4 style="margin-top: 0; color: #1976d2;">📱 Need Help?</h4>
+        <p style="margin: 5px 0;">If you have questions about your medications or need assistance, our pharmacist will be happy to help during pickup.</p>
+        <p style="margin: 5px 0;"><strong>Pharmacy Direct:</strong> {{pharmacyPhone}}</p>
+      </div>
+
+      <div style="text-align: center; margin: 30px 0;">
+        <a href="{{directionsLink}}" class="button">🗺️ Get Directions</a>
+        <a href="{{contactLink}}" class="button" style="background: #dc143c; margin-left: 10px;">📞 Contact Pharmacy</a>
+      </div>
+
+      <div style="background: #f8f9fa; padding: 20px; border-radius: 5px; margin: 25px 0;">
+        <h4 style="margin-top: 0; color: #2c3e50;">🏥 Facility Information</h4>
+        <p style="margin: 5px 0;"><strong>Address:</strong> {{facilityAddress}}</p>
+        <p style="margin: 5px 0;"><strong>Main Phone:</strong> {{facilityPhone}}</p>
+        <p style="margin: 5px 0;"><strong>Pharmacy:</strong> {{pharmacyPhone}}</p>
+        <p style="margin: 5px 0;"><strong>Email:</strong> {{facilityEmail}}</p>
+      </div>
+
+      {{#specialInstructions}}
+      <div style="background: #fff3cd; border: 1px solid #ffeaa7; border-radius: 5px; padding: 15px; margin: 20px 0;">
+        <h4 style="margin-top: 0; color: #856404;">📝 Special Instructions</h4>
+        <p style="margin-bottom: 0; color: #856404;">{{specialInstructions}}</p>
+      </div>
+      {{/specialInstructions}}
+
+      <p style="color: #7f8c8d; font-size: 14px; margin-top: 30px;">
+        Thank you for choosing {{facilityName}} for your healthcare needs. We're committed to providing you with the best pharmaceutical care.
+      </p>
+
+      <p style="font-size: 16px; color: #2c3e50; margin-top: 25px;">
+        Best regards,<br>
+        <strong>{{facilityName}} Pharmacy Team</strong>
+      </p>
+    </div>
+    
+    <div class="footer">
+      <p>&copy; 2025 GhEHR - Ghana Electronic Health Records System</p>
+      <p style="font-size: 12px; color: #bdc3c7; margin-top: 15px;">
+        This is an automated message. Please do not reply to this email.<br>
+        For medical emergencies, please call {{emergencyPhone}} or visit the nearest emergency room.
+      </p>
+    </div>
+  </div>
+</body>
+</html>

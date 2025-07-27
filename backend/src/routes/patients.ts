@@ -3,6 +3,7 @@ import { body, query, validationResult } from 'express-validator';
 import { authenticateToken, authorizeRoles, AuthenticatedRequest } from '../middleware/auth';
 import { Patient, PatientSearchCriteria, PatientRegistrationRequest, GHANA_REGIONS } from '../models/Patient';
 import { patients } from '../models/patientData';
+import { emailService, EmailNotificationType } from '../services/EmailService';
 
 const router = express.Router();
 
@@ -223,6 +224,43 @@ router.post('/', [
     console.log('✅ Creating new patient:', newPatient);
     patients.push(newPatient);
     console.log(`🎉 Patient created! Total patients: ${patients.length}`);
+
+    // 📧 AUTOMATED EMAIL: Send welcome email to new patient
+    if (newPatient.email) {
+      try {
+        console.log('📧 Sending welcome email to:', newPatient.email);
+        await emailService.queueEmail({
+          to: newPatient.email,
+          type: EmailNotificationType.PATIENT_REGISTRATION,
+          data: {
+            patientName: `${newPatient.firstName} ${newPatient.lastName}`,
+            patientId: newPatient.patientId,
+            facilityName: 'GhEHR Medical Center',
+            facilityTagline: 'Your Health, Our Priority',
+            facilityPhone: '+233 302 123 456',
+            facilityEmail: 'info@ghehr.gh',
+            facilityAddress: 'Accra, Ghana',
+            registrationDate: new Date().toLocaleDateString(),
+            nextSteps: [
+              'Keep your Patient ID safe: ' + newPatient.patientId,
+              'Bring a valid ID when visiting the facility',
+              'Contact us if you have any questions'
+            ],
+            emergencyPhone: '+233 302 123 456',
+            privacyPolicyLink: '#',
+            termsLink: '#',
+            unsubscribeLink: '#'
+          },
+          priority: 'normal'
+        });
+        console.log('✅ Welcome email queued successfully');
+      } catch (emailError) {
+        console.error('❌ Failed to send welcome email:', emailError);
+        // Don't fail the registration if email fails
+      }
+    } else {
+      console.log('⚠️ No email provided, skipping welcome email');
+    }
 
     res.status(201).json({
       success: true,

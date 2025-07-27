@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🤖 GhEHR Automated Email Notifications Demo</title>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; margin: 0; padding: 20px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; }
+        .container { max-width: 1200px; margin: 0 auto; background: white; border-radius: 15px; box-shadow: 0 20px 40px rgba(0,0,0,0.1); overflow: hidden; }
+        .header { background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); color: white; padding: 30px; text-align: center; }
+        .header h1 { margin: 0; font-size: 2.5em; font-weight: 300; }
+        .header p { margin: 10px 0 0 0; opacity: 0.9; font-size: 1.1em; }
+        .content { padding: 30px; }
+        .automation-section { margin: 30px 0; padding: 25px; border-radius: 10px; border-left: 5px solid #11998e; background: #f8fffe; }
+        .automation-section h3 { margin-top: 0; color: #11998e; font-size: 1.4em; }
+        .demo-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 25px; margin: 25px 0; }
+        .demo-card { background: white; border-radius: 10px; padding: 25px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); border: 1px solid #e1e8ed; }
+        .demo-card h4 { margin-top: 0; color: #333; display: flex; align-items: center; gap: 10px; }
+        .form-group { margin: 15px 0; }
+        .form-group label { display: block; margin-bottom: 5px; font-weight: 600; color: #555; }
+        .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 12px; border: 2px solid #e1e8ed; border-radius: 8px; font-size: 14px; transition: border-color 0.3s; }
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus { outline: none; border-color: #11998e; }
+        .btn { background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); color: white; border: none; padding: 12px 25px; border-radius: 8px; cursor: pointer; font-size: 14px; font-weight: 600; transition: transform 0.2s, box-shadow 0.2s; }
+        .btn:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(17, 153, 142, 0.4); }
+        .btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+        .result { margin: 15px 0; padding: 15px; border-radius: 8px; font-weight: 500; }
+        .success { background: #d4edda; border: 1px solid #c3e6cb; color: #155724; }
+        .error { background: #f8d7da; border: 1px solid #f5c6cb; color: #721c24; }
+        .info { background: #d1ecf1; border: 1px solid #bee5eb; color: #0c5460; }
+        .warning { background: #fff3cd; border: 1px solid #ffeaa7; color: #856404; }
+        .automation-flow { background: #f8f9fa; padding: 20px; border-radius: 10px; margin: 20px 0; }
+        .flow-step { display: flex; align-items: center; margin: 10px 0; padding: 15px; background: white; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .flow-step .step-number { background: #11998e; color: white; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; margin-right: 15px; flex-shrink: 0; }
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin: 20px 0; }
+        .stat-card { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 20px; border-radius: 10px; text-align: center; }
+        .stat-number { font-size: 2.5em; font-weight: bold; margin: 10px 0; }
+        .email-preview { background: #f8f9fa; border: 1px solid #dee2e6; border-radius: 8px; padding: 20px; margin: 15px 0; font-family: 'Arial', sans-serif; }
+        .email-header { border-bottom: 1px solid #dee2e6; padding-bottom: 10px; margin-bottom: 15px; }
+        .email-subject { font-weight: bold; color: #495057; }
+        .email-from { color: #6c757d; font-size: 0.9em; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🤖 Automated Email Notifications</h1>
+            <p>GhEHR Healthcare Communication System - Real-time Patient Notifications</p>
+        </div>
+        
+        <div class="content">
+            <div class="automation-section">
+                <h3>🔄 How Automated Emails Work</h3>
+                <div class="automation-flow">
+                    <div class="flow-step">
+                        <div class="step-number">1</div>
+                        <div>
+                            <strong>Event Trigger:</strong> A healthcare event occurs (patient registration, appointment booking, lab order)
+                        </div>
+                    </div>
+                    <div class="flow-step">
+                        <div class="step-number">2</div>
+                        <div>
+                            <strong>Data Collection:</strong> System gathers patient info, event details, and facility information
+                        </div>
+                    </div>
+                    <div class="flow-step">
+                        <div class="step-number">3</div>
+                        <div>
+                            <strong>Email Generation:</strong> Creates Ghana-specific healthcare email with appropriate template
+                        </div>
+                    </div>
+                    <div class="flow-step">
+                        <div class="step-number">4</div>
+                        <div>
+                            <strong>Delivery:</strong> Email is queued and sent automatically to patient's registered email
+                        </div>
+                    </div>
+                    <div class="flow-step">
+                        <div class="step-number">5</div>
+                        <div>
+                            <strong>Tracking:</strong> System logs delivery status and provides analytics
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="automation-section">
+                <h3>📊 Email Automation Statistics</h3>
+                <div class="stats-grid" id="email-stats">
+                    <div class="stat-card">
+                        <div>📧 Total Automated</div>
+                        <div class="stat-number" id="total-automated">0</div>
+                    </div>
+                    <div class="stat-card">
+                        <div>✅ Successfully Sent</div>
+                        <div class="stat-number" id="successful-sent">0</div>
+                    </div>
+                    <div class="stat-card">
+                        <div>⏱️ Avg Response Time</div>
+                        <div class="stat-number" id="avg-response">2.3s</div>
+                    </div>
+                    <div class="stat-card">
+                        <div>📈 Success Rate</div>
+                        <div class="stat-number" id="success-rate">98%</div>
+                    </div>
+                </div>
+                <button class="btn" onclick="loadEmailStats()">🔄 Refresh Statistics</button>
+            </div>
+
+            <div class="demo-grid">
+                <!-- Patient Registration Demo -->
+                <div class="demo-card">
+                    <h4>👤 Patient Registration Automation</h4>
+                    <p>Automatically sends welcome email when a patient registers</p>
+                    
+                    <div class="form-group">
+                        <label>First Name:</label>
+                        <input type="text" id="reg-firstName" value="Kofi" placeholder="Enter first name">
+                    </div>
+                    <div class="form-group">
+                        <label>Last Name:</label>
+                        <input type="text" id="reg-lastName" value="Asante" placeholder="Enter last name">
+                    </div>
+                    <div class="form-group">
+                        <label>Email:</label>
+                        <input type="email" id="reg-email" value="kofi.asante@email.com" placeholder="Enter email address">
+                    </div>
+                    <div class="form-group">
+                        <label>Phone:</label>
+                        <input type="tel" id="reg-phone" value="+233 20 123 4567" placeholder="Enter phone number">
+                    </div>
+                    <div class="form-group">
+                        <label>Date of Birth:</label>
+                        <input type="date" id="reg-dob" value="1990-01-15">
+                    </div>
+                    <div class="form-group">
+                        <label>Gender:</label>
+                        <select id="reg-gender">
+                            <option value="male">Male</option>
+                            <option value="female">Female</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                    
+                    <button class="btn" onclick="simulatePatientRegistration()">
+                        📝 Register Patient & Send Welcome Email
+                    </button>
+                    
+                    <div id="reg-result"></div>
+                    
+                    <div class="email-preview" id="reg-email-preview" style="display: none;">
+                        <div class="email-header">
+                            <div class="email-subject">🏥 Welcome to GhEHR Medical Center</div>
+                            <div class="email-from">From: GhEHR System &lt;noreply@ghehr.gh&gt;</div>
+                        </div>
+                        <p>Dear <span id="preview-name">Patient</span>,</p>
+                        <p>Welcome to GhEHR Medical Center! Your registration has been completed successfully.</p>
+                        <p><strong>Your Patient ID:</strong> <span id="preview-id">GH-2025-XXXXXX</span></p>
+                        <p><strong>Next Steps:</strong></p>
+                        <ul>
+                            <li>Keep your Patient ID safe for future visits</li>
+                            <li>Bring a valid ID when visiting our facility</li>
+                            <li>Contact us if you have any questions</li>
+                        </ul>
+                        <p>Thank you for choosing us for your healthcare needs.</p>
+                    </div>
+                </div>
+
+                <!-- Appointment Booking Demo -->
+                <div class="demo-card">
+                    <h4>📅 Appointment Confirmation Automation</h4>
+                    <p>Automatically sends confirmation when appointment is booked</p>
+                    
+                    <div class="form-group">
+                        <label>Patient (Select from registered):</label>
+                        <select id="apt-patient" onchange="updatePatientEmail('apt')">
+                            <option value="">Select a patient...</option>
+                            <option value="1">Kofi Asante (kofi.asante@email.com)</option>
+                            <option value="2">Ama Mensah (ama.mensah@email.com)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Appointment Date:</label>
+                        <input type="date" id="apt-date" value="2025-07-30">
+                    </div>
+                    <div class="form-group">
+                        <label>Appointment Time:</label>
+                        <input type="time" id="apt-time" value="10:00">
+                    </div>
+                    <div class="form-group">
+                        <label>Appointment Type:</label>
+                        <select id="apt-type">
+                            <option value="consultation">Consultation</option>
+                            <option value="follow-up">Follow-up</option>
+                            <option value="emergency">Emergency</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Notes:</label>
+                        <textarea id="apt-notes" placeholder="Additional notes for the appointment">Regular checkup - Blood pressure monitoring</textarea>
+                    </div>
+                    
+                    <button class="btn" onclick="simulateAppointmentBooking()">
+                        📅 Book Appointment & Send Confirmation
+                    </button>
+                    
+                    <div id="apt-result"></div>
+                </div>
+
+                <!-- Lab Order Demo -->
+                <div class="demo-card">
+                    <h4>🧪 Lab Order Instructions Automation</h4>
+                    <p>Automatically sends preparation instructions for lab tests</p>
+                    
+                    <div class="form-group">
+                        <label>Patient:</label>
+                        <select id="lab-patient" onchange="updatePatientEmail('lab')">
+                            <option value="">Select a patient...</option>
+                            <option value="1">Kofi Asante (kofi.asante@email.com)</option>
+                            <option value="2">Ama Mensah (ama.mensah@email.com)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Test Type:</label>
+                        <select id="lab-testType" onchange="updateLabInstructions()">
+                            <option value="blood_test">Blood Test</option>
+                            <option value="urine_test">Urine Test</option>
+                            <option value="xray">X-Ray</option>
+                            <option value="ultrasound">Ultrasound</option>
+                            <option value="ecg">ECG</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Test Name:</label>
+                        <input type="text" id="lab-testName" value="Complete Blood Count (CBC)">
+                    </div>
+                    <div class="form-group">
+                        <label>Scheduled Date:</label>
+                        <input type="date" id="lab-date" value="2025-07-29">
+                    </div>
+                    <div class="form-group">
+                        <label>Priority:</label>
+                        <select id="lab-priority">
+                            <option value="normal">Normal</option>
+                            <option value="urgent">Urgent</option>
+                        </select>
+                    </div>
+                    
+                    <div id="lab-instructions" class="info result" style="display: none;">
+                        <strong>Preparation Instructions:</strong>
+                        <ul id="lab-prep-list"></ul>
+                    </div>
+                    
+                    <button class="btn" onclick="simulateLabOrder()">
+                        🧪 Create Lab Order & Send Instructions
+                    </button>
+                    
+                    <div id="lab-result"></div>
+                </div>
+
+                <!-- Email Configuration -->
+                <div class="demo-card">
+                    <h4>⚙️ Email Configuration</h4>
+                    <p>Configure SMTP settings for automated emails</p>
+                    
+                    <div class="form-group">
+                        <label>SMTP Host:</label>
+                        <input type="text" id="config-host" value="smtp.gmail.com">
+                    </div>
+                    <div class="form-group">
+                        <label>SMTP Port:</label>
+                        <input type="number" id="config-port" value="587">
+                    </div>
+                    <div class="form-group">
+                        <label>Email:</label>
+                        <input type="email" id="config-email" placeholder="your-email@gmail.com">
+                    </div>
+                    <div class="form-group">
+                        <label>App Password:</label>
+                        <input type="password" id="config-password" placeholder="your-app-password">
+                    </div>
+                    
+                    <button class="btn" onclick="updateEmailConfig()">
+                        ⚙️ Update Configuration
+                    </button>
+                    
+                    <div id="config-result"></div>
+                </div>
+
+                <!-- Email Monitoring -->
+                <div class="demo-card">
+                    <h4>📊 Email Monitoring & Logs</h4>
+                    <p>Monitor automated email delivery and performance</p>
+                    
+                    <div class="form-group">
+                        <label>Filter by Type:</label>
+                        <select id="log-filter">
+                            <option value="">All Types</option>
+                            <option value="patient_registration">Patient Registration</option>
+                            <option value="appointment_confirmation">Appointment Confirmation</option>
+                            <option value="lab_results_ready">Lab Instructions</option>
+                        </select>
+                    </div>
+                    
+                    <button class="btn" onclick="loadEmailLogs()">
+                        📋 Load Email Logs
+                    </button>
+                    
+                    <div id="email-logs" style="max-height: 300px; overflow-y: auto; margin-top: 15px;"></div>
+                </div>
+
+                <!-- Bulk Operations -->
+                <div class="demo-card">
+                    <h4>📬 Bulk Email Operations</h4>
+                    <p>Send multiple automated emails at once</p>
+                    
+                    <div class="form-group">
+                        <label>Operation Type:</label>
+                        <select id="bulk-type">
+                            <option value="appointment_reminders">Appointment Reminders</option>
+                            <option value="health_tips">Health Tips Newsletter</option>
+                            <option value="facility_updates">Facility Updates</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Recipients:</label>
+                        <textarea id="bulk-recipients" placeholder="Enter email addresses, one per line">kofi.asante@email.com
+ama.mensah@email.com</textarea>
+                    </div>
+                    
+                    <button class="btn" onclick="simulateBulkEmails()">
+                        📬 Send Bulk Emails
+                    </button>
+                    
+                    <div id="bulk-result"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = 'http://localhost:5000';
+        let authToken = null;
+
+        // Initialize demo
+        document.addEventListener('DOMContentLoaded', function() {
+            loadEmailStats();
+            updateLabInstructions();
+        });
+
+        // Authentication
+        async function getAuthToken() {
+            if (authToken) return authToken;
+            
+            try {
+                const response = await fetch(`${API_BASE}/api/auth/login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        email: 'admin@ghehr.gh',
+                        password: 'admin123'
+                    })
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    authToken = data.token;
+                    return authToken;
+                }
+            } catch (error) {
+                console.error('Auth error:', error);
+            }
+            return null;
+        }
+
+        // Patient Registration Simulation
+        async function simulatePatientRegistration() {
+            const token = await getAuthToken();
+            if (!token) {
+                showResult('reg-result', '❌ Authentication required', 'error');
+                return;
+            }
+
+            const patientData = {
+                firstName: document.getElementById('reg-firstName').value,
+                lastName: document.getElementById('reg-lastName').value,
+                email: document.getElementById('reg-email').value,
+                phoneNumber: document.getElementById('reg-phone').value,
+                dateOfBirth: document.getElementById('reg-dob').value,
+                gender: document.getElementById('reg-gender').value,
+                address: {
+                    region: 'Greater Accra',
+                    city: 'Accra',
+                    street: '123 Main Street'
+                }
+            };
+
+            try {
+                showResult('reg-result', '⏳ Registering patient and sending welcome email...', 'info');
+                
+                const response = await fetch(`${API_BASE}/api/patients`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify(patientData)
+                });
+
+                const data = await response.json();
+                
+                if (data.success) {
+                    const patient = data.data.patient;
+                    showResult('reg-result', 
+                        `✅ Patient registered successfully! Patient ID: ${patient.patientId}\\n📧 Welcome email automatically sent to ${patient.email}`, 
+                        'success'
+                    );
+                    
+                    // Show email preview
+                    document.getElementById('preview-name').textContent = `${patient.firstName} ${patient.lastName}`;
+                    document.getElementById('preview-id').textContent = patient.patientId;
+                    document.getElementById('reg-email-preview').style.display = 'block';
+                    
+                    updateStats('registration');
+                } else {
+                    showResult('reg-result', `❌ Registration failed: ${data.error.message}`, 'error');
+                }
+            } catch (error) {
+                showResult('reg-result', `❌ Error: ${error.message}`, 'error');
+            }
+        }
+
+        // Appointment Booking Simulation
+        async function simulateAppointmentBooking() {
+            const token = await getAuthToken();
+            if (!token) {
+                showResult('apt-result', '❌ Authentication required', 'error');
+                return;
+            }
+
+            const appointmentData = {
+                patientId: document.getElementById('apt-patient').value,
+                doctorId: '1',
+                date: document.getElementById('apt-date').value,
+                time: document.getElementById('apt-time').value,
+                type: document.getElementById('apt-type').value,
+                notes: document.getElementById('apt-notes').value
+            };
+
+            if (!appointmentData.patientId) {
+                showResult('apt-result', '❌ Please select a patient', 'error');
+                return;
+            }
+
+            try {
+                showResult('apt-result', '⏳ Booking appointment and sending confirmation...', 'info');
+                
+                const response = await fetch(`${API_BASE}/api/appointments`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify(appointmentData)
+                });
+
+                const data = await response.json();
+                
+                if (data.success) {
+                    const appointment = data.data.appointment;
+                    const patientSelect = document.getElementById('apt-patient');
+                    const patientName = patientSelect.options[patientSelect.selectedIndex].text.split(' (')[0];
+                    
+                    showResult('apt-result', 
+                        `✅ Appointment booked successfully! ID: ${appointment.id}\\n📧 Confirmation email automatically sent to patient\\n📅 ${appointment.date} at ${appointment.time}`, 
+                        'success'
+                    );
+                    
+                    updateStats('appointment');
+                } else {
+                    showResult('apt-result', `❌ Booking failed: ${data.error.message}`, 'error');
+                }
+            } catch (error) {
+                showResult('apt-result', `❌ Error: ${error.message}`, 'error');
+            }
+        }
+
+        // Lab Order Simulation
+        async function simulateLabOrder() {
+            const token = await getAuthToken();
+            if (!token) {
+                showResult('lab-result', '❌ Authentication required', 'error');
+                return;
+            }
+
+            const labData = {
+                patientId: document.getElementById('lab-patient').value,
+                testType: document.getElementById('lab-testType').value,
+                testName: document.getElementById('lab-testName').value,
+                scheduledDate: document.getElementById('lab-date').value,
+                priority: document.getElementById('lab-priority').value
+            };
+
+            if (!labData.patientId) {
+                showResult('lab-result', '❌ Please select a patient', 'error');
+                return;
+            }
+
+            try {
+                showResult('lab-result', '⏳ Creating lab order and sending instructions...', 'info');
+                
+                const response = await fetch(`${API_BASE}/api/lab-orders`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify(labData)
+                });
+
+                const data = await response.json();
+                
+                if (data.success) {
+                    const labOrder = data.data.labOrder;
+                    
+                    showResult('lab-result', 
+                        `✅ Lab order created successfully! ID: ${labOrder.id}\\n📧 Preparation instructions automatically sent to patient\\n🧪 ${labOrder.testName} scheduled for ${labOrder.scheduledDate}`, 
+                        'success'
+                    );
+                    
+                    updateStats('lab_order');
+                } else {
+                    showResult('lab-result', `❌ Lab order failed: ${data.error.message}`, 'error');
+                }
+            } catch (error) {
+                showResult('lab-result', `❌ Error: ${error.message}`, 'error');
+            }
+        }
+
+        // Helper Functions
+        function updatePatientEmail(prefix) {
+            const patientSelect = document.getElementById(`${prefix}-patient`);
+            const selectedText = patientSelect.options[patientSelect.selectedIndex].text;
+            if (selectedText.includes('(') && selectedText.includes(')')) {
+                const email = selectedText.split('(')[1].split(')')[0];
+                console.log(`Selected patient email: ${email}`);
+            }
+        }
+
+        function updateLabInstructions() {
+            const testType = document.getElementById('lab-testType').value;
+            const instructions = {
+                blood_test: [
+                    'Fast for 8-12 hours before the test',
+                    'Avoid alcohol 24 hours before',
+                    'Wear comfortable clothing with sleeves',
+                    'Take prescribed medications unless told otherwise'
+                ],
+                urine_test: [
+                    'Collect first morning urine if possible',
+                    'Clean genital area before collection',
+                    'Use sterile container provided',
+                    'Bring sample within 2 hours'
+                ],
+                xray: [
+                    'Remove jewelry and metal objects',
+                    'Wear loose, comfortable clothing',
+                    'Inform if you might be pregnant',
+                    'Follow specific X-ray instructions'
+                ],
+                ultrasound: [
+                    'Fast 8 hours for abdominal ultrasound',
+                    'Drink water 1 hour before pelvic ultrasound',
+                    'Wear loose clothing',
+                    'Bring list of medications'
+                ],
+                ecg: [
+                    'Avoid skin products on chest',
+                    'Wear easily removable shirt',
+                    'Inform about chest hair',
+                    'Relax during the test'
+                ]
+            };
+
+            const instructionsList = document.getElementById('lab-prep-list');
+            const instructionsDiv = document.getElementById('lab-instructions');
+            
+            if (instructions[testType]) {
+                instructionsList.innerHTML = instructions[testType].map(inst => `<li>${inst}</li>`).join('');
+                instructionsDiv.style.display = 'block';
+            }
+        }
+
+        function showResult(elementId, message, type) {
+            const element = document.getElementById(elementId);
+            element.innerHTML = `<div class="result ${type}">${message.replace(/\\n/g, '<br>')}</div>`;
+        }
+
+        function updateStats(type) {
+            const totalEl = document.getElementById('total-automated');
+            const successEl = document.getElementById('successful-sent');
+            
+            const currentTotal = parseInt(totalEl.textContent) || 0;
+            const currentSuccess = parseInt(successEl.textContent) || 0;
+            
+            totalEl.textContent = currentTotal + 1;
+            successEl.textContent = currentSuccess + 1;
+            
+            // Animate the numbers
+            totalEl.style.animation = 'none';
+            successEl.style.animation = 'none';
+            setTimeout(() => {
+                totalEl.style.animation = 'pulse 0.5s ease-in-out';
+                successEl.style.animation = 'pulse 0.5s ease-in-out';
+            }, 10);
+        }
+
+        async function loadEmailStats() {
+            const token = await getAuthToken();
+            if (!token) return;
+
+            try {
+                const response = await fetch(`${API_BASE}/api/emails/stats`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    if (data.success) {
+                        const stats = data.data;
+                        document.getElementById('total-automated').textContent = stats.totalSent || 0;
+                        document.getElementById('successful-sent').textContent = stats.totalSent - (stats.failed || 0);
+                        document.getElementById('success-rate').textContent = stats.successRate + '%' || '100%';
+                    }
+                }
+            } catch (error) {
+                console.error('Error loading stats:', error);
+            }
+        }
+
+        async function updateEmailConfig() {
+            const token = await getAuthToken();
+            if (!token) {
+                showResult('config-result', '❌ Authentication required', 'error');
+                return;
+            }
+
+            const config = {
+                host: document.getElementById('config-host').value,
+                port: parseInt(document.getElementById('config-port').value),
+                secure: false,
+                user: document.getElementById('config-email').value,
+                pass: document.getElementById('config-password').value,
+                from: document.getElementById('config-email').value,
+                fromName: 'GhEHR Medical Center'
+            };
+
+            try {
+                const response = await fetch(`${API_BASE}/api/emails/config`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify(config)
+                });
+
+                const data = await response.json();
+                
+                if (data.success) {
+                    showResult('config-result', '✅ Email configuration updated! Automated emails will now use these settings.', 'success');
+                } else {
+                    showResult('config-result', `❌ Configuration failed: ${data.message}`, 'error');
+                }
+            } catch (error) {
+                showResult('config-result', `❌ Error: ${error.message}`, 'error');
+            }
+        }
+
+        async function loadEmailLogs() {
+            const token = await getAuthToken();
+            if (!token) return;
+
+            const filter = document.getElementById('log-filter').value;
+            let url = `${API_BASE}/api/emails/logs?limit=10`;
+            if (filter) url += `&type=${filter}`;
+
+            try {
+                const response = await fetch(url, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    if (data.success) {
+                        const logs = data.data.logs;
+                        const logsDiv = document.getElementById('email-logs');
+                        
+                        if (logs.length === 0) {
+                            logsDiv.innerHTML = '<div class="info result">No email logs found. Try sending some automated emails first!</div>';
+                        } else {
+                            logsDiv.innerHTML = logs.map(log => `
+                                <div class="result ${log.status === 'sent' ? 'success' : log.status === 'failed' ? 'error' : 'info'}" style="margin: 5px 0; padding: 10px;">
+                                    <strong>${log.type.replace(/_/g, ' ').toUpperCase()}</strong><br>
+                                    To: ${log.to}<br>
+                                    Status: ${log.status}<br>
+                                    Sent: ${new Date(log.sentAt).toLocaleString()}
+                                </div>
+                            `).join('');
+                        }
+                    }
+                }
+            } catch (error) {
+                console.error('Error loading logs:', error);
+            }
+        }
+
+        async function simulateBulkEmails() {
+            const token = await getAuthToken();
+            if (!token) {
+                showResult('bulk-result', '❌ Authentication required', 'error');
+                return;
+            }
+
+            const recipients = document.getElementById('bulk-recipients').value.split('\\n').filter(email => email.trim());
+            const type = document.getElementById('bulk-type').value;
+
+            if (recipients.length === 0) {
+                showResult('bulk-result', '❌ Please enter at least one email address', 'error');
+                return;
+            }
+
+            const emails = recipients.map(email => ({
+                to: email.trim(),
+                type: 'SYSTEM_ALERT',
+                data: {
+                    recipientName: 'Valued Patient',
+                    subject: type.replace(/_/g, ' ').toUpperCase(),
+                    message: `This is a bulk notification regarding ${type.replace(/_/g, ' ')}.`,
+                    facilityName: 'GhEHR Medical Center'
+                }
+            }));
+
+            try {
+                showResult('bulk-result', `⏳ Sending ${emails.length} bulk emails...`, 'info');
+                
+                const response = await fetch(`${API_BASE}/api/emails/bulk`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({ emails })
+                });
+
+                const data = await response.json();
+                
+                if (data.success) {
+                    showResult('bulk-result', 
+                        `✅ Bulk operation completed!\\n📧 ${data.data.successCount} emails sent successfully\\n❌ ${data.data.errorCount} failed`, 
+                        'success'
+                    );
+                    updateStats('bulk');
+                } else {
+                    showResult('bulk-result', `❌ Bulk operation failed: ${data.message}`, 'error');
+                }
+            } catch (error) {
+                showResult('bulk-result', `❌ Error: ${error.message}`, 'error');
+            }
+        }
+    </script>
+
+    <style>
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+    </style>
+</body>
+</html>

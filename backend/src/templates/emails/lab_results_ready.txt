@@ -1,0 +1,55 @@
+🧪 LAB TEST INSTRUCTIONS - {{facilityName}}
+=============================================
+
+Dear {{patientName}},
+
+Your lab test has been scheduled successfully. Please find the important details and preparation instructions below:
+
+📋 TEST DETAILS
+Test Name: {{testName}}
+Test Type: {{testType}}
+Lab Order ID: {{labOrderId}}
+Scheduled Date: {{scheduledDate}}
+Scheduled Time: {{scheduledTime}}
+Results Expected: {{resultsTimeframe}}
+
+⚠️ IMPORTANT PREPARATION INSTRUCTIONS
+Please follow these instructions carefully to ensure accurate test results:
+
+{{#each preparationInstructions}}
+• {{this}}
+{{/each}}
+
+{{#if instructions}}
+Additional Instructions: {{instructions}}
+{{/if}}
+
+📍 VISIT INFORMATION
+Location: {{labLocation}}
+Facility: {{facilityName}}
+Address: {{facilityAddress}}
+Contact: {{facilityPhone}}
+
+🚨 IMPORTANT REMINDERS
+• Arrive 15 minutes early for your appointment
+• Bring a valid ID and your patient card
+• Follow all preparation instructions exactly as written
+• If you have questions, call us immediately
+• If you cannot attend, please reschedule at least 24 hours in advance
+
+📞 NEED HELP?
+Main Contact: {{facilityPhone}}
+Email: {{facilityEmail}}
+Emergency: {{emergencyPhone}}
+Lab Department: {{labLocation}}
+
+Thank you for choosing {{facilityName}} for your healthcare needs. We look forward to serving you.
+
+Best regards,
+{{doctorName}}
+{{facilityName}} Medical Team
+
+---
+© 2025 GhEHR - Ghana Electronic Health Records System
+{{facilityAddress}} | {{facilityPhone}} | {{facilityEmail}}
+This is an automated message regarding your scheduled lab test.

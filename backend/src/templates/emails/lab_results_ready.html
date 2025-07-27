@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🧪 Lab Test Instructions - {{facilityName}}</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 20px; background-color: #f5f5f5; }
+        .container { max-width: 600px; margin: 0 auto; background: white; border-radius: 10px; overflow: hidden; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); }
+        .header { background: linear-gradient(135deg, #dc143c 0%, #ff8c00 30%, #ffd700 60%, #32cd32 100%); color: white; padding: 30px; text-align: center; }
+        .logo { height: 60px; width: auto; margin-bottom: 15px; }
+        .content { padding: 30px; }
+        .footer { background: #f8f9fa; padding: 20px; text-align: center; font-size: 12px; color: #666; }
+        .test-info { background: #e3f2fd; border-left: 4px solid #2196f3; padding: 20px; margin: 20px 0; border-radius: 5px; }
+        .instructions { background: #fff3e0; border-left: 4px solid #ff9800; padding: 20px; margin: 20px 0; border-radius: 5px; }
+        .instructions h3 { color: #e65100; margin-top: 0; }
+        .instructions ul { margin: 10px 0; padding-left: 20px; }
+        .instructions li { margin: 8px 0; line-height: 1.4; }
+        .appointment-details { background: #f1f8e9; border-left: 4px solid #4caf50; padding: 20px; margin: 20px 0; border-radius: 5px; }
+        .important { background: #ffebee; border-left: 4px solid #f44336; padding: 15px; margin: 15px 0; border-radius: 5px; }
+        .button { display: inline-block; padding: 12px 24px; background: #dc143c; color: white; text-decoration: none; border-radius: 5px; margin: 15px 0; }
+        .contact-info { background: #f5f5f5; padding: 15px; border-radius: 5px; margin: 20px 0; }
+        .emoji { font-size: 1.2em; margin-right: 5px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <img src="https://i.imgur.com/b8WvnC0.png" alt="GhEHR" class="logo" onerror="this.style.display='none';">
+            <h1><span class="emoji">🧪</span>Lab Test Instructions</h1>
+            <p>{{facilityName}} - {{facilityTagline}}</p>
+        </div>
+        
+        <div class="content">
+            <h2>Dear {{patientName}},</h2>
+            
+            <p>Your lab test has been scheduled successfully. Please find the important details and preparation instructions below:</p>
+            
+            <div class="test-info">
+                <h3><span class="emoji">📋</span>Test Details</h3>
+                <p><strong>Test Name:</strong> {{testName}}</p>
+                <p><strong>Test Type:</strong> {{testType}}</p>
+                <p><strong>Lab Order ID:</strong> {{labOrderId}}</p>
+                <p><strong>Scheduled Date:</strong> {{scheduledDate}}</p>
+                <p><strong>Scheduled Time:</strong> {{scheduledTime}}</p>
+                <p><strong>Results Expected:</strong> {{resultsTimeframe}}</p>
+            </div>
+            
+            <div class="instructions">
+                <h3><span class="emoji">⚠️</span>Important Preparation Instructions</h3>
+                <p><strong>Please follow these instructions carefully to ensure accurate test results:</strong></p>
+                <ul>
+                    {{#each preparationInstructions}}
+                    <li>{{this}}</li>
+                    {{/each}}
+                </ul>
+                {{#if instructions}}
+                <p><strong>Additional Instructions:</strong> {{instructions}}</p>
+                {{/if}}
+            </div>
+            
+            <div class="appointment-details">
+                <h3><span class="emoji">📍</span>Visit Information</h3>
+                <p><strong>Location:</strong> {{labLocation}}</p>
+                <p><strong>Facility:</strong> {{facilityName}}</p>
+                <p><strong>Address:</strong> {{facilityAddress}}</p>
+                <p><strong>Contact:</strong> {{facilityPhone}}</p>
+            </div>
+            
+            <div class="important">
+                <h3><span class="emoji">🚨</span>Important Reminders</h3>
+                <ul>
+                    <li>Arrive 15 minutes early for your appointment</li>
+                    <li>Bring a valid ID and your patient card</li>
+                    <li>Follow all preparation instructions exactly as written</li>
+                    <li>If you have questions, call us immediately</li>
+                    <li>If you cannot attend, please reschedule at least 24 hours in advance</li>
+                </ul>
+            </div>
+            
+            {{#if viewResultsLink}}
+            <div style="text-align: center; margin: 30px 0;">
+                <a href="{{viewResultsLink}}" class="button">📊 View Results (when ready)</a>
+            </div>
+            {{/if}}
+            
+            <div class="contact-info">
+                <h3><span class="emoji">📞</span>Need Help?</h3>
+                <p><strong>Main Contact:</strong> {{facilityPhone}}</p>
+                <p><strong>Email:</strong> {{facilityEmail}}</p>
+                <p><strong>Emergency:</strong> {{emergencyPhone}}</p>
+                <p><strong>Lab Department:</strong> {{labLocation}}</p>
+            </div>
+            
+            <p>Thank you for choosing {{facilityName}} for your healthcare needs. We look forward to serving you.</p>
+            
+            <p>Best regards,<br>
+            <strong>{{doctorName}}</strong><br>
+            {{facilityName}} Medical Team</p>
+        </div>
+        
+        <div class="footer">
+            <p>&copy; 2025 GhEHR - Ghana Electronic Health Records System</p>
+            <p>{{facilityAddress}} | {{facilityPhone}} | {{facilityEmail}}</p>
+            <p>This is an automated message regarding your scheduled lab test.</p>
+            <p>
+                <a href="{{privacyPolicyLink}}" style="color: #666;">Privacy Policy</a> | 
+                <a href="{{termsLink}}" style="color: #666;">Terms of Service</a> | 
+                <a href="{{unsubscribeLink}}" style="color: #666;">Unsubscribe</a>
+            </p>
+        </div>
+    </div>
+</body>
+</html>
