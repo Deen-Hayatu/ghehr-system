@@ -8,7 +8,6 @@ import {
   Typography,
   Box,
   Paper,
-  Grid2 as Grid,
   Chip,
   Alert,
   Tab,
@@ -153,8 +152,8 @@ const ConflictResolution: React.FC<ConflictResolutionProps> = ({ open, onClose }
     const differences: string[] = [];
 
     return (
-      <Grid container spacing={3}>
-        <Grid xs={6}>
+      <Box display="flex" gap={3}>
+        <Box flex={1}>
           <Paper sx={{ p: 2, bgcolor: '#fff3e0' }}>
             <Box display="flex" alignItems="center" mb={2}>
               <CloudOffIcon sx={{ mr: 1, color: 'warning.main' }} />
@@ -190,9 +189,9 @@ const ConflictResolution: React.FC<ConflictResolutionProps> = ({ open, onClose }
               })}
             </Box>
           </Paper>
-        </Grid>
+        </Box>
 
-        <Grid xs={6}>
+        <Box flex={1}>
           <Paper sx={{ p: 2, bgcolor: '#e3f2fd' }}>
             <Box display="flex" alignItems="center" mb={2}>
               <CloudIcon sx={{ mr: 1, color: 'primary.main' }} />
@@ -227,18 +226,18 @@ const ConflictResolution: React.FC<ConflictResolutionProps> = ({ open, onClose }
               })}
             </Box>
           </Paper>
-        </Grid>
+        </Box>
 
         {differences.length > 0 && (
-          <Grid xs={12}>
+          <Box sx={{ mt: 2 }}>
             <Alert severity="info" icon={<MergeIcon />}>
               <Typography variant="body2">
                 <strong>Differences found in:</strong> {differences.join(', ')}
               </Typography>
             </Alert>
-          </Grid>
+          </Box>
         )}
-      </Grid>
+      </Box>
     );
   };
 
@@ -295,7 +294,15 @@ const ConflictResolution: React.FC<ConflictResolutionProps> = ({ open, onClose }
   }
 
   return (
-    <Dialog open={open} onClose={onClose} maxWidth="lg" fullWidth maxHeight="90vh">
+    <Dialog 
+      open={open} 
+      onClose={onClose} 
+      maxWidth="lg" 
+      fullWidth
+      PaperProps={{
+        sx: { maxHeight: '90vh' }
+      }}
+    >
       <DialogTitle>
         <Box display="flex" alignItems="center">
           <WarningIcon sx={{ mr: 1, color: 'warning.main' }} />
@@ -334,24 +341,24 @@ const ConflictResolution: React.FC<ConflictResolutionProps> = ({ open, onClose }
             </TabPanel>
 
             <TabPanel value={tabValue} index={1}>
-              <Grid container spacing={2}>
-                <Grid xs={6}>
+              <Box display="flex" gap={2}>
+                <Box flex={1}>
                   <Typography variant="subtitle1" gutterBottom>Local Data:</Typography>
                   <Paper sx={{ p: 2, bgcolor: 'grey.50', maxHeight: 200, overflow: 'auto' }}>
                     <pre style={{ margin: 0, fontSize: '12px' }}>
                       {JSON.stringify(selectedConflict.localData, null, 2)}
                     </pre>
                   </Paper>
-                </Grid>
-                <Grid xs={6}>
+                </Box>
+                <Box flex={1}>
                   <Typography variant="subtitle1" gutterBottom>Server Data:</Typography>
                   <Paper sx={{ p: 2, bgcolor: 'grey.50', maxHeight: 200, overflow: 'auto' }}>
                     <pre style={{ margin: 0, fontSize: '12px' }}>
                       {JSON.stringify(selectedConflict.serverData, null, 2)}
                     </pre>
                   </Paper>
-                </Grid>
-              </Grid>
+                </Box>
+              </Box>
             </TabPanel>
           </Box>
         )}
