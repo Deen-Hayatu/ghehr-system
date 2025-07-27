@@ -3,41 +3,92 @@
   <head>
     <meta charset="utf-8" />
     <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#000000" />
-    <meta
-      name="description"
-      content="Web site created using create-react-app"
-    />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="theme-color" content="#dc143c" />
+    <meta name="description" content="Ghana Electronic Health Records System - Comprehensive healthcare management with offline capabilities" />
+    <meta name="keywords" content="Ghana, EHR, Electronic Health Records, Healthcare, Medical, Offline" />
+    <meta name="author" content="GhEHR Team" />
+    
+    <!-- PWA Meta Tags -->
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="GhEHR" />
+    <meta name="application-name" content="GhEHR" />
+    <meta name="msapplication-TileColor" content="#dc143c" />
+    <meta name="msapplication-config" content="%PUBLIC_URL%/browserconfig.xml" />
+    
+    <!-- Apple Touch Icons -->
     <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
-    <!--
-      manifest.json provides metadata used when your web app is installed on a
-      user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
-    -->
+    <link rel="apple-touch-icon" sizes="152x152" href="%PUBLIC_URL%/logo192.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="%PUBLIC_URL%/logo192.png" />
+    <link rel="apple-touch-icon" sizes="167x167" href="%PUBLIC_URL%/logo192.png" />
+    
+    <!-- Manifest -->
     <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
-    <!--
-      Notice the use of %PUBLIC_URL% in the tags above.
-      It will be replaced with the URL of the `public` folder during the build.
-      Only files inside the `public` folder can be referenced from the HTML.
-
-      Unlike "/favicon.ico" or "favicon.ico", "%PUBLIC_URL%/favicon.ico" will
-      work correctly both with client-side routing and a non-root public URL.
-      Learn how to configure a non-root public URL by running `npm run build`.
-    -->
+    
+    <!-- Preconnect to API -->
+    <link rel="preconnect" href="http://localhost:5000" />
+    
     <title>GhEHR - Ghana Electronic Health Records</title>
   </head>
   <body>
-    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <noscript>
+      <div style="text-align: center; padding: 50px; font-family: Arial, sans-serif;">
+        <h1>🏥 GhEHR</h1>
+        <p>You need to enable JavaScript to run this healthcare application.</p>
+        <p>Please enable JavaScript in your browser settings and refresh the page.</p>
+      </div>
+    </noscript>
     <div id="root"></div>
-    <!--
-      This HTML file is a template.
-      If you open it directly in the browser, you will see an empty page.
+    
+    <!-- Offline notification for users without JS -->
+    <div id="offline-fallback" style="display: none; text-align: center; padding: 50px; font-family: Arial, sans-serif;">
+      <h1>📴 You're Offline</h1>
+      <p>GhEHR is designed to work offline, but some features may be limited.</p>
+      <p>Your data will be saved locally and synced when you're back online.</p>
+      <button onclick="window.location.reload()">Try Again</button>
+    </div>
 
-      You can add webfonts, meta tags, or analytics to this file.
-      The build step will place the bundled scripts into the <body> tag.
+    <!-- Service Worker Registration -->
+    <script>
+      // Register service worker for PWA functionality
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', function() {
+          navigator.serviceWorker.getRegistrations().then(function(registrations) {
+            // Check if there are existing registrations
+            if (registrations.length === 0) {
+              console.log('🔧 No existing service workers found, registering new one...');
+            } else {
+              console.log('🔧 Found existing service worker registrations:', registrations.length);
+            }
+          });
+        });
+      } else {
+        console.warn('⚠️ Service Workers not supported in this browser');
+      }
 
-      To begin the development, run `npm start` or `yarn start`.
-      To create a production bundle, use `npm run build` or `yarn build`.
-    -->
+      // Network status detection for offline fallback
+      function updateOnlineStatus() {
+        const offlineFallback = document.getElementById('offline-fallback');
+        const root = document.getElementById('root');
+        
+        if (!navigator.onLine) {
+          console.log('📴 Network: OFFLINE detected');
+          // Note: We don't show fallback since React app handles offline mode
+        } else {
+          console.log('🌐 Network: ONLINE detected');
+          if (offlineFallback) {
+            offlineFallback.style.display = 'none';
+          }
+        }
+      }
+
+      window.addEventListener('online', updateOnlineStatus);
+      window.addEventListener('offline', updateOnlineStatus);
+      
+      // Initial check
+      updateOnlineStatus();
+    </script>
   </body>
 </html>
