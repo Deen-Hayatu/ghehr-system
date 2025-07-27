@@ -8,7 +8,7 @@ import {
   Typography,
   Box,
   Paper,
-  Grid,
+  Grid2 as Grid,
   Chip,
   Alert,
   Tab,
@@ -154,7 +154,7 @@ const ConflictResolution: React.FC<ConflictResolutionProps> = ({ open, onClose }
 
     return (
       <Grid container spacing={3}>
-        <Grid item xs={6}>
+        <Grid xs={6}>
           <Paper sx={{ p: 2, bgcolor: '#fff3e0' }}>
             <Box display="flex" alignItems="center" mb={2}>
               <CloudOffIcon sx={{ mr: 1, color: 'warning.main' }} />
@@ -192,7 +192,7 @@ const ConflictResolution: React.FC<ConflictResolutionProps> = ({ open, onClose }
           </Paper>
         </Grid>
 
-        <Grid item xs={6}>
+        <Grid xs={6}>
           <Paper sx={{ p: 2, bgcolor: '#e3f2fd' }}>
             <Box display="flex" alignItems="center" mb={2}>
               <CloudIcon sx={{ mr: 1, color: 'primary.main' }} />
@@ -230,7 +230,7 @@ const ConflictResolution: React.FC<ConflictResolutionProps> = ({ open, onClose }
         </Grid>
 
         {differences.length > 0 && (
-          <Grid item xs={12}>
+          <Grid xs={12}>
             <Alert severity="info" icon={<MergeIcon />}>
               <Typography variant="body2">
                 <strong>Differences found in:</strong> {differences.join(', ')}
@@ -335,7 +335,7 @@ const ConflictResolution: React.FC<ConflictResolutionProps> = ({ open, onClose }
 
             <TabPanel value={tabValue} index={1}>
               <Grid container spacing={2}>
-                <Grid item xs={6}>
+                <Grid xs={6}>
                   <Typography variant="subtitle1" gutterBottom>Local Data:</Typography>
                   <Paper sx={{ p: 2, bgcolor: 'grey.50', maxHeight: 200, overflow: 'auto' }}>
                     <pre style={{ margin: 0, fontSize: '12px' }}>
@@ -343,7 +343,7 @@ const ConflictResolution: React.FC<ConflictResolutionProps> = ({ open, onClose }
                     </pre>
                   </Paper>
                 </Grid>
-                <Grid item xs={6}>
+                <Grid xs={6}>
                   <Typography variant="subtitle1" gutterBottom>Server Data:</Typography>
                   <Paper sx={{ p: 2, bgcolor: 'grey.50', maxHeight: 200, overflow: 'auto' }}>
                     <pre style={{ margin: 0, fontSize: '12px' }}>

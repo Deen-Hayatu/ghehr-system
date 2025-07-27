@@ -175,7 +175,7 @@ const OfflineStatus: React.FC<OfflineStatusProps> = ({ position = 'fixed' }) => 
         
         {syncInProgress && (
           <Box sx={{ width: 100 }}>
-            <LinearProgress size="small" />
+            <LinearProgress />
           </Box>
         )}
       </Box>
@@ -259,7 +259,7 @@ const OfflineStatus: React.FC<OfflineStatusProps> = ({ position = 'fixed' }) => 
         onClose={() => setShowConflictDialog(false)}
       />
 
-      <style jsx global>{`
+      <style>{`
         @keyframes spin {
           from { transform: rotate(0deg); }
           to { transform: rotate(360deg); }
