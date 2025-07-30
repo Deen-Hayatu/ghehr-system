@@ -254,7 +254,7 @@ export class SyncManager {
 
   // Helper methods
   private getApiUrl(entityType: string, entityId: string, operation: string): string {
-    const baseUrl = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
+    const baseUrl = process.env.REACT_APP_API_URL || 'http://localhost:3001/api';
     const entityEndpoint = this.getEntityEndpoint(entityType);
     
     switch (operation) {

@@ -49,7 +49,7 @@ import axios from 'axios';
 import { debounce } from 'lodash';
 
 // API base URL
-const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:3001';
 
 // Types
 interface ClinicalNote {

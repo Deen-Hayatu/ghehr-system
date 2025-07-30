@@ -6,79 +6,88 @@ import {
   Typography,
   Button,
   TextField,
-  Grid,
   Switch,
   FormControl,
   InputLabel,
   Select,
   MenuItem,
-  Tabs,
-  Tab,
   Paper,
   Alert,
-  Divider,
   List,
   ListItem,
   ListItemText,
   ListItemSecondaryAction,
-  Chip,
   Dialog,
   DialogTitle,
   DialogContent,
   DialogActions,
+  IconButton,
+  Stack,
+  Accordion,
+  AccordionSummary,
+  AccordionDetails,
+  Chip,
+  FormControlLabel,
 } from '@mui/material';
 import {
-  Settings as SettingsIcon,
-  Security as SecurityIcon,
-  Notifications as NotificationIcon,
-  Palette as BrandingIcon,
-  Backup as BackupIcon,
-  Language as LanguageIcon,
+  AccountCircle as PreferencesIcon,
+  Lock as PasswordIcon,
+  Apps as ApplicationIcon,
   Save as SaveIcon,
   Upload as UploadIcon,
-  Download as DownloadIcon,
+  RestartAlt as ResetIcon,
+  ExpandMore as ExpandMoreIcon,
+  CloudUpload as CloudUploadIcon,
+  Schedule as ScheduleIcon,
+  Today as DateIcon,
+  Palette as ThemeIcon,
+  Delete as DeleteIcon,
+  Add as AddIcon,
+  Star as FavoriteIcon,
+  Code as CodeIcon,
+  Notifications as NotificationIcon,
+  Palette as BrandingIcon,
+  Language as LanguageIcon,
 } from '@mui/icons-material';
 
-interface SystemSettings {
-  general: {
-    facilityName: string;
-    facilityAddress: string;
-    contactEmail: string;
-    contactPhone: string;
-    timezone: string;
-    language: string;
-    currency: string;
+interface PreferencesSettings {
+  doctorSignature: {
+    uploaded: boolean;
+    fileName: string;
+    uploadDate: string;
   };
-  security: {
-    passwordMinLength: number;
-    sessionTimeout: number;
-    twoFactorAuth: boolean;
-    autoLogout: boolean;
-    ipWhitelist: boolean;
-    auditLogging: boolean;
-  };
+  autoLogoutTime: number; // in minutes
+  dateFormat: string;
+  theme: string;
+  language: string;
+}
+
+interface ApplicationSettings {
+  favorites: string[];
+  customCodes: Array<{
+    id: string;
+    code: string;
+    description: string;
+    category: string;
+  }>;
   notifications: {
     emailNotifications: boolean;
     smsNotifications: boolean;
-    whatsappNotifications: boolean;
     appointmentReminders: boolean;
     labResultAlerts: boolean;
-    systemAlerts: boolean;
   };
   branding: {
+    facilityName: string;
     logoUrl: string;
     primaryColor: string;
     secondaryColor: string;
-    customTheme: boolean;
-    facilitySlogan: string;
   };
-  backup: {
-    autoBackup: boolean;
-    backupFrequency: string;
-    retentionPeriod: number;
-    cloudBackup: boolean;
-    lastBackup: string;
-  };
+}
+
+interface PasswordChangeData {
+  currentPassword: string;
+  newPassword: string;
+  confirmPassword: string;
 }
 
 interface TabPanelProps {
@@ -103,631 +112,818 @@ function TabPanel(props: TabPanelProps) {
 }
 
 const SettingsManagement: React.FC = () => {
-  const [tabValue, setTabValue] = useState(0);
-  const [saveDialogOpen, setSaveDialogOpen] = useState(false);
-  const [settings, setSettings] = useState<SystemSettings>({
-    general: {
-      facilityName: 'Ghana Health Center - Accra',
-      facilityAddress: '123 Independence Avenue, Accra, Ghana',
-      contactEmail: 'admin@ghehr.com',
-      contactPhone: '+233 24 123 4567',
-      timezone: 'Africa/Accra',
-      language: 'en',
-      currency: 'GHS'
+  // State management
+  const [preferences, setPreferences] = useState<PreferencesSettings>({
+    doctorSignature: {
+      uploaded: false,
+      fileName: '',
+      uploadDate: '',
     },
-    security: {
-      passwordMinLength: 8,
-      sessionTimeout: 30,
-      twoFactorAuth: true,
-      autoLogout: true,
-      ipWhitelist: false,
-      auditLogging: true
-    },
-    notifications: {
-      emailNotifications: true,
-      smsNotifications: true,
-      whatsappNotifications: false,
-      appointmentReminders: true,
-      labResultAlerts: true,
-      systemAlerts: true
-    },
-    branding: {
-      logoUrl: '/assets/logo.png',
-      primaryColor: '#1976d2',
-      secondaryColor: '#dc004e',
-      customTheme: false,
-      facilitySlogan: 'Quality Healthcare for All Ghanaians'
-    },
-    backup: {
-      autoBackup: true,
-      backupFrequency: 'daily',
-      retentionPeriod: 30,
-      cloudBackup: true,
-      lastBackup: '2025-07-23T02:00:00Z'
-    }
+    autoLogoutTime: 30,
+    dateFormat: 'DD/MM/YYYY',
+    theme: 'Light',
+    language: 'English',
   });
 
-  const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
-    setTabValue(newValue);
-  };
+  const [applicationSettings, setApplicationSettings] = useState<ApplicationSettings>({
+    favorites: ['Patient Management', 'Appointments', 'Clinical Notes'],
+    customCodes: [
+      { id: '1', code: 'MALARIA-001', description: 'Malaria - Uncomplicated', category: 'Infectious Disease' },
+      { id: '2', code: 'HTN-001', description: 'Essential Hypertension', category: 'Cardiovascular' },
+    ],
+    notifications: {
+      emailNotifications: true,
+      smsNotifications: false,
+      appointmentReminders: true,
+      labResultAlerts: true,
+    },
+    branding: {
+      facilityName: 'GhEHR Medical Center',
+      logoUrl: '',
+      primaryColor: '#1976d2',
+      secondaryColor: '#dc004e',
+    },
+  });
 
-  const updateGeneralSettings = (field: string, value: any) => {
-    setSettings(prev => ({
-      ...prev,
-      general: { ...prev.general, [field]: value }
-    }));
-  };
+  const [passwordData, setPasswordData] = useState<PasswordChangeData>({
+    currentPassword: '',
+    newPassword: '',
+    confirmPassword: '',
+  });
 
-  const updateSecuritySettings = (field: string, value: any) => {
-    setSettings(prev => ({
-      ...prev,
-      security: { ...prev.security, [field]: value }
-    }));
-  };
+  const [saveDialog, setSaveDialog] = useState(false);
+  const [resetDialog, setResetDialog] = useState(false);
+  const [newCodeDialog, setNewCodeDialog] = useState(false);
+  const [newCode, setNewCode] = useState({ code: '', description: '', category: '' });
 
-  const updateNotificationSettings = (field: string, value: any) => {
-    setSettings(prev => ({
-      ...prev,
-      notifications: { ...prev.notifications, [field]: value }
-    }));
-  };
-
-  const updateBrandingSettings = (field: string, value: any) => {
-    setSettings(prev => ({
-      ...prev,
-      branding: { ...prev.branding, [field]: value }
-    }));
-  };
-
-  const updateBackupSettings = (field: string, value: any) => {
-    setSettings(prev => ({
-      ...prev,
-      backup: { ...prev.backup, [field]: value }
-    }));
-  };
-
-  const handleSaveSettings = () => {
-    setSaveDialogOpen(false);
-    // Save settings logic here
-    console.log('Settings saved:', settings);
-  };
-
-  const settingsTabConfig = [
-    { label: 'General', icon: SettingsIcon, color: '#1976d2' },
-    { label: 'Security', icon: SecurityIcon, color: '#f44336' },
-    { label: 'Notifications', icon: NotificationIcon, color: '#ff9800' },
-    { label: 'Branding', icon: BrandingIcon, color: '#9c27b0' },
-    { label: 'Backup', icon: BackupIcon, color: '#4caf50' },
+  // Available options
+  const autoLogoutOptions = [
+    { value: 15, label: '15 minutes' },
+    { value: 30, label: '30 minutes' },
+    { value: 60, label: '1 hour' },
+    { value: 120, label: '2 hours' },
+    { value: 240, label: '4 hours' },
+    { value: 480, label: '8 hours' },
   ];
+
+  const dateFormatOptions = [
+    'DD/MM/YYYY',
+    'MM/DD/YYYY',
+    'YYYY-MM-DD',
+    'DD-MM-YYYY',
+  ];
+
+  const themeOptions = ['Light', 'Dark', 'Auto'];
+  const languageOptions = ['English', 'Twi', 'Ga', 'Ewe'];
+
+  const availableModules = [
+    'Dashboard',
+    'Patient Management',
+    'Appointments',
+    'Clinical Notes',
+    'Billing',
+    'Reports',
+    'Lab Orders',
+    'Pharmacy Orders',
+    'MOH Dashboard',
+  ];
+
+  // Event handlers
+  const handleSignatureUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      // In a real app, you would upload the file to a server
+      setPreferences((prev: any) => ({
+        ...prev,
+        doctorSignature: {
+          uploaded: true,
+          fileName: file.name,
+          uploadDate: new Date().toLocaleDateString(),
+        },
+      }));
+    }
+  };
+
+  const handlePasswordChange = () => {
+    if (passwordData.newPassword !== passwordData.confirmPassword) {
+      alert('New passwords do not match');
+      return;
+    }
+    if (passwordData.newPassword.length < 6) {
+      alert('Password must be at least 6 characters long');
+      return;
+    }
+    // In a real app, you would send this to the server
+    console.log('Password change requested');
+    setPasswordData({ currentPassword: '', newPassword: '', confirmPassword: '' });
+    alert('Password changed successfully');
+  };
+
+  const handleAddCustomCode = () => {
+    if (!newCode.code || !newCode.description || !newCode.category) {
+      alert('Please fill in all fields');
+      return;
+    }
+    
+    setApplicationSettings((prev: any) => ({
+      ...prev,
+      customCodes: [...prev.customCodes, { 
+        id: Date.now().toString(), 
+        ...newCode 
+      }],
+    }));
+    
+    setNewCode({ code: '', description: '', category: '' });
+    setNewCodeDialog(false);
+  };
+
+  const handleDeleteCustomCode = (id: string) => {
+    setApplicationSettings((prev: any) => ({
+      ...prev,
+      customCodes: prev.customCodes.filter((code: any) => code.id !== id),
+    }));
+  };
+
+  const handleToggleFavorite = (module: string) => {
+    setApplicationSettings((prev: any) => ({
+      ...prev,
+      favorites: prev.favorites.includes(module)
+        ? prev.favorites.filter((fav: any) => fav !== module)
+        : [...prev.favorites, module],
+    }));
+  };
+
+  const handleResetAllSettings = () => {
+    setPreferences({
+      doctorSignature: { uploaded: false, fileName: '', uploadDate: '' },
+      autoLogoutTime: 30,
+      dateFormat: 'DD/MM/YYYY',
+      theme: 'Light',
+      language: 'English',
+    });
+    setApplicationSettings({
+      favorites: [],
+      customCodes: [],
+      notifications: {
+        emailNotifications: false,
+        smsNotifications: false,
+        appointmentReminders: false,
+        labResultAlerts: false,
+      },
+      branding: {
+        facilityName: 'GhEHR Medical Center',
+        logoUrl: '',
+        primaryColor: '#1976d2',
+        secondaryColor: '#dc004e',
+      },
+    });
+    setResetDialog(false);
+    alert('All settings have been reset to defaults');
+  };
+
+  const handleSaveAllSettings = () => {
+    // In a real app, you would send this to the server
+    console.log('Saving settings:', { preferences, applicationSettings });
+    setSaveDialog(false);
+    alert('Settings saved successfully');
+  };
 
   return (
     <Box>
       {/* Header */}
       <Box display="flex" justifyContent="space-between" alignItems="center" sx={{ mb: 3 }}>
         <Typography variant="h6" fontWeight="bold">
-          ⚙️ System Settings & Configuration
+          ⚙️ Manage Settings
         </Typography>
-        <Box display="flex" gap={1}>
-          <Button
-            variant="outlined"
-            startIcon={<DownloadIcon />}
-            size="small"
-          >
-            Export Config
-          </Button>
-          <Button
-            variant="contained"
-            startIcon={<SaveIcon />}
-            onClick={() => setSaveDialogOpen(true)}
-            sx={{ backgroundColor: '#4caf50' }}
-          >
-            Save Changes
-          </Button>
-        </Box>
+        <Button
+          variant="contained"
+          startIcon={<SaveIcon />}
+          onClick={() => setSaveDialog(true)}
+          sx={{ backgroundColor: '#4caf50' }}
+        >
+          Save All Changes
+        </Button>
       </Box>
 
-      {/* Settings Navigation */}
-      <Paper sx={{ mb: 3 }}>
-        <Tabs
-          value={tabValue}
-          onChange={handleTabChange}
-          variant="fullWidth"
-          sx={{
-            '& .MuiTab-root': {
-              minHeight: 70,
-              textTransform: 'none',
-              fontSize: '0.9rem',
-              fontWeight: 500,
-              flexDirection: 'column',
-              gap: 0.5,
-            },
-          }}
-        >
-          {settingsTabConfig.map((tab, index) => {
-            const IconComponent = tab.icon;
-            return (
-              <Tab
-                key={index}
-                icon={
-                  <Box
-                    sx={{
-                      width: 32,
-                      height: 32,
-                      borderRadius: '6px',
-                      backgroundColor: tabValue === index ? tab.color : 'rgba(0,0,0,0.1)',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      transition: 'all 0.3s ease',
-                    }}
-                  >
-                    <IconComponent 
-                      sx={{ 
-                        color: tabValue === index ? 'white' : 'rgba(0,0,0,0.6)',
-                        fontSize: 20 
-                      }} 
-                    />
-                  </Box>
-                }
-                label={
-                  <Typography variant="subtitle2" fontWeight="bold">
-                    {tab.label}
-                  </Typography>
-                }
-              />
-            );
-          })}
-        </Tabs>
-      </Paper>
-
-      {/* General Settings */}
-      <TabPanel value={tabValue} index={0}>
-        <Card>
-          <CardContent>
-            <Typography variant="h6" gutterBottom>
-              🏥 General Facility Settings
-            </Typography>
-            <Grid container spacing={3}>
-              <Grid size={{ xs: 12, md: 6 }}>
-                <TextField
-                  fullWidth
-                  label="Facility Name"
-                  value={settings.general.facilityName}
-                  onChange={(e) => updateGeneralSettings('facilityName', e.target.value)}
-                />
-              </Grid>
-              <Grid size={{ xs: 12, md: 6 }}>
-                <TextField
-                  fullWidth
-                  label="Contact Email"
-                  type="email"
-                  value={settings.general.contactEmail}
-                  onChange={(e) => updateGeneralSettings('contactEmail', e.target.value)}
-                />
-              </Grid>
-              <Grid size={12}>
-                <TextField
-                  fullWidth
-                  label="Facility Address"
-                  multiline
-                  rows={2}
-                  value={settings.general.facilityAddress}
-                  onChange={(e) => updateGeneralSettings('facilityAddress', e.target.value)}
-                />
-              </Grid>
-              <Grid size={{ xs: 12, md: 4 }}>
-                <TextField
-                  fullWidth
-                  label="Contact Phone"
-                  value={settings.general.contactPhone}
-                  onChange={(e) => updateGeneralSettings('contactPhone', e.target.value)}
-                />
-              </Grid>
-              <Grid size={{ xs: 12, md: 4 }}>
-                <FormControl fullWidth>
-                  <InputLabel>Timezone</InputLabel>
-                  <Select
-                    value={settings.general.timezone}
-                    label="Timezone"
-                    onChange={(e) => updateGeneralSettings('timezone', e.target.value)}
-                  >
-                    <MenuItem value="Africa/Accra">Africa/Accra (GMT)</MenuItem>
-                    <MenuItem value="Africa/Lagos">Africa/Lagos (WAT)</MenuItem>
-                    <MenuItem value="UTC">UTC</MenuItem>
-                  </Select>
-                </FormControl>
-              </Grid>
-              <Grid size={{ xs: 12, md: 4 }}>
-                <FormControl fullWidth>
-                  <InputLabel>Language</InputLabel>
-                  <Select
-                    value={settings.general.language}
-                    label="Language"
-                    onChange={(e) => updateGeneralSettings('language', e.target.value)}
-                  >
-                    <MenuItem value="en">English</MenuItem>
-                    <MenuItem value="tw">Twi</MenuItem>
-                    <MenuItem value="ga">Ga</MenuItem>
-                    <MenuItem value="ee">Ewe</MenuItem>
-                  </Select>
-                </FormControl>
-              </Grid>
-            </Grid>
-          </CardContent>
-        </Card>
-      </TabPanel>
-
-      {/* Security Settings */}
-      <TabPanel value={tabValue} index={1}>
-        <Card>
-          <CardContent>
-            <Typography variant="h6" gutterBottom>
-              🔒 Security & Access Control
-            </Typography>
-            <Alert severity="warning" sx={{ mb: 3 }}>
-              <Typography variant="body2">
-                Changes to security settings will affect all users. Please review carefully before saving.
+      {/* Main Content */}
+      <Stack spacing={3}>
+        
+        {/* 1. PREFERENCES SECTION */}
+        <Accordion defaultExpanded>
+          <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+            <Box display="flex" alignItems="center" gap={2}>
+              <PreferencesIcon sx={{ color: '#1976d2' }} />
+              <Typography variant="h6" fontWeight="bold">
+                Preferences
               </Typography>
-            </Alert>
-            <Grid container spacing={3}>
-              <Grid size={{ xs: 12, md: 6 }}>
-                <TextField
-                  fullWidth
-                  label="Minimum Password Length"
-                  type="number"
-                  value={settings.security.passwordMinLength}
-                  onChange={(e) => updateSecuritySettings('passwordMinLength', parseInt(e.target.value))}
-                  inputProps={{ min: 6, max: 20 }}
-                />
-              </Grid>
-              <Grid size={{ xs: 12, md: 6 }}>
-                <TextField
-                  fullWidth
-                  label="Session Timeout (minutes)"
-                  type="number"
-                  value={settings.security.sessionTimeout}
-                  onChange={(e) => updateSecuritySettings('sessionTimeout', parseInt(e.target.value))}
-                  inputProps={{ min: 15, max: 120 }}
-                />
-              </Grid>
-            </Grid>
-            <List>
-              <ListItem>
-                <ListItemText
-                  primary="Two-Factor Authentication"
-                  secondary="Require 2FA for all user accounts"
-                />
-                <ListItemSecondaryAction>
-                  <Switch
-                    checked={settings.security.twoFactorAuth}
-                    onChange={(e) => updateSecuritySettings('twoFactorAuth', e.target.checked)}
-                  />
-                </ListItemSecondaryAction>
-              </ListItem>
-              <ListItem>
-                <ListItemText
-                  primary="Auto-Logout on Inactivity"
-                  secondary="Automatically log out inactive users"
-                />
-                <ListItemSecondaryAction>
-                  <Switch
-                    checked={settings.security.autoLogout}
-                    onChange={(e) => updateSecuritySettings('autoLogout', e.target.checked)}
-                  />
-                </ListItemSecondaryAction>
-              </ListItem>
-              <ListItem>
-                <ListItemText
-                  primary="IP Address Whitelisting"
-                  secondary="Restrict access to specific IP ranges"
-                />
-                <ListItemSecondaryAction>
-                  <Switch
-                    checked={settings.security.ipWhitelist}
-                    onChange={(e) => updateSecuritySettings('ipWhitelist', e.target.checked)}
-                  />
-                </ListItemSecondaryAction>
-              </ListItem>
-              <ListItem>
-                <ListItemText
-                  primary="Comprehensive Audit Logging"
-                  secondary="Log all user activities for compliance"
-                />
-                <ListItemSecondaryAction>
-                  <Switch
-                    checked={settings.security.auditLogging}
-                    onChange={(e) => updateSecuritySettings('auditLogging', e.target.checked)}
-                  />
-                </ListItemSecondaryAction>
-              </ListItem>
-            </List>
-          </CardContent>
-        </Card>
-      </TabPanel>
-
-      {/* Notifications Settings */}
-      <TabPanel value={tabValue} index={2}>
-        <Card>
-          <CardContent>
-            <Typography variant="h6" gutterBottom>
-              🔔 Notification Preferences
-            </Typography>
-            <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
-              Configure how and when the system sends notifications to users and patients.
-            </Typography>
-            <List>
-              <ListItem>
-                <ListItemText
-                  primary="Email Notifications"
-                  secondary="Send notifications via email"
-                />
-                <ListItemSecondaryAction>
-                  <Switch
-                    checked={settings.notifications.emailNotifications}
-                    onChange={(e) => updateNotificationSettings('emailNotifications', e.target.checked)}
-                  />
-                </ListItemSecondaryAction>
-              </ListItem>
-              <ListItem>
-                <ListItemText
-                  primary="SMS Notifications"
-                  secondary="Send SMS alerts and reminders"
-                />
-                <ListItemSecondaryAction>
-                  <Switch
-                    checked={settings.notifications.smsNotifications}
-                    onChange={(e) => updateNotificationSettings('smsNotifications', e.target.checked)}
-                  />
-                </ListItemSecondaryAction>
-              </ListItem>
-              <ListItem>
-                <ListItemText
-                  primary="WhatsApp Notifications"
-                  secondary="Send WhatsApp messages (requires setup)"
-                />
-                <ListItemSecondaryAction>
-                  <Box display="flex" alignItems="center" gap={1}>
-                    <Chip label="Coming Soon" size="small" color="primary" />
-                    <Switch
-                      checked={settings.notifications.whatsappNotifications}
-                      onChange={(e) => updateNotificationSettings('whatsappNotifications', e.target.checked)}
-                      disabled
-                    />
-                  </Box>
-                </ListItemSecondaryAction>
-              </ListItem>
-              <ListItem>
-                <ListItemText
-                  primary="Appointment Reminders"
-                  secondary="Automatic reminders for upcoming appointments"
-                />
-                <ListItemSecondaryAction>
-                  <Switch
-                    checked={settings.notifications.appointmentReminders}
-                    onChange={(e) => updateNotificationSettings('appointmentReminders', e.target.checked)}
-                  />
-                </ListItemSecondaryAction>
-              </ListItem>
-              <ListItem>
-                <ListItemText
-                  primary="Lab Result Alerts"
-                  secondary="Notify doctors when lab results are ready"
-                />
-                <ListItemSecondaryAction>
-                  <Switch
-                    checked={settings.notifications.labResultAlerts}
-                    onChange={(e) => updateNotificationSettings('labResultAlerts', e.target.checked)}
-                  />
-                </ListItemSecondaryAction>
-              </ListItem>
-              <ListItem>
-                <ListItemText
-                  primary="System Alerts"
-                  secondary="Critical system notifications and security alerts"
-                />
-                <ListItemSecondaryAction>
-                  <Switch
-                    checked={settings.notifications.systemAlerts}
-                    onChange={(e) => updateNotificationSettings('systemAlerts', e.target.checked)}
-                  />
-                </ListItemSecondaryAction>
-              </ListItem>
-            </List>
-          </CardContent>
-        </Card>
-      </TabPanel>
-
-      {/* Branding Settings */}
-      <TabPanel value={tabValue} index={3}>
-        <Card>
-          <CardContent>
-            <Typography variant="h6" gutterBottom>
-              🎨 Branding & Appearance
-            </Typography>
-            <Grid container spacing={3}>
-              <Grid size={12}>
-                <TextField
-                  fullWidth
-                  label="Facility Slogan"
-                  value={settings.branding.facilitySlogan}
-                  onChange={(e) => updateBrandingSettings('facilitySlogan', e.target.value)}
-                  placeholder="Enter your facility's motto or slogan"
-                />
-              </Grid>
-              <Grid size={{ xs: 12, md: 6 }}>
-                <TextField
-                  fullWidth
-                  label="Primary Color"
-                  type="color"
-                  value={settings.branding.primaryColor}
-                  onChange={(e) => updateBrandingSettings('primaryColor', e.target.value)}
-                />
-              </Grid>
-              <Grid size={{ xs: 12, md: 6 }}>
-                <TextField
-                  fullWidth
-                  label="Secondary Color"
-                  type="color"
-                  value={settings.branding.secondaryColor}
-                  onChange={(e) => updateBrandingSettings('secondaryColor', e.target.value)}
-                />
-              </Grid>
-              <Grid size={12}>
-                <Card variant="outlined" sx={{ p: 2 }}>
-                  <Typography variant="subtitle2" gutterBottom>
-                    Facility Logo
-                  </Typography>
-                  <Box display="flex" alignItems="center" gap={2}>
-                    <Box
-                      sx={{
-                        width: 80,
-                        height: 80,
-                        backgroundColor: '#f5f5f5',
-                        borderRadius: 1,
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        border: '2px dashed #ccc'
-                      }}
-                    >
-                      <Typography variant="caption" color="text.secondary">
-                        Logo
-                      </Typography>
-                    </Box>
-                    <Box>
-                      <Button
-                        variant="outlined"
-                        startIcon={<UploadIcon />}
-                        component="label"
-                        size="small"
-                      >
-                        Upload Logo
-                        <input type="file" hidden accept="image/*" />
-                      </Button>
-                      <Typography variant="caption" display="block" color="text.secondary" sx={{ mt: 1 }}>
-                        Recommended: 200x200px, PNG or SVG
-                      </Typography>
-                    </Box>
-                  </Box>
-                </Card>
-              </Grid>
-              <Grid size={12}>
-                <List>
-                  <ListItem>
-                    <ListItemText
-                      primary="Custom Theme"
-                      secondary="Apply custom colors throughout the application"
-                    />
-                    <ListItemSecondaryAction>
-                      <Switch
-                        checked={settings.branding.customTheme}
-                        onChange={(e) => updateBrandingSettings('customTheme', e.target.checked)}
-                      />
-                    </ListItemSecondaryAction>
-                  </ListItem>
-                </List>
-              </Grid>
-            </Grid>
-          </CardContent>
-        </Card>
-      </TabPanel>
-
-      {/* Backup Settings */}
-      <TabPanel value={tabValue} index={4}>
-        <Card>
-          <CardContent>
-            <Typography variant="h6" gutterBottom>
-              💾 Data Backup & Recovery
-            </Typography>
-            <Alert severity="info" sx={{ mb: 3 }}>
-              <Typography variant="body2">
-                Last backup: {new Date(settings.backup.lastBackup).toLocaleString()} (Automatic)
-              </Typography>
-            </Alert>
-            <Grid container spacing={3}>
-              <Grid size={{ xs: 12, md: 6 }}>
-                <FormControl fullWidth>
-                  <InputLabel>Backup Frequency</InputLabel>
-                  <Select
-                    value={settings.backup.backupFrequency}
-                    label="Backup Frequency"
-                    onChange={(e) => updateBackupSettings('backupFrequency', e.target.value)}
-                  >
-                    <MenuItem value="hourly">Every Hour</MenuItem>
-                    <MenuItem value="daily">Daily</MenuItem>
-                    <MenuItem value="weekly">Weekly</MenuItem>
-                    <MenuItem value="monthly">Monthly</MenuItem>
-                  </Select>
-                </FormControl>
-              </Grid>
-              <Grid size={{ xs: 12, md: 6 }}>
-                <TextField
-                  fullWidth
-                  label="Retention Period (days)"
-                  type="number"
-                  value={settings.backup.retentionPeriod}
-                  onChange={(e) => updateBackupSettings('retentionPeriod', parseInt(e.target.value))}
-                  inputProps={{ min: 7, max: 365 }}
-                />
-              </Grid>
-            </Grid>
-            <List>
-              <ListItem>
-                <ListItemText
-                  primary="Automatic Backups"
-                  secondary="Enable scheduled automatic backups"
-                />
-                <ListItemSecondaryAction>
-                  <Switch
-                    checked={settings.backup.autoBackup}
-                    onChange={(e) => updateBackupSettings('autoBackup', e.target.checked)}
-                  />
-                </ListItemSecondaryAction>
-              </ListItem>
-              <ListItem>
-                <ListItemText
-                  primary="Cloud Backup"
-                  secondary="Store backups in secure cloud storage"
-                />
-                <ListItemSecondaryAction>
-                  <Switch
-                    checked={settings.backup.cloudBackup}
-                    onChange={(e) => updateBackupSettings('cloudBackup', e.target.checked)}
-                  />
-                </ListItemSecondaryAction>
-              </ListItem>
-            </List>
-            <Box sx={{ mt: 3 }}>
-              <Button
-                variant="outlined"
-                startIcon={<BackupIcon />}
-                sx={{ mr: 2 }}
-              >
-                Create Backup Now
-              </Button>
-              <Button
-                variant="outlined"
-                startIcon={<DownloadIcon />}
-              >
-                Download Latest Backup
-              </Button>
             </Box>
-          </CardContent>
-        </Card>
-      </TabPanel>
+          </AccordionSummary>
+          <AccordionDetails>
+            <Box display="flex" flexWrap="wrap" gap={3}>
+              
+              {/* Doctor Signature Upload */}
+              <Box flex="1" minWidth="300px">
+                <Card>
+                  <CardContent>
+                    <Box display="flex" alignItems="center" gap={1} sx={{ mb: 2 }}>
+                      <CloudUploadIcon sx={{ color: '#1976d2' }} />
+                      <Typography variant="subtitle1" fontWeight="bold">
+                        Doctor Signature Upload
+                      </Typography>
+                    </Box>
+                    
+                    {preferences.doctorSignature.uploaded ? (
+                      <Box>
+                        <Alert severity="success" sx={{ mb: 2 }}>
+                          Signature uploaded: {preferences.doctorSignature.fileName}
+                          <br />
+                          Upload date: {preferences.doctorSignature.uploadDate}
+                        </Alert>
+                        <Button
+                          variant="outlined"
+                          startIcon={<DeleteIcon />}
+                          color="error"
+                          onClick={() => setPreferences((prev: any) => ({
+                            ...prev,
+                            doctorSignature: { uploaded: false, fileName: '', uploadDate: '' }
+                          }))}
+                        >
+                          Remove Signature
+                        </Button>
+                      </Box>
+                    ) : (
+                      <Box>
+                        <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+                          Upload your digital signature for reports and prescriptions
+                        </Typography>
+                        <input
+                          accept="image/*,.pdf"
+                          style={{ display: 'none' }}
+                          id="signature-upload"
+                          type="file"
+                          onChange={handleSignatureUpload}
+                        />
+                        <label htmlFor="signature-upload">
+                          <Button
+                            variant="contained"
+                            component="span"
+                            startIcon={<UploadIcon />}
+                            sx={{ backgroundColor: '#1976d2' }}
+                          >
+                            Upload Signature
+                          </Button>
+                        </label>
+                      </Box>
+                    )}
+                  </CardContent>
+                </Card>
+              </Box>
 
+              {/* Auto Logout Time */}
+              <Box flex="1" minWidth="300px">
+                <Card>
+                  <CardContent>
+                    <Box display="flex" alignItems="center" gap={1} sx={{ mb: 2 }}>
+                      <ScheduleIcon sx={{ color: '#f57c00' }} />
+                      <Typography variant="subtitle1" fontWeight="bold">
+                        Auto Logout Time
+                      </Typography>
+                    </Box>
+                    <FormControl fullWidth>
+                      <Select
+                        value={preferences.autoLogoutTime}
+                        onChange={(e) => setPreferences((prev: any) => ({
+                          ...prev,
+                          autoLogoutTime: e.target.value as number
+                        }))}
+                      >
+                        {autoLogoutOptions.map((option) => (
+                          <MenuItem key={option.value} value={option.value}>
+                            {option.label}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                    </FormControl>
+                  </CardContent>
+                </Card>
+              </Box>
+
+              {/* Date Format Selection */}
+              <Box flex="1" minWidth="300px">
+                <Card>
+                  <CardContent>
+                    <Box display="flex" alignItems="center" gap={1} sx={{ mb: 2 }}>
+                      <DateIcon sx={{ color: '#388e3c' }} />
+                      <Typography variant="subtitle1" fontWeight="bold">
+                        Date Format Selection
+                      </Typography>
+                    </Box>
+                    <FormControl fullWidth>
+                      <Select
+                        value={preferences.dateFormat}
+                        onChange={(e) => setPreferences((prev: any) => ({
+                          ...prev,
+                          dateFormat: e.target.value
+                        }))}
+                      >
+                        {dateFormatOptions.map((format) => (
+                          <MenuItem key={format} value={format}>
+                            {format} (Example: {new Date().toLocaleDateString('en-GB', {
+                              day: '2-digit',
+                              month: '2-digit',
+                              year: 'numeric'
+                            }).replace(/\//g, format.includes('-') ? '-' : '/')})
+                          </MenuItem>
+                        ))}
+                      </Select>
+                    </FormControl>
+                  </CardContent>
+                </Card>
+              </Box>
+
+              {/* Theme Selection */}
+              <Box flex="1" minWidth="300px">
+                <Card>
+                  <CardContent>
+                    <Box display="flex" alignItems="center" gap={1} sx={{ mb: 2 }}>
+                      <ThemeIcon sx={{ color: '#9c27b0' }} />
+                      <Typography variant="subtitle1" fontWeight="bold">
+                        Theme Selection
+                      </Typography>
+                    </Box>
+                    <FormControl fullWidth>
+                      <Select
+                        value={preferences.theme}
+                        onChange={(e) => setPreferences((prev: any) => ({
+                          ...prev,
+                          theme: e.target.value
+                        }))}
+                      >
+                        {themeOptions.map((theme) => (
+                          <MenuItem key={theme} value={theme}>
+                            {theme}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                    </FormControl>
+                  </CardContent>
+                </Card>
+              </Box>
+
+              {/* Language Selection */}
+              <Box flex="1" minWidth="300px">
+                <Card>
+                  <CardContent>
+                    <Box display="flex" alignItems="center" gap={1} sx={{ mb: 2 }}>
+                      <LanguageIcon sx={{ color: '#00796b' }} />
+                      <Typography variant="subtitle1" fontWeight="bold">
+                        Language Selection
+                      </Typography>
+                    </Box>
+                    <FormControl fullWidth>
+                      <Select
+                        value={preferences.language}
+                        onChange={(e) => setPreferences((prev: any) => ({
+                          ...prev,
+                          language: e.target.value
+                        }))}
+                      >
+                        {languageOptions.map((language) => (
+                          <MenuItem key={language} value={language}>
+                            {language}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                    </FormControl>
+                  </CardContent>
+                </Card>
+              </Box>
+
+              {/* Reset All Settings */}
+              <Box flex="1" minWidth="300px">
+                <Card>
+                  <CardContent>
+                    <Box display="flex" alignItems="center" gap={1} sx={{ mb: 2 }}>
+                      <ResetIcon sx={{ color: '#d32f2f' }} />
+                      <Typography variant="subtitle1" fontWeight="bold">
+                        Reset All Settings
+                      </Typography>
+                    </Box>
+                    <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+                      This will reset all preferences to their default values
+                    </Typography>
+                    <Button
+                      variant="outlined"
+                      color="error"
+                      startIcon={<ResetIcon />}
+                      onClick={() => setResetDialog(true)}
+                    >
+                      Reset Settings
+                    </Button>
+                  </CardContent>
+                </Card>
+              </Box>
+            </Box>
+          </AccordionDetails>
+        </Accordion>
+
+        {/* 2. CHANGE PASSWORD SECTION */}
+        <Accordion>
+          <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+            <Box display="flex" alignItems="center" gap={2}>
+              <PasswordIcon sx={{ color: '#d32f2f' }} />
+              <Typography variant="h6" fontWeight="bold">
+                Change Password
+              </Typography>
+            </Box>
+          </AccordionSummary>
+          <AccordionDetails>
+            <Card>
+              <CardContent>
+                <Box display="flex" flexWrap="wrap" gap={3}>
+                  <Box flex="1" minWidth="200px">
+                    <TextField
+                      fullWidth
+                      type="password"
+                      label="Current Password"
+                      value={passwordData.currentPassword}
+                      onChange={(e) => setPasswordData((prev: any) => ({
+                        ...prev,
+                        currentPassword: e.target.value
+                      }))}
+                    />
+                  </Box>
+                  <Box flex="1" minWidth="200px">
+                    <TextField
+                      fullWidth
+                      type="password"
+                      label="New Password"
+                      value={passwordData.newPassword}
+                      onChange={(e) => setPasswordData((prev: any) => ({
+                        ...prev,
+                        newPassword: e.target.value
+                      }))}
+                    />
+                  </Box>
+                  <Box flex="1" minWidth="200px">
+                    <TextField
+                      fullWidth
+                      type="password"
+                      label="Confirm New Password"
+                      value={passwordData.confirmPassword}
+                      onChange={(e) => setPasswordData((prev: any) => ({
+                        ...prev,
+                        confirmPassword: e.target.value
+                      }))}
+                    />
+                  </Box>
+                  <Box width="100%">
+                    <Button
+                      variant="contained"
+                      onClick={handlePasswordChange}
+                      disabled={!passwordData.currentPassword || !passwordData.newPassword || !passwordData.confirmPassword}
+                      sx={{ backgroundColor: '#d32f2f' }}
+                    >
+                      Change Password
+                    </Button>
+                  </Box>
+                </Box>
+              </CardContent>
+            </Card>
+          </AccordionDetails>
+        </Accordion>
+
+        {/* 3. APPLICATION SETTINGS SECTION */}
+        <Accordion>
+          <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+            <Box display="flex" alignItems="center" gap={2}>
+              <ApplicationIcon sx={{ color: '#1976d2' }} />
+              <Typography variant="h6" fontWeight="bold">
+                Application Settings
+              </Typography>
+            </Box>
+          </AccordionSummary>
+          <AccordionDetails>
+            <Stack spacing={3}>
+              
+              {/* Favorites */}
+              <Card>
+                <CardContent>
+                  <Box display="flex" alignItems="center" gap={1} sx={{ mb: 2 }}>
+                    <FavoriteIcon sx={{ color: '#ff9800' }} />
+                    <Typography variant="subtitle1" fontWeight="bold">
+                      Favorites
+                    </Typography>
+                  </Box>
+                  <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+                    Pin your frequently used modules for quick access
+                  </Typography>
+                  <Box display="flex" flexWrap="wrap" gap={1}>
+                    {availableModules.map((module) => (
+                      <Chip
+                        key={module}
+                        label={module}
+                        onClick={() => handleToggleFavorite(module)}
+                        color={applicationSettings.favorites.includes(module) ? 'primary' : 'default'}
+                        icon={applicationSettings.favorites.includes(module) ? <FavoriteIcon /> : undefined}
+                        variant={applicationSettings.favorites.includes(module) ? 'filled' : 'outlined'}
+                      />
+                    ))}
+                  </Box>
+                </CardContent>
+              </Card>
+
+              {/* Custom Codes */}
+              <Card>
+                <CardContent>
+                  <Box display="flex" alignItems="center" justifyContent="space-between" sx={{ mb: 2 }}>
+                    <Box display="flex" alignItems="center" gap={1}>
+                      <CodeIcon sx={{ color: '#4caf50' }} />
+                      <Typography variant="subtitle1" fontWeight="bold">
+                        Custom Codes
+                      </Typography>
+                    </Box>
+                    <Button
+                      variant="outlined"
+                      startIcon={<AddIcon />}
+                      onClick={() => setNewCodeDialog(true)}
+                    >
+                      Add Code
+                    </Button>
+                  </Box>
+                  <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+                    Facility-specific diagnosis and procedure codes
+                  </Typography>
+                  <List>
+                    {applicationSettings.customCodes.map((code) => (
+                      <ListItem key={code.id}>
+                        <ListItemText
+                          primary={`${code.code} - ${code.description}`}
+                          secondary={`Category: ${code.category}`}
+                        />
+                        <ListItemSecondaryAction>
+                          <IconButton
+                            edge="end"
+                            onClick={() => handleDeleteCustomCode(code.id)}
+                            color="error"
+                          >
+                            <DeleteIcon />
+                          </IconButton>
+                        </ListItemSecondaryAction>
+                      </ListItem>
+                    ))}
+                  </List>
+                </CardContent>
+              </Card>
+
+              {/* Notifications */}
+              <Card>
+                <CardContent>
+                  <Box display="flex" alignItems="center" gap={1} sx={{ mb: 2 }}>
+                    <NotificationIcon sx={{ color: '#2196f3' }} />
+                    <Typography variant="subtitle1" fontWeight="bold">
+                      Notifications
+                    </Typography>
+                  </Box>
+                  <Stack spacing={2}>
+                    <FormControlLabel
+                      control={
+                        <Switch
+                          checked={applicationSettings.notifications.emailNotifications}
+                          onChange={(e) => setApplicationSettings((prev: any) => ({
+                            ...prev,
+                            notifications: {
+                              ...prev.notifications,
+                              emailNotifications: e.target.checked
+                            }
+                          }))}
+                        />
+                      }
+                      label="Email Notifications"
+                    />
+                    <FormControlLabel
+                      control={
+                        <Switch
+                          checked={applicationSettings.notifications.smsNotifications}
+                          onChange={(e) => setApplicationSettings((prev: any) => ({
+                            ...prev,
+                            notifications: {
+                              ...prev.notifications,
+                              smsNotifications: e.target.checked
+                            }
+                          }))}
+                        />
+                      }
+                      label="SMS Notifications"
+                    />
+                    <FormControlLabel
+                      control={
+                        <Switch
+                          checked={applicationSettings.notifications.appointmentReminders}
+                          onChange={(e) => setApplicationSettings((prev: any) => ({
+                            ...prev,
+                            notifications: {
+                              ...prev.notifications,
+                              appointmentReminders: e.target.checked
+                            }
+                          }))}
+                        />
+                      }
+                      label="Appointment Reminders"
+                    />
+                    <FormControlLabel
+                      control={
+                        <Switch
+                          checked={applicationSettings.notifications.labResultAlerts}
+                          onChange={(e) => setApplicationSettings((prev: any) => ({
+                            ...prev,
+                            notifications: {
+                              ...prev.notifications,
+                              labResultAlerts: e.target.checked
+                            }
+                          }))}
+                        />
+                      }
+                      label="Lab Result Alerts"
+                    />
+                  </Stack>
+                </CardContent>
+              </Card>
+
+              {/* Branding */}
+              <Card>
+                <CardContent>
+                  <Box display="flex" alignItems="center" gap={1} sx={{ mb: 2 }}>
+                    <BrandingIcon sx={{ color: '#9c27b0' }} />
+                    <Typography variant="subtitle1" fontWeight="bold">
+                      Branding
+                    </Typography>
+                  </Box>
+                  <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+                    Customize your facility's branding that appears on all reports
+                  </Typography>
+                  <Box display="flex" flexWrap="wrap" gap={2}>
+                    <Box flex="1" minWidth="200px">
+                      <TextField
+                        fullWidth
+                        label="Facility Name"
+                        value={applicationSettings.branding.facilityName}
+                        onChange={(e) => setApplicationSettings((prev: any) => ({
+                          ...prev,
+                          branding: {
+                            ...prev.branding,
+                            facilityName: e.target.value
+                          }
+                        }))}
+                      />
+                    </Box>
+                    <Box flex="1" minWidth="200px">
+                      <input
+                        accept="image/*"
+                        style={{ display: 'none' }}
+                        id="logo-upload"
+                        type="file"
+                        onChange={(e) => {
+                          const file = e.target.files?.[0];
+                          if (file) {
+                            // In a real app, upload to server
+                            setApplicationSettings((prev: any) => ({
+                              ...prev,
+                              branding: {
+                                ...prev.branding,
+                                logoUrl: URL.createObjectURL(file)
+                              }
+                            }));
+                          }
+                        }}
+                      />
+                      <label htmlFor="logo-upload">
+                        <Button
+                          variant="outlined"
+                          component="span"
+                          startIcon={<UploadIcon />}
+                          fullWidth
+                        >
+                          Upload Logo
+                        </Button>
+                      </label>
+                    </Box>
+                    <Box flex="1" minWidth="200px">
+                      <TextField
+                        fullWidth
+                        label="Primary Color"
+                        type="color"
+                        value={applicationSettings.branding.primaryColor}
+                        onChange={(e) => setApplicationSettings((prev: any) => ({
+                          ...prev,
+                          branding: {
+                            ...prev.branding,
+                            primaryColor: e.target.value
+                          }
+                        }))}
+                      />
+                    </Box>
+                    <Box flex="1" minWidth="200px">
+                      <TextField
+                        fullWidth
+                        label="Secondary Color"
+                        type="color"
+                        value={applicationSettings.branding.secondaryColor}
+                        onChange={(e) => setApplicationSettings((prev: any) => ({
+                          ...prev,
+                          branding: {
+                            ...prev.branding,
+                            secondaryColor: e.target.value
+                          }
+                        }))}
+                      />
+                    </Box>
+                  </Box>
+                </CardContent>
+              </Card>
+            </Stack>
+          </AccordionDetails>
+        </Accordion>
+      </Stack>
+
+      {/* Dialogs */}
+      
       {/* Save Confirmation Dialog */}
-      <Dialog open={saveDialogOpen} onClose={() => setSaveDialogOpen(false)}>
-        <DialogTitle>Save Settings</DialogTitle>
+      <Dialog open={saveDialog} onClose={() => setSaveDialog(false)}>
+        <DialogTitle>Save All Settings</DialogTitle>
         <DialogContent>
-          <Typography variant="body2">
-            Are you sure you want to save these settings? Some changes may require users to log in again.
+          <Typography>
+            Are you sure you want to save all changes? This will update your preferences, 
+            application settings, and system configuration.
           </Typography>
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => setSaveDialogOpen(false)}>Cancel</Button>
-          <Button onClick={handleSaveSettings} variant="contained" color="primary">
-            Save Changes
+          <Button onClick={() => setSaveDialog(false)}>Cancel</Button>
+          <Button onClick={handleSaveAllSettings} variant="contained">
+            Save All
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      {/* Reset Confirmation Dialog */}
+      <Dialog open={resetDialog} onClose={() => setResetDialog(false)}>
+        <DialogTitle>Reset All Settings</DialogTitle>
+        <DialogContent>
+          <Alert severity="warning" sx={{ mb: 2 }}>
+            This action cannot be undone!
+          </Alert>
+          <Typography>
+            Are you sure you want to reset all settings to their default values? 
+            This will affect preferences, favorites, custom codes, and all other configurations.
+          </Typography>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setResetDialog(false)}>Cancel</Button>
+          <Button onClick={handleResetAllSettings} color="error" variant="contained">
+            Reset All
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      {/* Add Custom Code Dialog */}
+      <Dialog open={newCodeDialog} onClose={() => setNewCodeDialog(false)} maxWidth="sm" fullWidth>
+        <DialogTitle>Add Custom Code</DialogTitle>
+        <DialogContent>
+          <Stack spacing={2} sx={{ mt: 1 }}>
+            <TextField
+              fullWidth
+              label="Code"
+              value={newCode.code}
+              onChange={(e) => setNewCode((prev: any) => ({ ...prev, code: e.target.value }))}
+              placeholder="e.g., MALARIA-001"
+            />
+            <TextField
+              fullWidth
+              label="Description"
+              value={newCode.description}
+              onChange={(e) => setNewCode((prev: any) => ({ ...prev, description: e.target.value }))}
+              placeholder="e.g., Malaria - Uncomplicated"
+            />
+            <FormControl fullWidth>
+              <InputLabel>Category</InputLabel>
+              <Select
+                value={newCode.category}
+                onChange={(e) => setNewCode((prev: any) => ({ ...prev, category: e.target.value }))}
+              >
+                <MenuItem value="Infectious Disease">Infectious Disease</MenuItem>
+                <MenuItem value="Cardiovascular">Cardiovascular</MenuItem>
+                <MenuItem value="Respiratory">Respiratory</MenuItem>
+                <MenuItem value="Neurological">Neurological</MenuItem>
+                <MenuItem value="Orthopedic">Orthopedic</MenuItem>
+                <MenuItem value="Other">Other</MenuItem>
+              </Select>
+            </FormControl>
+          </Stack>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setNewCodeDialog(false)}>Cancel</Button>
+          <Button onClick={handleAddCustomCode} variant="contained">
+            Add Code
           </Button>
         </DialogActions>
       </Dialog>

@@ -25,11 +25,18 @@ import { notFound } from './middleware/notFound';
 const app: Application = express();
 const PORT = process.env.PORT || 80;
 
-// Rate limiting
+// Trust proxy for reverse proxy setups (prevents rate limiting warnings)
+app.set('trust proxy', true);
+
+// Rate limiting - more relaxed for development
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100, // limit each IP to 100 requests per windowMs
+  max: 1000, // Increased from 100 to 1000 requests per windowMs
   message: 'Too many requests from this IP, please try again later.',
+  skip: (req) => {
+    // Skip rate limiting for health checks and OPTIONS requests
+    return req.path === '/health' || req.path === '/api/health' || req.method === 'OPTIONS';
+  }
 });
 
 // Middleware
@@ -103,6 +110,16 @@ if (process.env.NODE_ENV === 'production') {
 
 // Health check endpoint
 app.get('/health', (req: Request, res: Response) => {
+  res.status(200).json({
+    status: 'OK',
+    message: 'GhEHR API is running',
+    timestamp: new Date().toISOString(),
+    environment: process.env.NODE_ENV || 'development',
+  });
+});
+
+// Additional health check endpoint for frontend compatibility
+app.get('/api/health', (req: Request, res: Response) => {
   res.status(200).json({
     status: 'OK',
     message: 'GhEHR API is running',

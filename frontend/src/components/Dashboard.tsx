@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   Box,
@@ -31,7 +31,7 @@ import { CommonHeader } from './CommonHeader';
 import axios from 'axios';
 
 // API base URL
-const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:3001';
 
 // Dashboard statistics interface
 interface DashboardStats {
@@ -61,7 +61,7 @@ const Dashboard: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
 
   // Fetch dashboard statistics
-  const fetchDashboardStats = async () => {
+  const fetchDashboardStats = useCallback(async () => {
     try {
       setLoading(true);
       setError(null);
@@ -89,14 +89,14 @@ const Dashboard: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [token]);
 
   // Load dashboard data on component mount
   useEffect(() => {
     if (token) {
       fetchDashboardStats();
     }
-  }, [token]);
+  }, [token, fetchDashboardStats]);
 
   // Dynamic dashboard data based on fetched statistics
   const getDashboardCards = () => {

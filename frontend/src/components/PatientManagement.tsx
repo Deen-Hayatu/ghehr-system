@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
   Box,
   Card,
@@ -54,7 +54,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom'; // Add this import
 
 // API base URL
-const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:3001';
 
 // Types for Patient Management
 interface Patient {
@@ -126,7 +126,7 @@ const PatientManagement: React.FC = () => {
   const [selectedPatient, setSelectedPatient] = useState<Patient | null>(null);
 
   // Fetch patients from API
-  const fetchPatients = async () => {
+  const fetchPatients = useCallback(async () => {
     setLoading(true);
     setError(null);
     
@@ -183,7 +183,7 @@ const PatientManagement: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [token, currentPage, searchTerm, selectedRegion, selectedGender, checkTokenValidity]);
 
   // Load patients on component mount and when filters change
   useEffect(() => {
@@ -200,7 +200,7 @@ const PatientManagement: React.FC = () => {
       console.warn('No token available, skipping fetchPatients');
       setError('Authentication required. Please log in again.');
     }
-  }, [currentPage, searchTerm, selectedRegion, selectedGender, token]);
+  }, [fetchPatients, token, user]);
 
   // Handle search input
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {

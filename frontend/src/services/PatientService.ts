@@ -1,7 +1,8 @@
 import { Patient } from '../types/Patient';
 import axios from 'axios';
 
-const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+// API base URL configuration
+const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5001';
 
 // Patient Service for centralized patient data management
 export class PatientService {

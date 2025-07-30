@@ -219,7 +219,7 @@ export class OfflineDataService<T extends { id: string }> {
   }
 
   private getApiUrl(): string {
-    const baseUrl = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
+    const baseUrl = process.env.REACT_APP_API_URL || 'http://localhost:3001/api';
     return `${baseUrl}/${this.apiEndpoint}`;
   }
 
